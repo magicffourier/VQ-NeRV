@@ -1,0 +1,3 @@
+[submodule "vector_quantize_pytorch"]
+	path = vector_quantize_pytorch
+	url = https://github.com/lucidrains/vector-quantize-pytorch

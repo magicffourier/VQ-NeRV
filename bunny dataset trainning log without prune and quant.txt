@@ -1,0 +1,1142 @@
+HNeRV(
+  (encoder): ConvNeXt(
+    (downsample_layers): ModuleList(
+      (0): Sequential(
+        (0): Conv2d(3, 64, kernel_size=(5, 5), stride=(5, 5))
+        (1): LayerNorm()
+      )
+      (1): Sequential(
+        (0): LayerNorm()
+        (1): Conv2d(64, 64, kernel_size=(4, 4), stride=(4, 4))
+      )
+      (2): Sequential(
+        (0): LayerNorm()
+        (1): Conv2d(64, 64, kernel_size=(4, 4), stride=(4, 4))
+      )
+      (3): Sequential(
+        (0): LayerNorm()
+        (1): Conv2d(64, 64, kernel_size=(2, 2), stride=(2, 2))
+      )
+      (4): Sequential(
+        (0): LayerNorm()
+        (1): Conv2d(64, 16, kernel_size=(2, 2), stride=(2, 2))
+      )
+    )
+    (stages): ModuleList(
+      (0): Sequential(
+        (0): Block(
+          (dwconv): Conv2d(64, 64, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=64)
+          (norm): LayerNorm()
+          (pwconv1): Linear(in_features=64, out_features=256, bias=True)
+          (act): GELU()
+          (pwconv2): Linear(in_features=256, out_features=64, bias=True)
+          (drop_path): Identity()
+        )
+      )
+      (1): Sequential(
+        (0): Block(
+          (dwconv): Conv2d(64, 64, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=64)
+          (norm): LayerNorm()
+          (pwconv1): Linear(in_features=64, out_features=256, bias=True)
+          (act): GELU()
+          (pwconv2): Linear(in_features=256, out_features=64, bias=True)
+          (drop_path): Identity()
+        )
+      )
+      (2): Sequential(
+        (0): Block(
+          (dwconv): Conv2d(64, 64, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=64)
+          (norm): LayerNorm()
+          (pwconv1): Linear(in_features=64, out_features=256, bias=True)
+          (act): GELU()
+          (pwconv2): Linear(in_features=256, out_features=64, bias=True)
+          (drop_path): Identity()
+        )
+      )
+      (3): Sequential(
+        (0): Block(
+          (dwconv): Conv2d(64, 64, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=64)
+          (norm): LayerNorm()
+          (pwconv1): Linear(in_features=64, out_features=256, bias=True)
+          (act): GELU()
+          (pwconv2): Linear(in_features=256, out_features=64, bias=True)
+          (drop_path): Identity()
+        )
+      )
+      (4): Sequential(
+        (0): Block(
+          (dwconv): Conv2d(16, 16, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=16)
+          (norm): LayerNorm()
+          (pwconv1): Linear(in_features=16, out_features=64, bias=True)
+          (act): GELU()
+          (pwconv2): Linear(in_features=64, out_features=16, bias=True)
+          (drop_path): Identity()
+        )
+      )
+    )
+    (b): Sequential(
+      (0): double_conv0(
+        (conv): Sequential(
+          (0): MaxPool2d(kernel_size=4, stride=4, padding=0, dilation=1, ceil_mode=False)
+          (1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (2): Block(
+            (dwconv): Conv2d(64, 64, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=64)
+            (norm): LayerNorm()
+            (pwconv1): Linear(in_features=64, out_features=256, bias=True)
+            (act): GELU()
+            (pwconv2): Linear(in_features=256, out_features=64, bias=True)
+            (drop_path): Identity()
+          )
+        )
+      )
+      (1): double_conv0(
+        (conv): Sequential(
+          (0): MaxPool2d(kernel_size=4, stride=4, padding=0, dilation=1, ceil_mode=False)
+          (1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (2): Block(
+            (dwconv): Conv2d(64, 64, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=64)
+            (norm): LayerNorm()
+            (pwconv1): Linear(in_features=64, out_features=256, bias=True)
+            (act): GELU()
+            (pwconv2): Linear(in_features=256, out_features=64, bias=True)
+            (drop_path): Identity()
+          )
+        )
+      )
+      (2): Conv2d(64, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (cnerv): CNeRVBlock(
+      (vq): VectorQuantize(
+        (project_in): Identity()
+        (project_out): Identity()
+        (_codebook): EuclideanCodebook(
+          (fp_pool): FeaturePool()
+        )
+        (codebook): EuclideanCodebook(
+          (fp_pool): FeaturePool()
+        )
+      )
+      (up): Sequential(
+        (0): Upsample(size=4, mode=nearest)
+        (1): Conv2d(8, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (2): Upsample(size=4, mode=nearest)
+        (3): Conv2d(8, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+    )
+  )
+  (decoder): ModuleList(
+    (0): NeRVBlock(
+      (conv): DownConv(
+        (downconv): Conv2d(16, 67, kernel_size=(1, 1), stride=(1, 1))
+      )
+      (norm): Identity()
+      (act): GELU()
+    )
+    (1): NeRVBlock(
+      (conv): UpConv(
+        (upconv): Sequential(
+          (0): Conv2d(67, 1400, kernel_size=(1, 1), stride=(1, 1))
+          (1): PixelShuffle(upscale_factor=5)
+        )
+      )
+      (norm): Identity()
+      (act): GELU()
+    )
+    (2): NeRVBlock(
+      (conv): UpConv(
+        (upconv): Sequential(
+          (0): Conv2d(56, 752, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): PixelShuffle(upscale_factor=4)
+        )
+      )
+      (norm): Identity()
+      (act): GELU()
+    )
+    (3): NeRVBlock(
+      (conv): UpConv(
+        (upconv): Sequential(
+          (0): Conv2d(47, 624, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+          (1): PixelShuffle(upscale_factor=4)
+        )
+      )
+      (norm): Identity()
+      (act): GELU()
+    )
+    (4): NeRVBlock(
+      (conv): UpConv(
+        (upconv): Sequential(
+          (0): Conv2d(39, 156, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+          (1): PixelShuffle(upscale_factor=2)
+        )
+      )
+      (norm): Identity()
+      (act): GELU()
+    )
+    (5): NeRVBlock(
+      (conv): UpConv(
+        (upconv): Sequential(
+          (0): Conv2d(39, 156, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+          (1): PixelShuffle(upscale_factor=2)
+        )
+      )
+      (norm): Identity()
+      (act): GELU()
+      (vq): RQVAE(
+        (conv): Sequential(
+          (0): InstanceNorm2d(47, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
+          (1): Conv2d(47, 39, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        )
+      )
+    )
+  )
+  (head_layer): Conv2d(39, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+)
+Encoder_0.46M_Decoder_1.54M_Total_1.55M
+[2024/02/18 20:19:04] Rank:None, Epoch[1/300], Step [1/66], lr:2.00e-04 pred_PSNR: 11.52 perplexity:235.06 lvq:9.47e-04 L2:7.05e-02 usage:0.4707 total usage:0.4707
+[2024/02/18 20:19:09] Rank:None, Epoch[1/300], Step [51/66], lr:2.45e-04 pred_PSNR: 15.67 perplexity:105.85 lvq:1.70e-03 L2:1.30e-02 usage:0.2246 total usage:0.9980
+[2024/02/18 20:19:10] Rank:None, Epoch[1/300], Step [66/66], lr:2.59e-04 pred_PSNR: 16.37 perplexity:115.03 lvq:1.59e-03 L2:1.29e-02 usage:0.2461 total usage:1.0000
+[2024/02/18 20:19:11] Rank:None, Epoch[2/300], Step [1/66], lr:2.60e-04 pred_PSNR: 19.11 perplexity:125.49 lvq:1.64e-03 L2:1.24e-02 usage:0.2656 total usage:0.2656
+[2024/02/18 20:19:16] Rank:None, Epoch[2/300], Step [51/66], lr:3.05e-04 pred_PSNR: 19.82 perplexity:131.62 lvq:8.78e-04 L2:9.92e-03 usage:0.2832 total usage:0.9355
+[2024/02/18 20:19:17] Rank:None, Epoch[2/300], Step [66/66], lr:3.19e-04 pred_PSNR: 20.03 perplexity:109.65 lvq:1.31e-03 L2:1.07e-02 usage:0.2461 total usage:0.9492
+[2024/02/18 20:19:18] Rank:None, Epoch[3/300], Step [1/66], lr:3.20e-04 pred_PSNR: 20.72 perplexity:142.13 lvq:7.71e-04 L2:8.64e-03 usage:0.3086 total usage:0.3086
+[2024/02/18 20:19:23] Rank:None, Epoch[3/300], Step [51/66], lr:3.65e-04 pred_PSNR: 21.12 perplexity:120.02 lvq:8.53e-04 L2:1.03e-02 usage:0.2637 total usage:0.9004
+[2024/02/18 20:19:24] Rank:None, Epoch[3/300], Step [66/66], lr:3.79e-04 pred_PSNR: 21.28 perplexity:136.30 lvq:6.06e-04 L2:8.34e-03 usage:0.3027 total usage:0.9219
+[2024/02/18 20:19:25] Rank:None, Epoch[4/300], Step [1/66], lr:3.80e-04 pred_PSNR: 20.81 perplexity:88.24 lvq:8.71e-04 L2:8.29e-03 usage:0.1973 total usage:0.1973
+[2024/02/18 20:19:30] Rank:None, Epoch[4/300], Step [51/66], lr:4.25e-04 pred_PSNR: 21.83 perplexity:150.81 lvq:4.28e-04 L2:6.48e-03 usage:0.3262 total usage:0.8906
+[2024/02/18 20:19:31] Rank:None, Epoch[4/300], Step [66/66], lr:4.39e-04 pred_PSNR: 21.92 perplexity:136.39 lvq:2.93e-04 L2:6.13e-03 usage:0.2949 total usage:0.9199
+[2024/02/18 20:19:32] Rank:None, Epoch[5/300], Step [1/66], lr:4.40e-04 pred_PSNR: 21.72 perplexity:127.85 lvq:2.78e-04 L2:7.09e-03 usage:0.2754 total usage:0.2754
+[2024/02/18 20:19:36] Rank:None, Epoch[5/300], Step [51/66], lr:4.85e-04 pred_PSNR: 22.36 perplexity:120.79 lvq:4.77e-04 L2:7.45e-03 usage:0.2617 total usage:0.9141
+[2024/02/18 20:19:38] Rank:None, Epoch[5/300], Step [66/66], lr:4.99e-04 pred_PSNR: 22.45 perplexity:130.11 lvq:4.08e-04 L2:5.01e-03 usage:0.2852 total usage:0.9375
+[2024/02/18 20:19:39] Rank:None, Epoch[6/300], Step [1/66], lr:5.00e-04 pred_PSNR: 23.1 perplexity:131.72 lvq:2.25e-04 L2:5.19e-03 usage:0.2832 total usage:0.2832
+[2024/02/18 20:19:43] Rank:None, Epoch[6/300], Step [51/66], lr:5.45e-04 pred_PSNR: 22.99 perplexity:131.18 lvq:2.30e-04 L2:5.49e-03 usage:0.2852 total usage:0.8730
+[2024/02/18 20:19:45] Rank:None, Epoch[6/300], Step [66/66], lr:5.59e-04 pred_PSNR: 22.89 perplexity:102.96 lvq:1.14e-04 L2:4.14e-03 usage:0.2188 total usage:0.9023
+[2024/02/18 20:19:45] Rank:None, Epoch[7/300], Step [1/66], lr:5.60e-04 pred_PSNR: 22.02 perplexity:112.53 lvq:3.38e-04 L2:6.29e-03 usage:0.2559 total usage:0.2559
+[2024/02/18 20:19:50] Rank:None, Epoch[7/300], Step [51/66], lr:6.05e-04 pred_PSNR: 22.82 perplexity:140.89 lvq:1.96e-04 L2:5.86e-03 usage:0.3008 total usage:0.8809
+[2024/02/18 20:19:52] Rank:None, Epoch[7/300], Step [66/66], lr:6.19e-04 pred_PSNR: 23.01 perplexity:122.73 lvq:1.11e-04 L2:4.08e-03 usage:0.2656 total usage:0.9258
+[2024/02/18 20:19:52] Rank:None, Epoch[8/300], Step [1/66], lr:6.20e-04 pred_PSNR: 22.72 perplexity:127.25 lvq:1.54e-04 L2:5.64e-03 usage:0.2773 total usage:0.2773
+[2024/02/18 20:19:57] Rank:None, Epoch[8/300], Step [51/66], lr:6.65e-04 pred_PSNR: 23.46 perplexity:131.72 lvq:1.84e-04 L2:5.63e-03 usage:0.2871 total usage:0.8867
+[2024/02/18 20:19:59] Rank:None, Epoch[8/300], Step [66/66], lr:6.79e-04 pred_PSNR: 23.52 perplexity:119.68 lvq:9.50e-05 L2:4.36e-03 usage:0.2637 total usage:0.9219
+[2024/02/18 20:19:59] Rank:None, Epoch[9/300], Step [1/66], lr:6.80e-04 pred_PSNR: 24.72 perplexity:106.62 lvq:1.08e-04 L2:3.47e-03 usage:0.2344 total usage:0.2344
+[2024/02/18 20:20:04] Rank:None, Epoch[9/300], Step [51/66], lr:7.25e-04 pred_PSNR: 23.62 perplexity:132.62 lvq:1.12e-04 L2:4.25e-03 usage:0.2930 total usage:0.9102
+[2024/02/18 20:20:06] Rank:None, Epoch[9/300], Step [66/66], lr:7.39e-04 pred_PSNR: 23.72 perplexity:113.69 lvq:1.37e-04 L2:5.55e-03 usage:0.2598 total usage:0.9395
+[2024/02/18 20:20:06] Rank:None, Epoch[10/300], Step [1/66], lr:7.40e-04 pred_PSNR: 25.51 perplexity:101.17 lvq:7.85e-05 L2:2.81e-03 usage:0.2188 total usage:0.2188
+[2024/02/18 20:20:11] Rank:None, Epoch[10/300], Step [51/66], lr:7.85e-04 pred_PSNR: 23.67 perplexity:110.50 lvq:1.11e-04 L2:4.45e-03 usage:0.2363 total usage:0.8984
+[2024/02/18 20:20:12] Rank:None, Epoch[10/300], Step [66/66], lr:7.99e-04 pred_PSNR: 23.77 perplexity:131.81 lvq:1.04e-04 L2:4.38e-03 usage:0.2910 total usage:0.9258
+[2024/02/18 20:20:13] Rank:None, Epoch[11/300], Step [1/66], lr:8.00e-04 pred_PSNR: 24.14 perplexity:115.57 lvq:1.50e-04 L2:4.02e-03 usage:0.2539 total usage:0.2539
+[2024/02/18 20:20:18] Rank:None, Epoch[11/300], Step [51/66], lr:8.45e-04 pred_PSNR: 24.1 perplexity:110.40 lvq:1.28e-04 L2:3.83e-03 usage:0.2461 total usage:0.9004
+[2024/02/18 20:20:19] Rank:None, Epoch[11/300], Step [66/66], lr:8.59e-04 pred_PSNR: 24.16 perplexity:132.67 lvq:9.41e-05 L2:4.76e-03 usage:0.2891 total usage:0.9238
+[2024/02/18 20:20:20] Rank:None, Epoch[12/300], Step [1/66], lr:8.60e-04 pred_PSNR: 23.21 perplexity:117.21 lvq:4.26e-04 L2:4.80e-03 usage:0.2598 total usage:0.2598
+[2024/02/18 20:20:25] Rank:None, Epoch[12/300], Step [51/66], lr:9.05e-04 pred_PSNR: 24.34 perplexity:119.92 lvq:1.04e-04 L2:4.37e-03 usage:0.2676 total usage:0.8945
+[2024/02/18 20:20:26] Rank:None, Epoch[12/300], Step [66/66], lr:9.19e-04 pred_PSNR: 24.38 perplexity:126.81 lvq:8.90e-05 L2:3.89e-03 usage:0.2852 total usage:0.9141
+[2024/02/18 20:20:27] Rank:None, Epoch[13/300], Step [1/66], lr:9.20e-04 pred_PSNR: 22.54 perplexity:119.97 lvq:1.18e-04 L2:5.71e-03 usage:0.2656 total usage:0.2656
+[2024/02/18 20:20:31] Rank:None, Epoch[13/300], Step [51/66], lr:9.65e-04 pred_PSNR: 24.38 perplexity:109.82 lvq:1.04e-04 L2:4.47e-03 usage:0.2461 total usage:0.8926
+[2024/02/18 20:20:33] Rank:None, Epoch[13/300], Step [66/66], lr:9.79e-04 pred_PSNR: 24.45 perplexity:111.09 lvq:9.68e-05 L2:5.71e-03 usage:0.2480 total usage:0.9258
+[2024/02/18 20:20:33] Rank:None, Epoch[14/300], Step [1/66], lr:9.80e-04 pred_PSNR: 23.17 perplexity:113.40 lvq:7.25e-05 L2:4.86e-03 usage:0.2480 total usage:0.2480
+[2024/02/18 20:20:38] Rank:None, Epoch[14/300], Step [51/66], lr:1.03e-03 pred_PSNR: 24.61 perplexity:118.96 lvq:7.21e-05 L2:3.76e-03 usage:0.2715 total usage:0.9004
+[2024/02/18 20:20:40] Rank:None, Epoch[14/300], Step [66/66], lr:1.04e-03 pred_PSNR: 24.61 perplexity:99.88 lvq:6.68e-05 L2:3.74e-03 usage:0.2266 total usage:0.9258
+[2024/02/18 20:20:40] Rank:None, Epoch[15/300], Step [1/66], lr:1.04e-03 pred_PSNR: 26.41 perplexity:103.27 lvq:6.50e-05 L2:2.32e-03 usage:0.2266 total usage:0.2266
+[2024/02/18 20:20:45] Rank:None, Epoch[15/300], Step [51/66], lr:1.09e-03 pred_PSNR: 24.77 perplexity:105.84 lvq:5.97e-05 L2:4.23e-03 usage:0.2344 total usage:0.8887
+[2024/02/18 20:20:47] Rank:None, Epoch[15/300], Step [66/66], lr:1.10e-03 pred_PSNR: 24.66 perplexity:107.33 lvq:4.52e-05 L2:2.49e-03 usage:0.2344 total usage:0.9219
+[2024/02/18 20:20:47] Rank:None, Epoch[16/300], Step [1/66], lr:1.10e-03 pred_PSNR: 24.67 perplexity:110.65 lvq:6.15e-05 L2:3.70e-03 usage:0.2500 total usage:0.2500
+[2024/02/18 20:20:52] Rank:None, Epoch[16/300], Step [51/66], lr:1.15e-03 pred_PSNR: 24.65 perplexity:128.15 lvq:2.66e-05 L2:2.94e-03 usage:0.2852 total usage:0.9043
+[2024/02/18 20:20:53] Rank:None, Epoch[16/300], Step [66/66], lr:1.16e-03 pred_PSNR: 24.86 perplexity:121.57 lvq:2.61e-05 L2:2.74e-03 usage:0.2656 total usage:0.9219
+[2024/02/18 20:20:54] Rank:None, Epoch[17/300], Step [1/66], lr:1.16e-03 pred_PSNR: 27.27 perplexity:105.00 lvq:3.93e-05 L2:1.90e-03 usage:0.2324 total usage:0.2324
+[2024/02/18 20:20:59] Rank:None, Epoch[17/300], Step [51/66], lr:1.21e-03 pred_PSNR: 25.4 perplexity:126.69 lvq:4.05e-05 L2:2.83e-03 usage:0.2754 total usage:0.8711
+[2024/02/18 20:21:00] Rank:None, Epoch[17/300], Step [66/66], lr:1.22e-03 pred_PSNR: 25.36 perplexity:119.44 lvq:9.32e-05 L2:2.59e-03 usage:0.2637 total usage:0.8965
+[2024/02/18 20:21:01] Rank:None, Epoch[18/300], Step [1/66], lr:1.22e-03 pred_PSNR: 25.4 perplexity:112.91 lvq:1.03e-04 L2:2.97e-03 usage:0.2500 total usage:0.2500
+[2024/02/18 20:21:06] Rank:None, Epoch[18/300], Step [51/66], lr:1.27e-03 pred_PSNR: 25.26 perplexity:92.61 lvq:8.76e-05 L2:1.99e-03 usage:0.2070 total usage:0.8965
+[2024/02/18 20:21:08] Rank:None, Epoch[18/300], Step [66/66], lr:1.28e-03 pred_PSNR: 25.28 perplexity:107.95 lvq:8.28e-05 L2:4.86e-03 usage:0.2363 total usage:0.9238
+[2024/02/18 20:21:09] Rank:None, Epoch[19/300], Step [1/66], lr:1.28e-03 pred_PSNR: 27.67 perplexity:93.04 lvq:6.28e-05 L2:1.71e-03 usage:0.2051 total usage:0.2051
+[2024/02/18 20:21:13] Rank:None, Epoch[19/300], Step [51/66], lr:1.33e-03 pred_PSNR: 25.45 perplexity:108.79 lvq:1.11e-04 L2:4.45e-03 usage:0.2383 total usage:0.8789
+[2024/02/18 20:21:15] Rank:None, Epoch[19/300], Step [66/66], lr:1.34e-03 pred_PSNR: 25.5 perplexity:94.43 lvq:5.55e-05 L2:2.30e-03 usage:0.2090 total usage:0.9160
+[2024/02/18 20:21:15] Rank:None, Epoch[20/300], Step [1/66], lr:1.34e-03 pred_PSNR: 26.85 perplexity:106.30 lvq:4.32e-05 L2:2.06e-03 usage:0.2363 total usage:0.2363
+[2024/02/18 20:21:20] Rank:None, Epoch[20/300], Step [51/66], lr:1.39e-03 pred_PSNR: 25.77 perplexity:108.82 lvq:6.40e-05 L2:3.20e-03 usage:0.2441 total usage:0.8711
+[2024/02/18 20:21:22] Rank:None, Epoch[20/300], Step [66/66], lr:1.40e-03 pred_PSNR: 25.7 perplexity:99.66 lvq:1.23e-04 L2:3.22e-03 usage:0.2285 total usage:0.8848
+[2024/02/18 20:21:22] Rank:None, Epoch[21/300], Step [1/66], lr:1.40e-03 pred_PSNR: 25.25 perplexity:110.14 lvq:1.10e-04 L2:3.06e-03 usage:0.2402 total usage:0.2402
+[2024/02/18 20:21:27] Rank:None, Epoch[21/300], Step [51/66], lr:1.45e-03 pred_PSNR: 25.65 perplexity:124.34 lvq:4.50e-05 L2:2.81e-03 usage:0.2773 total usage:0.8613
+[2024/02/18 20:21:29] Rank:None, Epoch[21/300], Step [66/66], lr:1.46e-03 pred_PSNR: 25.64 perplexity:126.34 lvq:9.26e-05 L2:3.19e-03 usage:0.2754 total usage:0.8867
+[2024/02/18 20:21:29] Rank:None, Epoch[22/300], Step [1/66], lr:1.46e-03 pred_PSNR: 24.51 perplexity:108.64 lvq:4.43e-05 L2:3.59e-03 usage:0.2383 total usage:0.2383
+[2024/02/18 20:21:34] Rank:None, Epoch[22/300], Step [51/66], lr:1.51e-03 pred_PSNR: 25.56 perplexity:113.09 lvq:4.57e-05 L2:3.92e-03 usage:0.2520 total usage:0.8887
+[2024/02/18 20:21:36] Rank:None, Epoch[22/300], Step [66/66], lr:1.52e-03 pred_PSNR: 25.57 perplexity:118.11 lvq:3.45e-05 L2:3.44e-03 usage:0.2578 total usage:0.9180
+[2024/02/18 20:21:36] Rank:None, Epoch[23/300], Step [1/66], lr:1.52e-03 pred_PSNR: 27.82 perplexity:96.70 lvq:2.57e-05 L2:1.67e-03 usage:0.2207 total usage:0.2207
+[2024/02/18 20:21:41] Rank:None, Epoch[23/300], Step [51/66], lr:1.57e-03 pred_PSNR: 25.9 perplexity:103.83 lvq:4.65e-05 L2:3.21e-03 usage:0.2324 total usage:0.8965
+[2024/02/18 20:21:43] Rank:None, Epoch[23/300], Step [66/66], lr:1.58e-03 pred_PSNR: 25.92 perplexity:122.71 lvq:2.43e-05 L2:2.37e-03 usage:0.2754 total usage:0.9199
+[2024/02/18 20:21:43] Rank:None, Epoch[24/300], Step [1/66], lr:1.58e-03 pred_PSNR: 24.48 perplexity:112.66 lvq:2.25e-05 L2:3.59e-03 usage:0.2441 total usage:0.2441
+[2024/02/18 20:21:48] Rank:None, Epoch[24/300], Step [51/66], lr:1.63e-03 pred_PSNR: 26.03 perplexity:109.05 lvq:4.23e-05 L2:2.15e-03 usage:0.2480 total usage:0.8867
+[2024/02/18 20:21:50] Rank:None, Epoch[24/300], Step [66/66], lr:1.64e-03 pred_PSNR: 25.94 perplexity:91.66 lvq:3.63e-05 L2:2.36e-03 usage:0.2129 total usage:0.9219
+[2024/02/18 20:21:50] Rank:None, Epoch[25/300], Step [1/66], lr:1.64e-03 pred_PSNR: 27.14 perplexity:105.59 lvq:2.77e-05 L2:2.13e-03 usage:0.2441 total usage:0.2441
+[2024/02/18 20:21:55] Rank:None, Epoch[25/300], Step [51/66], lr:1.69e-03 pred_PSNR: 26.08 perplexity:106.30 lvq:3.04e-05 L2:1.63e-03 usage:0.2383 total usage:0.8887
+[2024/02/18 20:21:56] Rank:None, Epoch[25/300], Step [66/66], lr:1.70e-03 pred_PSNR: 26.02 perplexity:102.12 lvq:4.53e-05 L2:2.62e-03 usage:0.2363 total usage:0.9082
+[2024/02/18 20:21:57] Rank:None, Epoch[26/300], Step [1/66], lr:1.70e-03 pred_PSNR: 29.29 perplexity:99.60 lvq:4.58e-05 L2:1.18e-03 usage:0.2188 total usage:0.2188
+[2024/02/18 20:22:02] Rank:None, Epoch[26/300], Step [51/66], lr:1.75e-03 pred_PSNR: 26.16 perplexity:105.72 lvq:2.74e-05 L2:2.32e-03 usage:0.2402 total usage:0.8887
+[2024/02/18 20:22:03] Rank:None, Epoch[26/300], Step [66/66], lr:1.76e-03 pred_PSNR: 26.07 perplexity:96.18 lvq:6.03e-05 L2:2.54e-03 usage:0.2227 total usage:0.9199
+[2024/02/18 20:22:04] Rank:None, Epoch[27/300], Step [1/66], lr:1.76e-03 pred_PSNR: 27.66 perplexity:102.93 lvq:5.54e-04 L2:1.74e-03 usage:0.2246 total usage:0.2246
+[2024/02/18 20:22:09] Rank:None, Epoch[27/300], Step [51/66], lr:1.81e-03 pred_PSNR: 26.43 perplexity:117.18 lvq:2.39e-05 L2:2.16e-03 usage:0.2617 total usage:0.8691
+[2024/02/18 20:22:10] Rank:None, Epoch[27/300], Step [66/66], lr:1.82e-03 pred_PSNR: 26.48 perplexity:101.46 lvq:7.94e-05 L2:2.65e-03 usage:0.2324 total usage:0.9043
+[2024/02/18 20:22:11] Rank:None, Epoch[28/300], Step [1/66], lr:1.82e-03 pred_PSNR: 24.87 perplexity:101.04 lvq:7.92e-05 L2:3.26e-03 usage:0.2344 total usage:0.2344
+[2024/02/18 20:22:16] Rank:None, Epoch[28/300], Step [51/66], lr:1.87e-03 pred_PSNR: 26.74 perplexity:88.53 lvq:3.96e-05 L2:1.29e-03 usage:0.1973 total usage:0.8789
+[2024/02/18 20:22:17] Rank:None, Epoch[28/300], Step [66/66], lr:1.88e-03 pred_PSNR: 26.87 perplexity:97.77 lvq:6.09e-05 L2:2.22e-03 usage:0.2285 total usage:0.9043
+[2024/02/18 20:22:18] Rank:None, Epoch[29/300], Step [1/66], lr:1.88e-03 pred_PSNR: 27.43 perplexity:92.10 lvq:4.92e-05 L2:2.23e-03 usage:0.2129 total usage:0.2129
+[2024/02/18 20:22:23] Rank:None, Epoch[29/300], Step [51/66], lr:1.93e-03 pred_PSNR: 26.73 perplexity:99.48 lvq:2.89e-05 L2:1.48e-03 usage:0.2324 total usage:0.9004
+[2024/02/18 20:22:24] Rank:None, Epoch[29/300], Step [66/66], lr:1.94e-03 pred_PSNR: 26.8 perplexity:101.95 lvq:5.40e-05 L2:3.92e-03 usage:0.2363 total usage:0.9277
+[2024/02/18 20:22:25] Rank:None, Epoch[30/300], Step [1/66], lr:1.94e-03 pred_PSNR: 27.17 perplexity:98.96 lvq:3.73e-05 L2:1.97e-03 usage:0.2227 total usage:0.2227
+[2024/02/18 20:22:30] Rank:None, Epoch[30/300], Step [51/66], lr:1.99e-03 pred_PSNR: 26.49 perplexity:98.47 lvq:3.34e-05 L2:1.90e-03 usage:0.2227 total usage:0.9023
+[2024/02/18 20:22:31] Rank:None, Epoch[30/300], Step [66/66], lr:2.00e-03 pred_PSNR: 26.5 perplexity:94.54 lvq:2.69e-05 L2:1.90e-03 usage:0.2129 total usage:0.9297
+[2024/02/18 20:22:32] Rank:None, Eval at Step [1/66] , FPS 219.3, pred_seen_psnr: 25.36 | 
+[2024/02/18 20:22:34] Rank:None, Eval at Step [51/66] , FPS 213.4, pred_seen_psnr: 26.19 | 
+[2024/02/18 20:22:35] Rank:None, Eval at Step [66/66] , FPS 207.3, pred_seen_psnr: 26.73 | 
+Eval at epoch 30 for (640, 1280): pred_seen_psnr: 26.73 | pred_unseen_psnr: 0.0 | quant_seen_psnr: 0.0 | quant_unseen_psnr: 0.0 | 
+[2024/02/18 20:22:36] Rank:None, Epoch[31/300], Step [1/66], lr:2.00e-03 pred_PSNR: 25.09 perplexity:98.61 lvq:3.65e-05 L2:3.31e-03 usage:0.2305 total usage:0.2305
+[2024/02/18 20:22:41] Rank:None, Epoch[31/300], Step [51/66], lr:2.00e-03 pred_PSNR: 26.75 perplexity:127.72 lvq:2.16e-05 L2:2.71e-03 usage:0.2871 total usage:0.8770
+[2024/02/18 20:22:42] Rank:None, Epoch[31/300], Step [66/66], lr:2.00e-03 pred_PSNR: 26.82 perplexity:98.86 lvq:8.01e-05 L2:2.89e-03 usage:0.2344 total usage:0.9160
+[2024/02/18 20:22:43] Rank:None, Epoch[32/300], Step [1/66], lr:2.00e-03 pred_PSNR: 25.39 perplexity:101.83 lvq:6.16e-05 L2:2.91e-03 usage:0.2344 total usage:0.2344
+[2024/02/18 20:22:48] Rank:None, Epoch[32/300], Step [51/66], lr:2.00e-03 pred_PSNR: 27.07 perplexity:102.02 lvq:3.08e-05 L2:2.90e-03 usage:0.2305 total usage:0.8730
+[2024/02/18 20:22:49] Rank:None, Epoch[32/300], Step [66/66], lr:2.00e-03 pred_PSNR: 27.15 perplexity:98.34 lvq:1.53e-05 L2:2.14e-03 usage:0.2207 total usage:0.9121
+[2024/02/18 20:22:50] Rank:None, Epoch[33/300], Step [1/66], lr:2.00e-03 pred_PSNR: 28.04 perplexity:98.43 lvq:1.95e-05 L2:1.76e-03 usage:0.2246 total usage:0.2246
+[2024/02/18 20:22:55] Rank:None, Epoch[33/300], Step [51/66], lr:2.00e-03 pred_PSNR: 27.31 perplexity:113.73 lvq:2.90e-05 L2:3.97e-03 usage:0.2539 total usage:0.9082
+[2024/02/18 20:22:56] Rank:None, Epoch[33/300], Step [66/66], lr:2.00e-03 pred_PSNR: 27.29 perplexity:93.37 lvq:1.23e-04 L2:2.97e-03 usage:0.2168 total usage:0.9297
+[2024/02/18 20:22:57] Rank:None, Epoch[34/300], Step [1/66], lr:2.00e-03 pred_PSNR: 26.95 perplexity:87.92 lvq:5.82e-05 L2:2.02e-03 usage:0.2031 total usage:0.2031
+[2024/02/18 20:23:02] Rank:None, Epoch[34/300], Step [51/66], lr:2.00e-03 pred_PSNR: 27.34 perplexity:96.45 lvq:3.44e-05 L2:1.80e-03 usage:0.2188 total usage:0.8613
+[2024/02/18 20:23:03] Rank:None, Epoch[34/300], Step [66/66], lr:2.00e-03 pred_PSNR: 27.34 perplexity:104.65 lvq:2.65e-05 L2:3.29e-03 usage:0.2402 total usage:0.8926
+[2024/02/18 20:23:04] Rank:None, Epoch[35/300], Step [1/66], lr:2.00e-03 pred_PSNR: 28.45 perplexity:93.31 lvq:3.40e-05 L2:1.50e-03 usage:0.2129 total usage:0.2129
+[2024/02/18 20:23:09] Rank:None, Epoch[35/300], Step [51/66], lr:2.00e-03 pred_PSNR: 27.68 perplexity:98.95 lvq:1.19e-05 L2:9.26e-04 usage:0.2246 total usage:0.8770
+[2024/02/18 20:23:10] Rank:None, Epoch[35/300], Step [66/66], lr:2.00e-03 pred_PSNR: 27.71 perplexity:96.90 lvq:3.08e-05 L2:1.90e-03 usage:0.2246 total usage:0.9082
+[2024/02/18 20:23:11] Rank:None, Epoch[36/300], Step [1/66], lr:2.00e-03 pred_PSNR: 29.27 perplexity:116.33 lvq:1.65e-05 L2:1.31e-03 usage:0.2617 total usage:0.2617
+[2024/02/18 20:23:16] Rank:None, Epoch[36/300], Step [51/66], lr:2.00e-03 pred_PSNR: 27.96 perplexity:100.85 lvq:1.16e-05 L2:1.60e-03 usage:0.2227 total usage:0.8730
+[2024/02/18 20:23:17] Rank:None, Epoch[36/300], Step [66/66], lr:2.00e-03 pred_PSNR: 28.0 perplexity:113.03 lvq:1.22e-04 L2:1.60e-03 usage:0.2539 total usage:0.9219
+[2024/02/18 20:23:18] Rank:None, Epoch[37/300], Step [1/66], lr:2.00e-03 pred_PSNR: 28.03 perplexity:98.01 lvq:5.21e-04 L2:1.81e-03 usage:0.2246 total usage:0.2246
+[2024/02/18 20:23:23] Rank:None, Epoch[37/300], Step [51/66], lr:2.00e-03 pred_PSNR: 28.09 perplexity:101.30 lvq:2.84e-05 L2:2.04e-03 usage:0.2363 total usage:0.8848
+[2024/02/18 20:23:24] Rank:None, Epoch[37/300], Step [66/66], lr:2.00e-03 pred_PSNR: 27.88 perplexity:98.33 lvq:2.09e-05 L2:2.24e-03 usage:0.2227 total usage:0.9180
+[2024/02/18 20:23:25] Rank:None, Epoch[38/300], Step [1/66], lr:2.00e-03 pred_PSNR: 26.58 perplexity:109.27 lvq:2.40e-05 L2:2.30e-03 usage:0.2480 total usage:0.2480
+[2024/02/18 20:23:30] Rank:None, Epoch[38/300], Step [51/66], lr:2.00e-03 pred_PSNR: 27.58 perplexity:86.72 lvq:2.89e-05 L2:1.10e-03 usage:0.1992 total usage:0.8789
+[2024/02/18 20:23:31] Rank:None, Epoch[38/300], Step [66/66], lr:2.00e-03 pred_PSNR: 27.65 perplexity:83.38 lvq:6.04e-05 L2:3.19e-03 usage:0.1953 total usage:0.9141
+[2024/02/18 20:23:32] Rank:None, Epoch[39/300], Step [1/66], lr:2.00e-03 pred_PSNR: 30.61 perplexity:79.57 lvq:5.25e-05 L2:9.08e-04 usage:0.1855 total usage:0.1855
+[2024/02/18 20:23:37] Rank:None, Epoch[39/300], Step [51/66], lr:1.99e-03 pred_PSNR: 27.98 perplexity:104.47 lvq:1.48e-05 L2:2.07e-03 usage:0.2402 total usage:0.8711
+[2024/02/18 20:23:38] Rank:None, Epoch[39/300], Step [66/66], lr:1.99e-03 pred_PSNR: 28.05 perplexity:104.42 lvq:2.40e-05 L2:2.24e-03 usage:0.2383 total usage:0.8926
+[2024/02/18 20:23:39] Rank:None, Epoch[40/300], Step [1/66], lr:1.99e-03 pred_PSNR: 28.87 perplexity:107.65 lvq:1.86e-05 L2:1.45e-03 usage:0.2422 total usage:0.2422
+[2024/02/18 20:23:44] Rank:None, Epoch[40/300], Step [51/66], lr:1.99e-03 pred_PSNR: 27.84 perplexity:96.46 lvq:2.43e-05 L2:1.94e-03 usage:0.2168 total usage:0.8672
+[2024/02/18 20:23:45] Rank:None, Epoch[40/300], Step [66/66], lr:1.99e-03 pred_PSNR: 27.95 perplexity:115.91 lvq:1.61e-05 L2:2.41e-03 usage:0.2559 total usage:0.9062
+[2024/02/18 20:23:46] Rank:None, Epoch[41/300], Step [1/66], lr:1.99e-03 pred_PSNR: 28.05 perplexity:113.79 lvq:1.50e-05 L2:1.85e-03 usage:0.2578 total usage:0.2578
+[2024/02/18 20:23:51] Rank:None, Epoch[41/300], Step [51/66], lr:1.99e-03 pred_PSNR: 28.33 perplexity:90.43 lvq:1.64e-05 L2:1.70e-03 usage:0.2129 total usage:0.8984
+[2024/02/18 20:23:52] Rank:None, Epoch[41/300], Step [66/66], lr:1.99e-03 pred_PSNR: 28.24 perplexity:88.27 lvq:6.50e-05 L2:8.47e-04 usage:0.1953 total usage:0.9297
+[2024/02/18 20:23:53] Rank:None, Epoch[42/300], Step [1/66], lr:1.99e-03 pred_PSNR: 31.22 perplexity:86.24 lvq:3.01e-05 L2:7.66e-04 usage:0.1953 total usage:0.1953
+[2024/02/18 20:23:58] Rank:None, Epoch[42/300], Step [51/66], lr:1.99e-03 pred_PSNR: 28.49 perplexity:100.71 lvq:1.38e-05 L2:1.70e-03 usage:0.2227 total usage:0.8867
+[2024/02/18 20:23:59] Rank:None, Epoch[42/300], Step [66/66], lr:1.99e-03 pred_PSNR: 28.32 perplexity:92.36 lvq:2.63e-05 L2:8.06e-04 usage:0.2109 total usage:0.9160
+[2024/02/18 20:24:00] Rank:None, Epoch[43/300], Step [1/66], lr:1.99e-03 pred_PSNR: 30.18 perplexity:93.34 lvq:1.38e-05 L2:9.64e-04 usage:0.2168 total usage:0.2168
+[2024/02/18 20:24:05] Rank:None, Epoch[43/300], Step [51/66], lr:1.99e-03 pred_PSNR: 28.58 perplexity:104.48 lvq:9.85e-06 L2:8.42e-04 usage:0.2383 total usage:0.8926
+[2024/02/18 20:24:06] Rank:None, Epoch[43/300], Step [66/66], lr:1.99e-03 pred_PSNR: 28.42 perplexity:115.05 lvq:8.79e-06 L2:1.69e-03 usage:0.2559 total usage:0.9258
+[2024/02/18 20:24:07] Rank:None, Epoch[44/300], Step [1/66], lr:1.99e-03 pred_PSNR: 28.15 perplexity:76.02 lvq:1.57e-05 L2:1.53e-03 usage:0.1758 total usage:0.1758
+[2024/02/18 20:24:12] Rank:None, Epoch[44/300], Step [51/66], lr:1.99e-03 pred_PSNR: 28.22 perplexity:91.20 lvq:2.86e-05 L2:8.75e-04 usage:0.1992 total usage:0.8652
+[2024/02/18 20:24:13] Rank:None, Epoch[44/300], Step [66/66], lr:1.99e-03 pred_PSNR: 28.22 perplexity:89.32 lvq:3.15e-05 L2:1.56e-03 usage:0.2031 total usage:0.8965
+[2024/02/18 20:24:14] Rank:None, Epoch[45/300], Step [1/66], lr:1.99e-03 pred_PSNR: 27.39 perplexity:82.75 lvq:4.16e-05 L2:1.82e-03 usage:0.1914 total usage:0.1914
+[2024/02/18 20:24:19] Rank:None, Epoch[45/300], Step [51/66], lr:1.99e-03 pred_PSNR: 28.62 perplexity:86.44 lvq:3.66e-05 L2:9.42e-04 usage:0.1934 total usage:0.8691
+[2024/02/18 20:24:20] Rank:None, Epoch[45/300], Step [66/66], lr:1.98e-03 pred_PSNR: 28.8 perplexity:105.08 lvq:1.01e-05 L2:1.69e-03 usage:0.2363 total usage:0.9023
+[2024/02/18 20:24:21] Rank:None, Epoch[46/300], Step [1/66], lr:1.98e-03 pred_PSNR: 27.09 perplexity:102.74 lvq:1.22e-05 L2:1.96e-03 usage:0.2383 total usage:0.2383
+[2024/02/18 20:24:26] Rank:None, Epoch[46/300], Step [51/66], lr:1.98e-03 pred_PSNR: 28.19 perplexity:86.57 lvq:3.51e-05 L2:2.29e-03 usage:0.2012 total usage:0.8906
+[2024/02/18 20:24:27] Rank:None, Epoch[46/300], Step [66/66], lr:1.98e-03 pred_PSNR: 28.23 perplexity:101.50 lvq:1.21e-05 L2:9.06e-04 usage:0.2266 total usage:0.9160
+[2024/02/18 20:24:28] Rank:None, Epoch[47/300], Step [1/66], lr:1.98e-03 pred_PSNR: 27.58 perplexity:109.34 lvq:1.55e-05 L2:1.75e-03 usage:0.2500 total usage:0.2500
+[2024/02/18 20:24:33] Rank:None, Epoch[47/300], Step [51/66], lr:1.98e-03 pred_PSNR: 28.29 perplexity:89.09 lvq:1.19e-05 L2:1.29e-03 usage:0.2109 total usage:0.8828
+[2024/02/18 20:24:34] Rank:None, Epoch[47/300], Step [66/66], lr:1.98e-03 pred_PSNR: 28.41 perplexity:89.04 lvq:1.01e-05 L2:9.30e-04 usage:0.2070 total usage:0.9062
+[2024/02/18 20:24:35] Rank:None, Epoch[48/300], Step [1/66], lr:1.98e-03 pred_PSNR: 26.81 perplexity:108.92 lvq:1.32e-05 L2:2.09e-03 usage:0.2539 total usage:0.2539
+[2024/02/18 20:24:40] Rank:None, Epoch[48/300], Step [51/66], lr:1.98e-03 pred_PSNR: 28.58 perplexity:83.75 lvq:2.91e-05 L2:1.92e-03 usage:0.2031 total usage:0.8730
+[2024/02/18 20:24:41] Rank:None, Epoch[48/300], Step [66/66], lr:1.98e-03 pred_PSNR: 28.67 perplexity:93.07 lvq:3.71e-05 L2:1.37e-03 usage:0.2188 total usage:0.8906
+[2024/02/18 20:24:42] Rank:None, Epoch[49/300], Step [1/66], lr:1.98e-03 pred_PSNR: 28.05 perplexity:101.19 lvq:4.36e-05 L2:1.78e-03 usage:0.2344 total usage:0.2344
+[2024/02/18 20:24:47] Rank:None, Epoch[49/300], Step [51/66], lr:1.98e-03 pred_PSNR: 28.99 perplexity:87.48 lvq:2.68e-05 L2:8.38e-04 usage:0.1953 total usage:0.8887
+[2024/02/18 20:24:48] Rank:None, Epoch[49/300], Step [66/66], lr:1.98e-03 pred_PSNR: 29.15 perplexity:98.01 lvq:2.58e-05 L2:7.78e-04 usage:0.2305 total usage:0.9219
+[2024/02/18 20:24:49] Rank:None, Epoch[50/300], Step [1/66], lr:1.98e-03 pred_PSNR: 29.15 perplexity:96.05 lvq:1.70e-05 L2:1.22e-03 usage:0.2168 total usage:0.2168
+[2024/02/18 20:24:54] Rank:None, Epoch[50/300], Step [51/66], lr:1.97e-03 pred_PSNR: 29.38 perplexity:90.17 lvq:2.18e-05 L2:1.42e-03 usage:0.2031 total usage:0.8770
+[2024/02/18 20:24:55] Rank:None, Epoch[50/300], Step [66/66], lr:1.97e-03 pred_PSNR: 29.32 perplexity:86.28 lvq:3.20e-05 L2:1.79e-03 usage:0.2051 total usage:0.9141
+[2024/02/18 20:24:55] Rank:None, Epoch[51/300], Step [1/66], lr:1.97e-03 pred_PSNR: 32.85 perplexity:80.47 lvq:1.69e-05 L2:5.19e-04 usage:0.1816 total usage:0.1816
+[2024/02/18 20:25:00] Rank:None, Epoch[51/300], Step [51/66], lr:1.97e-03 pred_PSNR: 29.12 perplexity:110.84 lvq:1.61e-05 L2:1.64e-03 usage:0.2500 total usage:0.8789
+[2024/02/18 20:25:02] Rank:None, Epoch[51/300], Step [66/66], lr:1.97e-03 pred_PSNR: 29.08 perplexity:86.68 lvq:1.58e-05 L2:8.39e-04 usage:0.1992 total usage:0.9102
+[2024/02/18 20:25:02] Rank:None, Epoch[52/300], Step [1/66], lr:1.97e-03 pred_PSNR: 28.68 perplexity:109.71 lvq:1.36e-05 L2:1.52e-03 usage:0.2480 total usage:0.2480
+[2024/02/18 20:25:07] Rank:None, Epoch[52/300], Step [51/66], lr:1.97e-03 pred_PSNR: 28.72 perplexity:103.06 lvq:2.04e-05 L2:1.49e-03 usage:0.2422 total usage:0.8828
+[2024/02/18 20:25:09] Rank:None, Epoch[52/300], Step [66/66], lr:1.97e-03 pred_PSNR: 28.85 perplexity:109.70 lvq:1.08e-05 L2:1.09e-03 usage:0.2461 total usage:0.9121
+[2024/02/18 20:25:09] Rank:None, Epoch[53/300], Step [1/66], lr:1.97e-03 pred_PSNR: 29.31 perplexity:99.01 lvq:8.17e-06 L2:1.66e-03 usage:0.2266 total usage:0.2266
+[2024/02/18 20:25:14] Rank:None, Epoch[53/300], Step [51/66], lr:1.97e-03 pred_PSNR: 29.06 perplexity:85.93 lvq:2.09e-05 L2:1.83e-03 usage:0.2031 total usage:0.8711
+[2024/02/18 20:25:16] Rank:None, Epoch[53/300], Step [66/66], lr:1.96e-03 pred_PSNR: 29.18 perplexity:104.67 lvq:9.65e-06 L2:9.27e-04 usage:0.2324 total usage:0.9023
+[2024/02/18 20:25:16] Rank:None, Epoch[54/300], Step [1/66], lr:1.96e-03 pred_PSNR: 29.58 perplexity:98.72 lvq:9.53e-06 L2:1.21e-03 usage:0.2246 total usage:0.2246
+[2024/02/18 20:25:21] Rank:None, Epoch[54/300], Step [51/66], lr:1.96e-03 pred_PSNR: 29.32 perplexity:90.17 lvq:1.45e-05 L2:7.36e-04 usage:0.2031 total usage:0.8730
+[2024/02/18 20:25:23] Rank:None, Epoch[54/300], Step [66/66], lr:1.96e-03 pred_PSNR: 29.39 perplexity:80.34 lvq:5.93e-05 L2:1.16e-03 usage:0.1895 total usage:0.9141
+[2024/02/18 20:25:23] Rank:None, Epoch[55/300], Step [1/66], lr:1.96e-03 pred_PSNR: 29.16 perplexity:87.81 lvq:4.72e-05 L2:1.27e-03 usage:0.1992 total usage:0.1992
+[2024/02/18 20:25:28] Rank:None, Epoch[55/300], Step [51/66], lr:1.96e-03 pred_PSNR: 29.43 perplexity:92.99 lvq:5.75e-06 L2:1.66e-03 usage:0.2148 total usage:0.8516
+[2024/02/18 20:25:30] Rank:None, Epoch[55/300], Step [66/66], lr:1.96e-03 pred_PSNR: 29.48 perplexity:100.04 lvq:1.80e-05 L2:1.35e-03 usage:0.2344 total usage:0.8887
+[2024/02/18 20:25:30] Rank:None, Epoch[56/300], Step [1/66], lr:1.96e-03 pred_PSNR: 29.04 perplexity:97.03 lvq:1.48e-05 L2:1.26e-03 usage:0.2285 total usage:0.2285
+[2024/02/18 20:25:35] Rank:None, Epoch[56/300], Step [51/66], lr:1.96e-03 pred_PSNR: 29.74 perplexity:97.40 lvq:2.70e-05 L2:1.91e-03 usage:0.2168 total usage:0.8945
+[2024/02/18 20:25:37] Rank:None, Epoch[56/300], Step [66/66], lr:1.95e-03 pred_PSNR: 29.52 perplexity:95.55 lvq:1.95e-04 L2:1.33e-03 usage:0.2207 total usage:0.9180
+[2024/02/18 20:25:37] Rank:None, Epoch[57/300], Step [1/66], lr:1.95e-03 pred_PSNR: 29.87 perplexity:86.14 lvq:2.04e-05 L2:1.03e-03 usage:0.1973 total usage:0.1973
+[2024/02/18 20:25:42] Rank:None, Epoch[57/300], Step [51/66], lr:1.95e-03 pred_PSNR: 29.69 perplexity:83.03 lvq:5.45e-06 L2:4.60e-04 usage:0.1914 total usage:0.8750
+[2024/02/18 20:25:43] Rank:None, Epoch[57/300], Step [66/66], lr:1.95e-03 pred_PSNR: 29.62 perplexity:97.00 lvq:4.29e-06 L2:5.94e-04 usage:0.2266 total usage:0.9043
+[2024/02/18 20:25:44] Rank:None, Epoch[58/300], Step [1/66], lr:1.95e-03 pred_PSNR: 29.84 perplexity:105.10 lvq:5.04e-06 L2:1.16e-03 usage:0.2402 total usage:0.2402
+[2024/02/18 20:25:49] Rank:None, Epoch[58/300], Step [51/66], lr:1.95e-03 pred_PSNR: 29.75 perplexity:114.46 lvq:6.26e-06 L2:1.90e-03 usage:0.2559 total usage:0.8887
+[2024/02/18 20:25:50] Rank:None, Epoch[58/300], Step [66/66], lr:1.95e-03 pred_PSNR: 29.73 perplexity:87.21 lvq:2.12e-05 L2:5.78e-04 usage:0.1992 total usage:0.9121
+[2024/02/18 20:25:51] Rank:None, Epoch[59/300], Step [1/66], lr:1.95e-03 pred_PSNR: 30.43 perplexity:89.38 lvq:1.52e-05 L2:1.03e-03 usage:0.2070 total usage:0.2070
+[2024/02/18 20:25:56] Rank:None, Epoch[59/300], Step [51/66], lr:1.94e-03 pred_PSNR: 29.61 perplexity:93.23 lvq:1.70e-05 L2:7.78e-04 usage:0.2051 total usage:0.8789
+[2024/02/18 20:25:57] Rank:None, Epoch[59/300], Step [66/66], lr:1.94e-03 pred_PSNR: 29.59 perplexity:103.56 lvq:5.44e-06 L2:8.57e-04 usage:0.2344 total usage:0.9102
+[2024/02/18 20:25:58] Rank:None, Epoch[60/300], Step [1/66], lr:1.94e-03 pred_PSNR: 32.46 perplexity:85.00 lvq:6.80e-06 L2:5.67e-04 usage:0.1973 total usage:0.1973
+[2024/02/18 20:26:03] Rank:None, Epoch[60/300], Step [51/66], lr:1.94e-03 pred_PSNR: 29.97 perplexity:92.82 lvq:4.62e-05 L2:1.40e-03 usage:0.2148 total usage:0.8867
+[2024/02/18 20:26:04] Rank:None, Epoch[60/300], Step [66/66], lr:1.94e-03 pred_PSNR: 30.06 perplexity:91.79 lvq:1.82e-05 L2:7.81e-04 usage:0.2090 total usage:0.9141
+[2024/02/18 20:26:05] Rank:None, Eval at Step [1/66] , FPS 151.8, pred_seen_psnr: 29.68 | 
+[2024/02/18 20:26:07] Rank:None, Eval at Step [51/66] , FPS 214.6, pred_seen_psnr: 29.68 | 
+[2024/02/18 20:26:08] Rank:None, Eval at Step [66/66] , FPS 209.0, pred_seen_psnr: 30.15 | 
+Eval at epoch 60 for (640, 1280): pred_seen_psnr: 30.15 | pred_unseen_psnr: 0.0 | quant_seen_psnr: 0.0 | quant_unseen_psnr: 0.0 | 
+[2024/02/18 20:26:09] Rank:None, Epoch[61/300], Step [1/66], lr:1.94e-03 pred_PSNR: 29.39 perplexity:105.87 lvq:2.29e-05 L2:1.20e-03 usage:0.2461 total usage:0.2461
+[2024/02/18 20:26:14] Rank:None, Epoch[61/300], Step [51/66], lr:1.94e-03 pred_PSNR: 29.86 perplexity:93.62 lvq:1.06e-05 L2:1.86e-03 usage:0.2129 total usage:0.8652
+[2024/02/18 20:26:15] Rank:None, Epoch[61/300], Step [66/66], lr:1.94e-03 pred_PSNR: 29.75 perplexity:79.38 lvq:2.70e-05 L2:7.98e-04 usage:0.1875 total usage:0.9023
+[2024/02/18 20:26:16] Rank:None, Epoch[62/300], Step [1/66], lr:1.94e-03 pred_PSNR: 32.77 perplexity:84.92 lvq:1.26e-05 L2:5.29e-04 usage:0.1973 total usage:0.1973
+[2024/02/18 20:26:21] Rank:None, Epoch[62/300], Step [51/66], lr:1.93e-03 pred_PSNR: 30.01 perplexity:95.63 lvq:1.13e-05 L2:7.13e-04 usage:0.2207 total usage:0.9062
+[2024/02/18 20:26:22] Rank:None, Epoch[62/300], Step [66/66], lr:1.93e-03 pred_PSNR: 30.01 perplexity:112.13 lvq:7.60e-06 L2:9.38e-04 usage:0.2578 total usage:0.9277
+[2024/02/18 20:26:23] Rank:None, Epoch[63/300], Step [1/66], lr:1.93e-03 pred_PSNR: 26.95 perplexity:96.40 lvq:1.02e-05 L2:2.02e-03 usage:0.2246 total usage:0.2246
+[2024/02/18 20:26:28] Rank:None, Epoch[63/300], Step [51/66], lr:1.93e-03 pred_PSNR: 30.16 perplexity:89.00 lvq:6.07e-05 L2:8.50e-04 usage:0.2031 total usage:0.8633
+[2024/02/18 20:26:29] Rank:None, Epoch[63/300], Step [66/66], lr:1.93e-03 pred_PSNR: 30.13 perplexity:91.58 lvq:2.52e-05 L2:1.35e-03 usage:0.2148 total usage:0.8965
+[2024/02/18 20:26:30] Rank:None, Epoch[64/300], Step [1/66], lr:1.93e-03 pred_PSNR: 30.39 perplexity:97.65 lvq:1.97e-05 L2:9.43e-04 usage:0.2246 total usage:0.2246
+[2024/02/18 20:26:35] Rank:None, Epoch[64/300], Step [51/66], lr:1.92e-03 pred_PSNR: 29.88 perplexity:102.46 lvq:1.26e-05 L2:8.45e-04 usage:0.2344 total usage:0.8750
+[2024/02/18 20:26:36] Rank:None, Epoch[64/300], Step [66/66], lr:1.92e-03 pred_PSNR: 29.87 perplexity:90.01 lvq:1.09e-05 L2:1.30e-03 usage:0.2129 total usage:0.8965
+[2024/02/18 20:26:37] Rank:None, Epoch[65/300], Step [1/66], lr:1.92e-03 pred_PSNR: 29.24 perplexity:110.66 lvq:5.88e-06 L2:1.19e-03 usage:0.2480 total usage:0.2480
+[2024/02/18 20:26:42] Rank:None, Epoch[65/300], Step [51/66], lr:1.92e-03 pred_PSNR: 29.75 perplexity:95.61 lvq:6.20e-06 L2:6.61e-04 usage:0.2168 total usage:0.8770
+[2024/02/18 20:26:43] Rank:None, Epoch[65/300], Step [66/66], lr:1.92e-03 pred_PSNR: 29.85 perplexity:90.57 lvq:5.28e-05 L2:9.03e-04 usage:0.2148 total usage:0.8926
+[2024/02/18 20:26:44] Rank:None, Epoch[66/300], Step [1/66], lr:1.92e-03 pred_PSNR: 28.82 perplexity:94.36 lvq:8.30e-06 L2:1.31e-03 usage:0.2188 total usage:0.2188
+[2024/02/18 20:26:49] Rank:None, Epoch[66/300], Step [51/66], lr:1.91e-03 pred_PSNR: 29.66 perplexity:87.23 lvq:2.20e-05 L2:1.38e-03 usage:0.2070 total usage:0.8555
+[2024/02/18 20:26:50] Rank:None, Epoch[66/300], Step [66/66], lr:1.91e-03 pred_PSNR: 29.44 perplexity:85.70 lvq:4.18e-05 L2:1.31e-03 usage:0.1953 total usage:0.8984
+[2024/02/18 20:26:51] Rank:None, Epoch[67/300], Step [1/66], lr:1.91e-03 pred_PSNR: 29.24 perplexity:89.13 lvq:2.82e-05 L2:1.27e-03 usage:0.2129 total usage:0.2129
+[2024/02/18 20:26:55] Rank:None, Epoch[67/300], Step [51/66], lr:1.91e-03 pred_PSNR: 29.72 perplexity:90.44 lvq:7.63e-06 L2:7.76e-04 usage:0.2109 total usage:0.8848
+[2024/02/18 20:26:57] Rank:None, Epoch[67/300], Step [66/66], lr:1.91e-03 pred_PSNR: 29.91 perplexity:97.92 lvq:4.55e-06 L2:8.25e-04 usage:0.2266 total usage:0.9102
+[2024/02/18 20:26:57] Rank:None, Epoch[68/300], Step [1/66], lr:1.91e-03 pred_PSNR: 29.22 perplexity:95.16 lvq:7.60e-06 L2:1.24e-03 usage:0.2246 total usage:0.2246
+[2024/02/18 20:27:02] Rank:None, Epoch[68/300], Step [51/66], lr:1.91e-03 pred_PSNR: 30.34 perplexity:85.20 lvq:1.87e-05 L2:1.28e-03 usage:0.1992 total usage:0.8652
+[2024/02/18 20:27:04] Rank:None, Epoch[68/300], Step [66/66], lr:1.90e-03 pred_PSNR: 30.55 perplexity:104.46 lvq:8.10e-06 L2:6.57e-04 usage:0.2402 total usage:0.8945
+[2024/02/18 20:27:04] Rank:None, Epoch[69/300], Step [1/66], lr:1.90e-03 pred_PSNR: 29.18 perplexity:107.29 lvq:7.33e-06 L2:1.21e-03 usage:0.2402 total usage:0.2402
+[2024/02/18 20:27:09] Rank:None, Epoch[69/300], Step [51/66], lr:1.90e-03 pred_PSNR: 30.68 perplexity:87.90 lvq:2.65e-05 L2:1.58e-03 usage:0.1973 total usage:0.8633
+[2024/02/18 20:27:11] Rank:None, Epoch[69/300], Step [66/66], lr:1.90e-03 pred_PSNR: 30.59 perplexity:84.51 lvq:1.72e-05 L2:1.03e-03 usage:0.1875 total usage:0.8945
+[2024/02/18 20:27:11] Rank:None, Epoch[70/300], Step [1/66], lr:1.90e-03 pred_PSNR: 29.59 perplexity:102.50 lvq:1.56e-05 L2:1.12e-03 usage:0.2363 total usage:0.2363
+[2024/02/18 20:27:16] Rank:None, Epoch[70/300], Step [51/66], lr:1.89e-03 pred_PSNR: 29.08 perplexity:81.24 lvq:5.56e-05 L2:1.42e-03 usage:0.1934 total usage:0.8828
+[2024/02/18 20:27:18] Rank:None, Epoch[70/300], Step [66/66], lr:1.89e-03 pred_PSNR: 29.14 perplexity:85.56 lvq:1.48e-05 L2:7.03e-04 usage:0.2012 total usage:0.9102
+[2024/02/18 20:27:18] Rank:None, Epoch[71/300], Step [1/66], lr:1.89e-03 pred_PSNR: 31.3 perplexity:95.59 lvq:2.53e-05 L2:7.67e-04 usage:0.2246 total usage:0.2246
+[2024/02/18 20:27:23] Rank:None, Epoch[71/300], Step [51/66], lr:1.89e-03 pred_PSNR: 29.77 perplexity:81.77 lvq:9.49e-06 L2:5.32e-04 usage:0.1875 total usage:0.8828
+[2024/02/18 20:27:24] Rank:None, Epoch[71/300], Step [66/66], lr:1.89e-03 pred_PSNR: 30.02 perplexity:89.87 lvq:1.51e-05 L2:1.22e-03 usage:0.2109 total usage:0.9102
+[2024/02/18 20:27:25] Rank:None, Epoch[72/300], Step [1/66], lr:1.89e-03 pred_PSNR: 30.3 perplexity:105.45 lvq:1.81e-05 L2:1.12e-03 usage:0.2363 total usage:0.2363
+[2024/02/18 20:27:30] Rank:None, Epoch[72/300], Step [51/66], lr:1.88e-03 pred_PSNR: 30.43 perplexity:97.06 lvq:5.26e-06 L2:7.87e-04 usage:0.2227 total usage:0.8672
+[2024/02/18 20:27:31] Rank:None, Epoch[72/300], Step [66/66], lr:1.88e-03 pred_PSNR: 30.5 perplexity:114.75 lvq:4.32e-06 L2:1.50e-03 usage:0.2598 total usage:0.8906
+[2024/02/18 20:27:32] Rank:None, Epoch[73/300], Step [1/66], lr:1.88e-03 pred_PSNR: 31.27 perplexity:100.16 lvq:3.55e-06 L2:7.97e-04 usage:0.2305 total usage:0.2305
+[2024/02/18 20:27:37] Rank:None, Epoch[73/300], Step [51/66], lr:1.88e-03 pred_PSNR: 30.33 perplexity:92.01 lvq:1.35e-05 L2:1.31e-03 usage:0.2188 total usage:0.8828
+[2024/02/18 20:27:38] Rank:None, Epoch[73/300], Step [66/66], lr:1.88e-03 pred_PSNR: 30.57 perplexity:102.35 lvq:1.03e-05 L2:5.68e-04 usage:0.2402 total usage:0.9082
+[2024/02/18 20:27:39] Rank:None, Epoch[74/300], Step [1/66], lr:1.88e-03 pred_PSNR: 28.81 perplexity:96.51 lvq:8.40e-06 L2:1.37e-03 usage:0.2285 total usage:0.2285
+[2024/02/18 20:27:44] Rank:None, Epoch[74/300], Step [51/66], lr:1.87e-03 pred_PSNR: 30.3 perplexity:101.95 lvq:1.04e-05 L2:8.48e-04 usage:0.2402 total usage:0.8711
+[2024/02/18 20:27:45] Rank:None, Epoch[74/300], Step [66/66], lr:1.87e-03 pred_PSNR: 30.25 perplexity:93.60 lvq:6.86e-06 L2:8.52e-04 usage:0.2285 total usage:0.9004
+[2024/02/18 20:27:46] Rank:None, Epoch[75/300], Step [1/66], lr:1.87e-03 pred_PSNR: 29.59 perplexity:92.69 lvq:1.36e-05 L2:1.11e-03 usage:0.2188 total usage:0.2188
+[2024/02/18 20:27:51] Rank:None, Epoch[75/300], Step [51/66], lr:1.87e-03 pred_PSNR: 30.15 perplexity:91.83 lvq:1.24e-05 L2:5.40e-04 usage:0.2051 total usage:0.8672
+[2024/02/18 20:27:52] Rank:None, Epoch[75/300], Step [66/66], lr:1.87e-03 pred_PSNR: 30.36 perplexity:97.88 lvq:6.93e-06 L2:9.99e-04 usage:0.2246 total usage:0.8984
+[2024/02/18 20:27:53] Rank:None, Epoch[76/300], Step [1/66], lr:1.87e-03 pred_PSNR: 30.78 perplexity:105.15 lvq:5.59e-06 L2:9.38e-04 usage:0.2461 total usage:0.2461
+[2024/02/18 20:27:58] Rank:None, Epoch[76/300], Step [51/66], lr:1.86e-03 pred_PSNR: 30.69 perplexity:95.55 lvq:1.25e-05 L2:7.32e-04 usage:0.2246 total usage:0.8652
+[2024/02/18 20:27:59] Rank:None, Epoch[76/300], Step [66/66], lr:1.86e-03 pred_PSNR: 30.47 perplexity:88.58 lvq:4.44e-05 L2:7.91e-04 usage:0.2070 total usage:0.8984
+[2024/02/18 20:28:00] Rank:None, Epoch[77/300], Step [1/66], lr:1.86e-03 pred_PSNR: 29.28 perplexity:89.15 lvq:2.95e-05 L2:1.18e-03 usage:0.2012 total usage:0.2012
+[2024/02/18 20:28:05] Rank:None, Epoch[77/300], Step [51/66], lr:1.86e-03 pred_PSNR: 30.36 perplexity:89.16 lvq:8.85e-06 L2:9.04e-04 usage:0.2090 total usage:0.8711
+[2024/02/18 20:28:06] Rank:None, Epoch[77/300], Step [66/66], lr:1.85e-03 pred_PSNR: 30.42 perplexity:112.41 lvq:9.28e-06 L2:8.82e-04 usage:0.2520 total usage:0.8906
+[2024/02/18 20:28:07] Rank:None, Epoch[78/300], Step [1/66], lr:1.85e-03 pred_PSNR: 29.78 perplexity:101.70 lvq:1.21e-05 L2:1.08e-03 usage:0.2285 total usage:0.2285
+[2024/02/18 20:28:12] Rank:None, Epoch[78/300], Step [51/66], lr:1.85e-03 pred_PSNR: 31.18 perplexity:83.15 lvq:1.06e-05 L2:3.91e-04 usage:0.1895 total usage:0.8809
+[2024/02/18 20:28:13] Rank:None, Epoch[78/300], Step [66/66], lr:1.85e-03 pred_PSNR: 31.08 perplexity:95.46 lvq:1.14e-05 L2:1.08e-03 usage:0.2246 total usage:0.9023
+[2024/02/18 20:28:14] Rank:None, Epoch[79/300], Step [1/66], lr:1.85e-03 pred_PSNR: 31.77 perplexity:93.21 lvq:8.17e-06 L2:7.00e-04 usage:0.2109 total usage:0.2109
+[2024/02/18 20:28:19] Rank:None, Epoch[79/300], Step [51/66], lr:1.84e-03 pred_PSNR: 30.81 perplexity:102.99 lvq:9.80e-06 L2:1.13e-03 usage:0.2285 total usage:0.8711
+[2024/02/18 20:28:20] Rank:None, Epoch[79/300], Step [66/66], lr:1.84e-03 pred_PSNR: 30.85 perplexity:99.95 lvq:5.31e-05 L2:7.75e-04 usage:0.2266 total usage:0.8867
+[2024/02/18 20:28:21] Rank:None, Epoch[80/300], Step [1/66], lr:1.84e-03 pred_PSNR: 28.12 perplexity:95.01 lvq:1.01e-05 L2:1.54e-03 usage:0.2207 total usage:0.2207
+[2024/02/18 20:28:26] Rank:None, Epoch[80/300], Step [51/66], lr:1.84e-03 pred_PSNR: 30.85 perplexity:98.98 lvq:1.89e-05 L2:1.51e-03 usage:0.2285 total usage:0.8535
+[2024/02/18 20:28:28] Rank:None, Epoch[80/300], Step [66/66], lr:1.84e-03 pred_PSNR: 30.78 perplexity:92.94 lvq:1.95e-05 L2:1.25e-03 usage:0.2109 total usage:0.8848
+[2024/02/18 20:28:28] Rank:None, Epoch[81/300], Step [1/66], lr:1.84e-03 pred_PSNR: 30.47 perplexity:104.27 lvq:1.13e-05 L2:9.14e-04 usage:0.2500 total usage:0.2500
+[2024/02/18 20:28:33] Rank:None, Epoch[81/300], Step [51/66], lr:1.83e-03 pred_PSNR: 31.1 perplexity:117.14 lvq:5.41e-05 L2:1.24e-03 usage:0.2617 total usage:0.8770
+[2024/02/18 20:28:34] Rank:None, Epoch[81/300], Step [66/66], lr:1.83e-03 pred_PSNR: 31.16 perplexity:97.02 lvq:1.39e-05 L2:8.78e-04 usage:0.2246 total usage:0.9121
+[2024/02/18 20:28:35] Rank:None, Epoch[82/300], Step [1/66], lr:1.83e-03 pred_PSNR: 31.8 perplexity:96.71 lvq:9.79e-06 L2:7.31e-04 usage:0.2188 total usage:0.2188
+[2024/02/18 20:28:40] Rank:None, Epoch[82/300], Step [51/66], lr:1.82e-03 pred_PSNR: 31.3 perplexity:99.79 lvq:4.20e-06 L2:1.03e-03 usage:0.2324 total usage:0.8828
+[2024/02/18 20:28:41] Rank:None, Epoch[82/300], Step [66/66], lr:1.82e-03 pred_PSNR: 31.16 perplexity:92.63 lvq:2.44e-05 L2:9.07e-04 usage:0.2168 total usage:0.9180
+[2024/02/18 20:28:42] Rank:None, Epoch[83/300], Step [1/66], lr:1.82e-03 pred_PSNR: 30.97 perplexity:82.26 lvq:6.27e-04 L2:8.14e-04 usage:0.1914 total usage:0.1914
+[2024/02/18 20:28:47] Rank:None, Epoch[83/300], Step [51/66], lr:1.82e-03 pred_PSNR: 31.37 perplexity:105.69 lvq:6.44e-06 L2:8.56e-04 usage:0.2461 total usage:0.8555
+[2024/02/18 20:28:48] Rank:None, Epoch[83/300], Step [66/66], lr:1.82e-03 pred_PSNR: 31.39 perplexity:92.53 lvq:2.49e-05 L2:1.15e-03 usage:0.2168 total usage:0.8945
+[2024/02/18 20:28:49] Rank:None, Epoch[84/300], Step [1/66], lr:1.82e-03 pred_PSNR: 30.73 perplexity:84.82 lvq:4.82e-05 L2:8.65e-04 usage:0.1953 total usage:0.1953
+[2024/02/18 20:28:54] Rank:None, Epoch[84/300], Step [51/66], lr:1.81e-03 pred_PSNR: 30.75 perplexity:89.92 lvq:8.74e-06 L2:6.34e-04 usage:0.2051 total usage:0.8750
+[2024/02/18 20:28:55] Rank:None, Epoch[84/300], Step [66/66], lr:1.81e-03 pred_PSNR: 30.91 perplexity:90.92 lvq:3.70e-06 L2:8.85e-04 usage:0.2148 total usage:0.8906
+[2024/02/18 20:28:56] Rank:None, Epoch[85/300], Step [1/66], lr:1.81e-03 pred_PSNR: 31.04 perplexity:99.82 lvq:4.47e-06 L2:8.63e-04 usage:0.2305 total usage:0.2305
+[2024/02/18 20:29:01] Rank:None, Epoch[85/300], Step [51/66], lr:1.80e-03 pred_PSNR: 31.48 perplexity:95.48 lvq:4.19e-06 L2:8.69e-04 usage:0.2246 total usage:0.8770
+[2024/02/18 20:29:02] Rank:None, Epoch[85/300], Step [66/66], lr:1.80e-03 pred_PSNR: 31.45 perplexity:96.47 lvq:2.56e-06 L2:7.53e-04 usage:0.2266 total usage:0.9102
+[2024/02/18 20:29:03] Rank:None, Epoch[86/300], Step [1/66], lr:1.80e-03 pred_PSNR: 33.01 perplexity:110.15 lvq:3.26e-06 L2:5.19e-04 usage:0.2500 total usage:0.2500
+[2024/02/18 20:29:08] Rank:None, Epoch[86/300], Step [51/66], lr:1.80e-03 pred_PSNR: 31.1 perplexity:88.14 lvq:2.35e-05 L2:1.32e-03 usage:0.2012 total usage:0.8789
+[2024/02/18 20:29:09] Rank:None, Epoch[86/300], Step [66/66], lr:1.80e-03 pred_PSNR: 31.08 perplexity:95.02 lvq:5.29e-06 L2:5.64e-04 usage:0.2168 total usage:0.9102
+[2024/02/18 20:29:10] Rank:None, Epoch[87/300], Step [1/66], lr:1.80e-03 pred_PSNR: 31.23 perplexity:92.66 lvq:1.78e-05 L2:7.64e-04 usage:0.2129 total usage:0.2129
+[2024/02/18 20:29:14] Rank:None, Epoch[87/300], Step [51/66], lr:1.79e-03 pred_PSNR: 31.59 perplexity:96.80 lvq:2.97e-06 L2:4.50e-04 usage:0.2227 total usage:0.8672
+[2024/02/18 20:29:16] Rank:None, Epoch[87/300], Step [66/66], lr:1.79e-03 pred_PSNR: 31.6 perplexity:96.13 lvq:2.97e-06 L2:4.29e-04 usage:0.2227 total usage:0.8965
+[2024/02/18 20:29:16] Rank:None, Epoch[88/300], Step [1/66], lr:1.79e-03 pred_PSNR: 32.13 perplexity:103.43 lvq:2.33e-06 L2:6.60e-04 usage:0.2402 total usage:0.2402
+[2024/02/18 20:29:21] Rank:None, Epoch[88/300], Step [51/66], lr:1.78e-03 pred_PSNR: 31.77 perplexity:88.33 lvq:3.81e-05 L2:7.89e-04 usage:0.2129 total usage:0.8574
+[2024/02/18 20:29:23] Rank:None, Epoch[88/300], Step [66/66], lr:1.78e-03 pred_PSNR: 31.7 perplexity:100.02 lvq:8.45e-06 L2:9.71e-04 usage:0.2285 total usage:0.8965
+[2024/02/18 20:29:23] Rank:None, Epoch[89/300], Step [1/66], lr:1.78e-03 pred_PSNR: 31.22 perplexity:103.04 lvq:7.45e-06 L2:7.94e-04 usage:0.2363 total usage:0.2363
+[2024/02/18 20:29:28] Rank:None, Epoch[89/300], Step [51/66], lr:1.78e-03 pred_PSNR: 31.25 perplexity:88.09 lvq:2.75e-05 L2:1.14e-03 usage:0.2031 total usage:0.8867
+[2024/02/18 20:29:30] Rank:None, Epoch[89/300], Step [66/66], lr:1.77e-03 pred_PSNR: 31.35 perplexity:94.98 lvq:1.26e-05 L2:9.06e-04 usage:0.2129 total usage:0.8984
+[2024/02/18 20:29:30] Rank:None, Epoch[90/300], Step [1/66], lr:1.77e-03 pred_PSNR: 32.61 perplexity:91.05 lvq:9.96e-06 L2:5.92e-04 usage:0.2188 total usage:0.2188
+[2024/02/18 20:29:35] Rank:None, Epoch[90/300], Step [51/66], lr:1.77e-03 pred_PSNR: 31.66 perplexity:93.74 lvq:8.47e-05 L2:1.01e-03 usage:0.2148 total usage:0.8496
+[2024/02/18 20:29:37] Rank:None, Epoch[90/300], Step [66/66], lr:1.77e-03 pred_PSNR: 31.64 perplexity:105.46 lvq:4.52e-06 L2:1.15e-03 usage:0.2383 total usage:0.8926
+[2024/02/18 20:29:37] Rank:None, Eval at Step [1/66] , FPS 223.2, pred_seen_psnr: 31.06 | 
+[2024/02/18 20:29:40] Rank:None, Eval at Step [51/66] , FPS 212.1, pred_seen_psnr: 31.5 | 
+[2024/02/18 20:29:41] Rank:None, Eval at Step [66/66] , FPS 203.5, pred_seen_psnr: 31.84 | 
+Eval at epoch 90 for (640, 1280): pred_seen_psnr: 31.84 | pred_unseen_psnr: 0.0 | quant_seen_psnr: 0.0 | quant_unseen_psnr: 0.0 | 
+[2024/02/18 20:29:42] Rank:None, Epoch[91/300], Step [1/66], lr:1.77e-03 pred_PSNR: 32.42 perplexity:87.94 lvq:6.00e-06 L2:6.05e-04 usage:0.2012 total usage:0.2012
+[2024/02/18 20:29:46] Rank:None, Epoch[91/300], Step [51/66], lr:1.76e-03 pred_PSNR: 31.73 perplexity:87.67 lvq:1.27e-05 L2:7.10e-04 usage:0.2051 total usage:0.8809
+[2024/02/18 20:29:48] Rank:None, Epoch[91/300], Step [66/66], lr:1.76e-03 pred_PSNR: 31.57 perplexity:101.23 lvq:6.46e-06 L2:9.80e-04 usage:0.2285 total usage:0.9043
+[2024/02/18 20:29:48] Rank:None, Epoch[92/300], Step [1/66], lr:1.76e-03 pred_PSNR: 31.28 perplexity:95.20 lvq:7.90e-06 L2:7.75e-04 usage:0.2227 total usage:0.2227
+[2024/02/18 20:29:53] Rank:None, Epoch[92/300], Step [51/66], lr:1.75e-03 pred_PSNR: 31.58 perplexity:100.68 lvq:5.41e-06 L2:1.30e-03 usage:0.2363 total usage:0.8516
+[2024/02/18 20:29:55] Rank:None, Epoch[92/300], Step [66/66], lr:1.75e-03 pred_PSNR: 31.5 perplexity:103.56 lvq:4.84e-06 L2:9.90e-04 usage:0.2344 total usage:0.8945
+[2024/02/18 20:29:55] Rank:None, Epoch[93/300], Step [1/66], lr:1.75e-03 pred_PSNR: 32.83 perplexity:86.51 lvq:5.45e-06 L2:5.25e-04 usage:0.1992 total usage:0.1992
+[2024/02/18 20:30:00] Rank:None, Epoch[93/300], Step [51/66], lr:1.75e-03 pred_PSNR: 31.39 perplexity:89.90 lvq:1.33e-04 L2:8.33e-04 usage:0.2012 total usage:0.8848
+[2024/02/18 20:30:02] Rank:None, Epoch[93/300], Step [66/66], lr:1.74e-03 pred_PSNR: 31.28 perplexity:87.28 lvq:1.63e-05 L2:1.04e-03 usage:0.1973 total usage:0.9160
+[2024/02/18 20:30:02] Rank:None, Epoch[94/300], Step [1/66], lr:1.74e-03 pred_PSNR: 30.41 perplexity:93.83 lvq:4.16e-04 L2:9.10e-04 usage:0.2129 total usage:0.2129
+[2024/02/18 20:30:07] Rank:None, Epoch[94/300], Step [51/66], lr:1.74e-03 pred_PSNR: 30.95 perplexity:106.50 lvq:4.58e-06 L2:1.02e-03 usage:0.2422 total usage:0.8750
+[2024/02/18 20:30:09] Rank:None, Epoch[94/300], Step [66/66], lr:1.74e-03 pred_PSNR: 30.99 perplexity:85.84 lvq:2.60e-05 L2:5.98e-04 usage:0.2012 total usage:0.9062
+[2024/02/18 20:30:09] Rank:None, Epoch[95/300], Step [1/66], lr:1.74e-03 pred_PSNR: 31.28 perplexity:99.10 lvq:3.15e-05 L2:7.88e-04 usage:0.2305 total usage:0.2305
+[2024/02/18 20:30:15] Rank:None, Epoch[95/300], Step [51/66], lr:1.73e-03 pred_PSNR: 31.65 perplexity:93.26 lvq:1.05e-05 L2:8.85e-04 usage:0.2188 total usage:0.8965
+[2024/02/18 20:30:16] Rank:None, Epoch[95/300], Step [66/66], lr:1.73e-03 pred_PSNR: 31.48 perplexity:79.90 lvq:3.77e-05 L2:8.30e-04 usage:0.1797 total usage:0.9238
+[2024/02/18 20:30:17] Rank:None, Epoch[96/300], Step [1/66], lr:1.73e-03 pred_PSNR: 33.36 perplexity:75.58 lvq:3.59e-05 L2:4.80e-04 usage:0.1777 total usage:0.1777
+[2024/02/18 20:30:22] Rank:None, Epoch[96/300], Step [51/66], lr:1.72e-03 pred_PSNR: 31.48 perplexity:88.35 lvq:1.30e-05 L2:7.39e-04 usage:0.1992 total usage:0.8730
+[2024/02/18 20:30:23] Rank:None, Epoch[96/300], Step [66/66], lr:1.72e-03 pred_PSNR: 31.58 perplexity:87.74 lvq:1.33e-05 L2:6.68e-04 usage:0.2090 total usage:0.9102
+[2024/02/18 20:30:24] Rank:None, Epoch[97/300], Step [1/66], lr:1.72e-03 pred_PSNR: 34.08 perplexity:89.91 lvq:7.24e-06 L2:3.94e-04 usage:0.2012 total usage:0.2012
+[2024/02/18 20:30:29] Rank:None, Epoch[97/300], Step [51/66], lr:1.71e-03 pred_PSNR: 31.74 perplexity:86.73 lvq:5.10e-06 L2:5.94e-04 usage:0.2031 total usage:0.8789
+[2024/02/18 20:30:30] Rank:None, Epoch[97/300], Step [66/66], lr:1.71e-03 pred_PSNR: 31.63 perplexity:103.48 lvq:5.06e-06 L2:7.85e-04 usage:0.2324 total usage:0.9043
+[2024/02/18 20:30:31] Rank:None, Epoch[98/300], Step [1/66], lr:1.71e-03 pred_PSNR: 29.97 perplexity:97.76 lvq:3.31e-06 L2:1.01e-03 usage:0.2246 total usage:0.2246
+[2024/02/18 20:30:36] Rank:None, Epoch[98/300], Step [51/66], lr:1.70e-03 pred_PSNR: 31.73 perplexity:80.53 lvq:3.59e-05 L2:4.71e-04 usage:0.1895 total usage:0.8691
+[2024/02/18 20:30:37] Rank:None, Epoch[98/300], Step [66/66], lr:1.70e-03 pred_PSNR: 31.71 perplexity:119.10 lvq:6.85e-06 L2:1.04e-03 usage:0.2656 total usage:0.9043
+[2024/02/18 20:30:38] Rank:None, Epoch[99/300], Step [1/66], lr:1.70e-03 pred_PSNR: 32.32 perplexity:99.05 lvq:9.95e-06 L2:5.92e-04 usage:0.2285 total usage:0.2285
+[2024/02/18 20:30:43] Rank:None, Epoch[99/300], Step [51/66], lr:1.70e-03 pred_PSNR: 31.95 perplexity:83.05 lvq:5.68e-05 L2:4.79e-04 usage:0.1973 total usage:0.8848
+[2024/02/18 20:30:44] Rank:None, Epoch[99/300], Step [66/66], lr:1.69e-03 pred_PSNR: 31.91 perplexity:84.81 lvq:1.01e-05 L2:4.23e-04 usage:0.1914 total usage:0.9062
+[2024/02/18 20:30:45] Rank:None, Epoch[100/300], Step [1/66], lr:1.69e-03 pred_PSNR: 31.9 perplexity:99.23 lvq:8.69e-06 L2:6.87e-04 usage:0.2324 total usage:0.2324
+[2024/02/18 20:30:49] Rank:None, Epoch[100/300], Step [51/66], lr:1.69e-03 pred_PSNR: 32.22 perplexity:93.88 lvq:2.61e-05 L2:8.47e-04 usage:0.2207 total usage:0.8711
+[2024/02/18 20:30:51] Rank:None, Epoch[100/300], Step [66/66], lr:1.69e-03 pred_PSNR: 32.07 perplexity:92.21 lvq:2.51e-05 L2:4.79e-04 usage:0.2227 total usage:0.8906
+[2024/02/18 20:30:51] Rank:None, Epoch[101/300], Step [1/66], lr:1.69e-03 pred_PSNR: 32.51 perplexity:84.67 lvq:1.79e-05 L2:6.55e-04 usage:0.2051 total usage:0.2051
+[2024/02/18 20:30:56] Rank:None, Epoch[101/300], Step [51/66], lr:1.68e-03 pred_PSNR: 31.99 perplexity:94.97 lvq:1.62e-05 L2:1.03e-03 usage:0.2129 total usage:0.8711
+[2024/02/18 20:30:58] Rank:None, Epoch[101/300], Step [66/66], lr:1.68e-03 pred_PSNR: 31.96 perplexity:95.94 lvq:1.48e-05 L2:6.49e-04 usage:0.2246 total usage:0.9062
+[2024/02/18 20:30:58] Rank:None, Epoch[102/300], Step [1/66], lr:1.68e-03 pred_PSNR: 34.71 perplexity:81.93 lvq:1.31e-05 L2:3.41e-04 usage:0.1855 total usage:0.1855
+[2024/02/18 20:31:03] Rank:None, Epoch[102/300], Step [51/66], lr:1.67e-03 pred_PSNR: 31.65 perplexity:84.77 lvq:3.13e-05 L2:9.55e-04 usage:0.1934 total usage:0.8652
+[2024/02/18 20:31:05] Rank:None, Epoch[102/300], Step [66/66], lr:1.67e-03 pred_PSNR: 31.61 perplexity:98.87 lvq:8.25e-06 L2:6.69e-04 usage:0.2344 total usage:0.8867
+[2024/02/18 20:31:05] Rank:None, Epoch[103/300], Step [1/66], lr:1.67e-03 pred_PSNR: 31.2 perplexity:88.31 lvq:7.92e-06 L2:7.83e-04 usage:0.2051 total usage:0.2051
+[2024/02/18 20:31:10] Rank:None, Epoch[103/300], Step [51/66], lr:1.66e-03 pred_PSNR: 32.0 perplexity:98.67 lvq:6.44e-06 L2:5.08e-04 usage:0.2246 total usage:0.8750
+[2024/02/18 20:31:12] Rank:None, Epoch[103/300], Step [66/66], lr:1.66e-03 pred_PSNR: 31.95 perplexity:82.70 lvq:1.06e-05 L2:5.29e-04 usage:0.1934 total usage:0.8926
+[2024/02/18 20:31:12] Rank:None, Epoch[104/300], Step [1/66], lr:1.66e-03 pred_PSNR: 32.62 perplexity:96.79 lvq:6.74e-06 L2:5.48e-04 usage:0.2285 total usage:0.2285
+[2024/02/18 20:31:17] Rank:None, Epoch[104/300], Step [51/66], lr:1.65e-03 pred_PSNR: 31.9 perplexity:75.92 lvq:4.32e-05 L2:6.89e-04 usage:0.1777 total usage:0.8711
+[2024/02/18 20:31:19] Rank:None, Epoch[104/300], Step [66/66], lr:1.65e-03 pred_PSNR: 31.92 perplexity:99.04 lvq:9.40e-06 L2:7.62e-04 usage:0.2227 total usage:0.8945
+[2024/02/18 20:31:19] Rank:None, Epoch[105/300], Step [1/66], lr:1.65e-03 pred_PSNR: 33.29 perplexity:87.79 lvq:8.04e-06 L2:5.15e-04 usage:0.2012 total usage:0.2012
+[2024/02/18 20:31:24] Rank:None, Epoch[105/300], Step [51/66], lr:1.64e-03 pred_PSNR: 32.18 perplexity:91.87 lvq:1.04e-05 L2:7.35e-04 usage:0.2168 total usage:0.8574
+[2024/02/18 20:31:26] Rank:None, Epoch[105/300], Step [66/66], lr:1.64e-03 pred_PSNR: 32.15 perplexity:98.70 lvq:4.87e-06 L2:6.11e-04 usage:0.2305 total usage:0.8906
+[2024/02/18 20:31:26] Rank:None, Epoch[106/300], Step [1/66], lr:1.64e-03 pred_PSNR: 30.95 perplexity:101.91 lvq:5.00e-06 L2:8.06e-04 usage:0.2363 total usage:0.2363
+[2024/02/18 20:31:31] Rank:None, Epoch[106/300], Step [51/66], lr:1.64e-03 pred_PSNR: 32.01 perplexity:91.37 lvq:1.21e-05 L2:4.86e-04 usage:0.2090 total usage:0.8828
+[2024/02/18 20:31:33] Rank:None, Epoch[106/300], Step [66/66], lr:1.63e-03 pred_PSNR: 32.14 perplexity:106.17 lvq:6.54e-06 L2:6.60e-04 usage:0.2383 total usage:0.9258
+[2024/02/18 20:31:33] Rank:None, Epoch[107/300], Step [1/66], lr:1.63e-03 pred_PSNR: 32.91 perplexity:88.08 lvq:6.83e-06 L2:5.12e-04 usage:0.2031 total usage:0.2031
+[2024/02/18 20:31:38] Rank:None, Epoch[107/300], Step [51/66], lr:1.63e-03 pred_PSNR: 32.57 perplexity:92.76 lvq:2.95e-06 L2:5.39e-04 usage:0.2188 total usage:0.8789
+[2024/02/18 20:31:40] Rank:None, Epoch[107/300], Step [66/66], lr:1.62e-03 pred_PSNR: 32.45 perplexity:119.07 lvq:2.64e-06 L2:5.77e-04 usage:0.2676 total usage:0.9199
+[2024/02/18 20:31:40] Rank:None, Epoch[108/300], Step [1/66], lr:1.62e-03 pred_PSNR: 32.1 perplexity:88.51 lvq:1.11e-05 L2:6.59e-04 usage:0.2031 total usage:0.2031
+[2024/02/18 20:31:45] Rank:None, Epoch[108/300], Step [51/66], lr:1.62e-03 pred_PSNR: 32.33 perplexity:77.83 lvq:1.38e-05 L2:6.79e-04 usage:0.1855 total usage:0.8867
+[2024/02/18 20:31:47] Rank:None, Epoch[108/300], Step [66/66], lr:1.62e-03 pred_PSNR: 32.19 perplexity:82.96 lvq:2.20e-05 L2:5.38e-04 usage:0.1914 total usage:0.9141
+[2024/02/18 20:31:47] Rank:None, Epoch[109/300], Step [1/66], lr:1.62e-03 pred_PSNR: 32.48 perplexity:88.62 lvq:2.00e-05 L2:6.03e-04 usage:0.2051 total usage:0.2051
+[2024/02/18 20:31:52] Rank:None, Epoch[109/300], Step [51/66], lr:1.61e-03 pred_PSNR: 31.96 perplexity:93.83 lvq:7.58e-06 L2:4.38e-04 usage:0.2109 total usage:0.8926
+[2024/02/18 20:31:54] Rank:None, Epoch[109/300], Step [66/66], lr:1.61e-03 pred_PSNR: 32.14 perplexity:91.54 lvq:1.14e-05 L2:5.45e-04 usage:0.2129 total usage:0.9141
+[2024/02/18 20:31:54] Rank:None, Epoch[110/300], Step [1/66], lr:1.61e-03 pred_PSNR: 32.02 perplexity:105.44 lvq:4.44e-06 L2:6.27e-04 usage:0.2461 total usage:0.2461
+[2024/02/18 20:31:59] Rank:None, Epoch[110/300], Step [51/66], lr:1.60e-03 pred_PSNR: 32.15 perplexity:93.35 lvq:1.79e-05 L2:6.80e-04 usage:0.2188 total usage:0.8594
+[2024/02/18 20:32:01] Rank:None, Epoch[110/300], Step [66/66], lr:1.60e-03 pred_PSNR: 32.14 perplexity:76.13 lvq:5.88e-05 L2:4.92e-04 usage:0.1797 total usage:0.8906
+[2024/02/18 20:32:01] Rank:None, Epoch[111/300], Step [1/66], lr:1.60e-03 pred_PSNR: 32.38 perplexity:87.75 lvq:3.82e-05 L2:5.84e-04 usage:0.2012 total usage:0.2012
+[2024/02/18 20:32:06] Rank:None, Epoch[111/300], Step [51/66], lr:1.59e-03 pred_PSNR: 31.88 perplexity:118.21 lvq:4.90e-06 L2:7.56e-04 usage:0.2637 total usage:0.8828
+[2024/02/18 20:32:08] Rank:None, Epoch[111/300], Step [66/66], lr:1.59e-03 pred_PSNR: 31.99 perplexity:120.33 lvq:3.09e-06 L2:8.58e-04 usage:0.2695 total usage:0.9082
+[2024/02/18 20:32:08] Rank:None, Epoch[112/300], Step [1/66], lr:1.59e-03 pred_PSNR: 32.69 perplexity:117.02 lvq:3.27e-06 L2:5.46e-04 usage:0.2637 total usage:0.2637
+[2024/02/18 20:32:13] Rank:None, Epoch[112/300], Step [51/66], lr:1.58e-03 pred_PSNR: 31.82 perplexity:97.39 lvq:3.78e-06 L2:5.91e-04 usage:0.2207 total usage:0.8945
+[2024/02/18 20:32:15] Rank:None, Epoch[112/300], Step [66/66], lr:1.58e-03 pred_PSNR: 31.8 perplexity:94.32 lvq:3.93e-06 L2:4.91e-04 usage:0.2148 total usage:0.9160
+[2024/02/18 20:32:15] Rank:None, Epoch[113/300], Step [1/66], lr:1.58e-03 pred_PSNR: 29.21 perplexity:91.02 lvq:6.79e-06 L2:1.20e-03 usage:0.2109 total usage:0.2109
+[2024/02/18 20:32:20] Rank:None, Epoch[113/300], Step [51/66], lr:1.57e-03 pred_PSNR: 31.6 perplexity:84.05 lvq:1.88e-05 L2:7.15e-04 usage:0.1992 total usage:0.8770
+[2024/02/18 20:32:22] Rank:None, Epoch[113/300], Step [66/66], lr:1.57e-03 pred_PSNR: 31.55 perplexity:97.52 lvq:1.35e-05 L2:8.74e-04 usage:0.2266 total usage:0.9043
+[2024/02/18 20:32:22] Rank:None, Epoch[114/300], Step [1/66], lr:1.57e-03 pred_PSNR: 32.84 perplexity:86.16 lvq:8.76e-06 L2:5.20e-04 usage:0.1992 total usage:0.1992
+[2024/02/18 20:32:27] Rank:None, Epoch[114/300], Step [51/66], lr:1.56e-03 pred_PSNR: 32.13 perplexity:115.47 lvq:4.23e-06 L2:6.71e-04 usage:0.2559 total usage:0.8906
+[2024/02/18 20:32:28] Rank:None, Epoch[114/300], Step [66/66], lr:1.56e-03 pred_PSNR: 32.2 perplexity:92.51 lvq:3.80e-06 L2:5.29e-04 usage:0.2090 total usage:0.9180
+[2024/02/18 20:32:29] Rank:None, Epoch[115/300], Step [1/66], lr:1.56e-03 pred_PSNR: 33.98 perplexity:97.06 lvq:2.38e-06 L2:4.04e-04 usage:0.2285 total usage:0.2285
+[2024/02/18 20:32:34] Rank:None, Epoch[115/300], Step [51/66], lr:1.55e-03 pred_PSNR: 32.51 perplexity:102.70 lvq:3.76e-06 L2:8.33e-04 usage:0.2461 total usage:0.8867
+[2024/02/18 20:32:35] Rank:None, Epoch[115/300], Step [66/66], lr:1.55e-03 pred_PSNR: 32.58 perplexity:82.12 lvq:2.35e-05 L2:5.66e-04 usage:0.1836 total usage:0.9180
+[2024/02/18 20:32:36] Rank:None, Epoch[116/300], Step [1/66], lr:1.55e-03 pred_PSNR: 32.55 perplexity:80.41 lvq:2.66e-05 L2:6.22e-04 usage:0.1875 total usage:0.1875
+[2024/02/18 20:32:41] Rank:None, Epoch[116/300], Step [51/66], lr:1.54e-03 pred_PSNR: 32.99 perplexity:90.31 lvq:1.63e-05 L2:4.42e-04 usage:0.2109 total usage:0.8691
+[2024/02/18 20:32:42] Rank:None, Epoch[116/300], Step [66/66], lr:1.54e-03 pred_PSNR: 33.03 perplexity:109.26 lvq:4.89e-05 L2:4.72e-04 usage:0.2422 total usage:0.9082
+[2024/02/18 20:32:43] Rank:None, Epoch[117/300], Step [1/66], lr:1.54e-03 pred_PSNR: 32.01 perplexity:106.06 lvq:8.42e-06 L2:6.31e-04 usage:0.2383 total usage:0.2383
+[2024/02/18 20:32:48] Rank:None, Epoch[117/300], Step [51/66], lr:1.53e-03 pred_PSNR: 32.94 perplexity:86.68 lvq:1.90e-05 L2:5.77e-04 usage:0.2031 total usage:0.8750
+[2024/02/18 20:32:49] Rank:None, Epoch[117/300], Step [66/66], lr:1.53e-03 pred_PSNR: 33.02 perplexity:77.27 lvq:5.82e-05 L2:4.98e-04 usage:0.1836 total usage:0.9023
+[2024/02/18 20:32:50] Rank:None, Epoch[118/300], Step [1/66], lr:1.53e-03 pred_PSNR: 32.66 perplexity:81.80 lvq:3.85e-05 L2:6.31e-04 usage:0.1895 total usage:0.1895
+[2024/02/18 20:32:55] Rank:None, Epoch[118/300], Step [51/66], lr:1.52e-03 pred_PSNR: 32.79 perplexity:89.04 lvq:8.01e-06 L2:7.59e-04 usage:0.2129 total usage:0.8906
+[2024/02/18 20:32:56] Rank:None, Epoch[118/300], Step [66/66], lr:1.52e-03 pred_PSNR: 32.71 perplexity:101.86 lvq:3.37e-06 L2:5.05e-04 usage:0.2402 total usage:0.9199
+[2024/02/18 20:32:57] Rank:None, Epoch[119/300], Step [1/66], lr:1.52e-03 pred_PSNR: 31.54 perplexity:92.91 lvq:5.56e-06 L2:7.05e-04 usage:0.2168 total usage:0.2168
+[2024/02/18 20:33:02] Rank:None, Epoch[119/300], Step [51/66], lr:1.51e-03 pred_PSNR: 33.03 perplexity:100.68 lvq:1.88e-06 L2:4.63e-04 usage:0.2246 total usage:0.8672
+[2024/02/18 20:33:03] Rank:None, Epoch[119/300], Step [66/66], lr:1.51e-03 pred_PSNR: 33.05 perplexity:80.20 lvq:4.33e-05 L2:4.17e-04 usage:0.1816 total usage:0.9062
+[2024/02/18 20:33:04] Rank:None, Epoch[120/300], Step [1/66], lr:1.51e-03 pred_PSNR: 32.85 perplexity:82.52 lvq:6.92e-05 L2:5.28e-04 usage:0.1914 total usage:0.1914
+[2024/02/18 20:33:09] Rank:None, Epoch[120/300], Step [51/66], lr:1.50e-03 pred_PSNR: 33.32 perplexity:103.15 lvq:2.74e-06 L2:5.06e-04 usage:0.2461 total usage:0.8945
+[2024/02/18 20:33:10] Rank:None, Epoch[120/300], Step [66/66], lr:1.50e-03 pred_PSNR: 33.19 perplexity:105.38 lvq:2.83e-06 L2:8.55e-04 usage:0.2402 total usage:0.9160
+[2024/02/18 20:33:11] Rank:None, Eval at Step [1/66] , FPS 107.5, pred_seen_psnr: 32.63 | 
+[2024/02/18 20:33:13] Rank:None, Eval at Step [51/66] , FPS 195.8, pred_seen_psnr: 32.9 | 
+[2024/02/18 20:33:14] Rank:None, Eval at Step [66/66] , FPS 191.6, pred_seen_psnr: 33.19 | 
+Eval at epoch 120 for (640, 1280): pred_seen_psnr: 33.19 | pred_unseen_psnr: 0.0 | quant_seen_psnr: 0.0 | quant_unseen_psnr: 0.0 | 
+[2024/02/18 20:33:15] Rank:None, Epoch[121/300], Step [1/66], lr:1.50e-03 pred_PSNR: 32.8 perplexity:98.22 lvq:5.31e-06 L2:5.61e-04 usage:0.2285 total usage:0.2285
+[2024/02/18 20:33:20] Rank:None, Epoch[121/300], Step [51/66], lr:1.49e-03 pred_PSNR: 33.07 perplexity:80.68 lvq:1.13e-05 L2:4.95e-04 usage:0.1914 total usage:0.8555
+[2024/02/18 20:33:22] Rank:None, Epoch[121/300], Step [66/66], lr:1.49e-03 pred_PSNR: 33.03 perplexity:83.61 lvq:6.95e-06 L2:4.85e-04 usage:0.1875 total usage:0.8887
+[2024/02/18 20:33:22] Rank:None, Epoch[122/300], Step [1/66], lr:1.49e-03 pred_PSNR: 30.56 perplexity:104.11 lvq:5.27e-06 L2:8.79e-04 usage:0.2441 total usage:0.2441
+[2024/02/18 20:33:27] Rank:None, Epoch[122/300], Step [51/66], lr:1.48e-03 pred_PSNR: 32.63 perplexity:101.38 lvq:3.05e-06 L2:5.50e-04 usage:0.2383 total usage:0.8750
+[2024/02/18 20:33:29] Rank:None, Epoch[122/300], Step [66/66], lr:1.48e-03 pred_PSNR: 32.77 perplexity:89.80 lvq:2.25e-06 L2:3.84e-04 usage:0.2012 total usage:0.9160
+[2024/02/18 20:33:29] Rank:None, Epoch[123/300], Step [1/66], lr:1.48e-03 pred_PSNR: 33.23 perplexity:96.93 lvq:2.83e-06 L2:4.84e-04 usage:0.2188 total usage:0.2188
+[2024/02/18 20:33:34] Rank:None, Epoch[123/300], Step [51/66], lr:1.47e-03 pred_PSNR: 32.64 perplexity:78.91 lvq:3.48e-05 L2:5.09e-04 usage:0.1875 total usage:0.9043
+[2024/02/18 20:33:35] Rank:None, Epoch[123/300], Step [66/66], lr:1.47e-03 pred_PSNR: 32.66 perplexity:86.91 lvq:3.22e-05 L2:4.98e-04 usage:0.2031 total usage:0.9277
+[2024/02/18 20:33:36] Rank:None, Epoch[124/300], Step [1/66], lr:1.47e-03 pred_PSNR: 31.97 perplexity:89.25 lvq:2.88e-05 L2:6.48e-04 usage:0.2031 total usage:0.2031
+[2024/02/18 20:33:41] Rank:None, Epoch[124/300], Step [51/66], lr:1.46e-03 pred_PSNR: 32.93 perplexity:98.74 lvq:7.45e-06 L2:4.28e-04 usage:0.2266 total usage:0.8418
+[2024/02/18 20:33:42] Rank:None, Epoch[124/300], Step [66/66], lr:1.46e-03 pred_PSNR: 32.99 perplexity:89.42 lvq:2.19e-06 L2:3.65e-04 usage:0.2070 total usage:0.8848
+[2024/02/18 20:33:43] Rank:None, Epoch[125/300], Step [1/66], lr:1.46e-03 pred_PSNR: 30.92 perplexity:94.40 lvq:5.06e-06 L2:8.11e-04 usage:0.2207 total usage:0.2207
+[2024/02/18 20:33:48] Rank:None, Epoch[125/300], Step [51/66], lr:1.45e-03 pred_PSNR: 32.64 perplexity:80.31 lvq:4.09e-05 L2:5.21e-04 usage:0.1973 total usage:0.8770
+[2024/02/18 20:33:49] Rank:None, Epoch[125/300], Step [66/66], lr:1.45e-03 pred_PSNR: 32.62 perplexity:105.25 lvq:9.97e-06 L2:5.37e-04 usage:0.2402 total usage:0.9121
+[2024/02/18 20:33:50] Rank:None, Epoch[126/300], Step [1/66], lr:1.45e-03 pred_PSNR: 32.64 perplexity:97.25 lvq:8.05e-06 L2:5.54e-04 usage:0.2227 total usage:0.2227
+[2024/02/18 20:33:55] Rank:None, Epoch[126/300], Step [51/66], lr:1.44e-03 pred_PSNR: 33.02 perplexity:85.92 lvq:1.57e-05 L2:1.23e-03 usage:0.1953 total usage:0.8906
+[2024/02/18 20:33:56] Rank:None, Epoch[126/300], Step [66/66], lr:1.44e-03 pred_PSNR: 33.0 perplexity:103.54 lvq:6.94e-06 L2:4.82e-04 usage:0.2441 total usage:0.9160
+[2024/02/18 20:33:57] Rank:None, Epoch[127/300], Step [1/66], lr:1.44e-03 pred_PSNR: 31.97 perplexity:96.89 lvq:5.30e-06 L2:7.41e-04 usage:0.2227 total usage:0.2227
+[2024/02/18 20:34:02] Rank:None, Epoch[127/300], Step [51/66], lr:1.43e-03 pred_PSNR: 32.51 perplexity:91.83 lvq:6.70e-06 L2:7.89e-04 usage:0.2109 total usage:0.8730
+[2024/02/18 20:34:04] Rank:None, Epoch[127/300], Step [66/66], lr:1.43e-03 pred_PSNR: 32.51 perplexity:97.00 lvq:2.68e-06 L2:4.32e-04 usage:0.2168 total usage:0.9219
+[2024/02/18 20:34:04] Rank:None, Epoch[128/300], Step [1/66], lr:1.43e-03 pred_PSNR: 33.88 perplexity:107.57 lvq:5.19e-06 L2:4.67e-04 usage:0.2461 total usage:0.2461
+[2024/02/18 20:34:09] Rank:None, Epoch[128/300], Step [51/66], lr:1.42e-03 pred_PSNR: 33.1 perplexity:100.34 lvq:8.38e-06 L2:3.94e-04 usage:0.2383 total usage:0.8711
+[2024/02/18 20:34:11] Rank:None, Epoch[128/300], Step [66/66], lr:1.42e-03 pred_PSNR: 32.9 perplexity:103.64 lvq:3.73e-06 L2:7.12e-04 usage:0.2324 total usage:0.8906
+[2024/02/18 20:34:11] Rank:None, Epoch[129/300], Step [1/66], lr:1.42e-03 pred_PSNR: 32.49 perplexity:99.73 lvq:3.70e-06 L2:5.69e-04 usage:0.2285 total usage:0.2285
+[2024/02/18 20:34:16] Rank:None, Epoch[129/300], Step [51/66], lr:1.41e-03 pred_PSNR: 32.56 perplexity:93.27 lvq:1.45e-06 L2:3.75e-04 usage:0.2109 total usage:0.8711
+[2024/02/18 20:34:17] Rank:None, Epoch[129/300], Step [66/66], lr:1.41e-03 pred_PSNR: 32.49 perplexity:104.04 lvq:2.61e-06 L2:8.63e-04 usage:0.2402 total usage:0.8984
+[2024/02/18 20:34:18] Rank:None, Epoch[130/300], Step [1/66], lr:1.41e-03 pred_PSNR: 31.84 perplexity:89.34 lvq:4.52e-06 L2:6.72e-04 usage:0.2109 total usage:0.2109
+[2024/02/18 20:34:23] Rank:None, Epoch[130/300], Step [51/66], lr:1.40e-03 pred_PSNR: 32.61 perplexity:107.98 lvq:2.28e-06 L2:6.55e-04 usage:0.2461 total usage:0.8711
+[2024/02/18 20:34:24] Rank:None, Epoch[130/300], Step [66/66], lr:1.40e-03 pred_PSNR: 32.66 perplexity:91.61 lvq:4.66e-06 L2:3.86e-04 usage:0.2090 total usage:0.9043
+[2024/02/18 20:34:25] Rank:None, Epoch[131/300], Step [1/66], lr:1.40e-03 pred_PSNR: 34.24 perplexity:113.18 lvq:4.62e-06 L2:3.83e-04 usage:0.2578 total usage:0.2578
+[2024/02/18 20:34:30] Rank:None, Epoch[131/300], Step [51/66], lr:1.39e-03 pred_PSNR: 33.19 perplexity:87.36 lvq:3.22e-05 L2:4.82e-04 usage:0.2090 total usage:0.8711
+[2024/02/18 20:34:31] Rank:None, Epoch[131/300], Step [66/66], lr:1.39e-03 pred_PSNR: 33.23 perplexity:100.95 lvq:6.35e-06 L2:4.90e-04 usage:0.2266 total usage:0.9023
+[2024/02/18 20:34:32] Rank:None, Epoch[132/300], Step [1/66], lr:1.39e-03 pred_PSNR: 36.51 perplexity:84.73 lvq:5.34e-06 L2:2.24e-04 usage:0.1992 total usage:0.1992
+[2024/02/18 20:34:37] Rank:None, Epoch[132/300], Step [51/66], lr:1.38e-03 pred_PSNR: 33.14 perplexity:82.20 lvq:1.70e-05 L2:4.35e-04 usage:0.1895 total usage:0.8906
+[2024/02/18 20:34:38] Rank:None, Epoch[132/300], Step [66/66], lr:1.37e-03 pred_PSNR: 33.17 perplexity:93.71 lvq:4.42e-06 L2:2.51e-04 usage:0.2129 total usage:0.9102
+[2024/02/18 20:34:39] Rank:None, Epoch[133/300], Step [1/66], lr:1.37e-03 pred_PSNR: 33.68 perplexity:97.14 lvq:3.87e-06 L2:4.83e-04 usage:0.2305 total usage:0.2305
+[2024/02/18 20:34:44] Rank:None, Epoch[133/300], Step [51/66], lr:1.37e-03 pred_PSNR: 33.24 perplexity:98.04 lvq:3.31e-06 L2:4.76e-04 usage:0.2305 total usage:0.8848
+[2024/02/18 20:34:45] Rank:None, Epoch[133/300], Step [66/66], lr:1.36e-03 pred_PSNR: 33.3 perplexity:95.73 lvq:1.71e-06 L2:4.40e-04 usage:0.2266 total usage:0.9082
+[2024/02/18 20:34:46] Rank:None, Epoch[134/300], Step [1/66], lr:1.36e-03 pred_PSNR: 34.88 perplexity:103.12 lvq:6.99e-06 L2:3.33e-04 usage:0.2344 total usage:0.2344
+[2024/02/18 20:34:51] Rank:None, Epoch[134/300], Step [51/66], lr:1.36e-03 pred_PSNR: 33.55 perplexity:92.72 lvq:1.19e-05 L2:2.81e-04 usage:0.2070 total usage:0.8672
+[2024/02/18 20:34:52] Rank:None, Epoch[134/300], Step [66/66], lr:1.35e-03 pred_PSNR: 33.53 perplexity:85.65 lvq:8.79e-06 L2:6.42e-04 usage:0.2012 total usage:0.9043
+[2024/02/18 20:34:53] Rank:None, Epoch[135/300], Step [1/66], lr:1.35e-03 pred_PSNR: 31.66 perplexity:98.42 lvq:5.65e-06 L2:6.87e-04 usage:0.2363 total usage:0.2363
+[2024/02/18 20:34:58] Rank:None, Epoch[135/300], Step [51/66], lr:1.34e-03 pred_PSNR: 33.76 perplexity:122.36 lvq:1.99e-04 L2:7.43e-04 usage:0.2715 total usage:0.8672
+[2024/02/18 20:34:59] Rank:None, Epoch[135/300], Step [66/66], lr:1.34e-03 pred_PSNR: 33.61 perplexity:80.77 lvq:3.12e-05 L2:5.73e-04 usage:0.1914 total usage:0.8848
+[2024/02/18 20:35:00] Rank:None, Epoch[136/300], Step [1/66], lr:1.34e-03 pred_PSNR: 31.84 perplexity:91.87 lvq:2.59e-05 L2:6.58e-04 usage:0.2207 total usage:0.2207
+[2024/02/18 20:35:05] Rank:None, Epoch[136/300], Step [51/66], lr:1.33e-03 pred_PSNR: 33.6 perplexity:90.00 lvq:1.06e-05 L2:4.50e-04 usage:0.2129 total usage:0.8828
+[2024/02/18 20:35:06] Rank:None, Epoch[136/300], Step [66/66], lr:1.33e-03 pred_PSNR: 33.48 perplexity:88.76 lvq:4.34e-06 L2:5.16e-04 usage:0.2090 total usage:0.9199
+[2024/02/18 20:35:07] Rank:None, Epoch[137/300], Step [1/66], lr:1.33e-03 pred_PSNR: 33.56 perplexity:79.05 lvq:3.89e-06 L2:4.50e-04 usage:0.1875 total usage:0.1875
+[2024/02/18 20:35:12] Rank:None, Epoch[137/300], Step [51/66], lr:1.32e-03 pred_PSNR: 33.32 perplexity:102.25 lvq:2.28e-06 L2:5.79e-04 usage:0.2402 total usage:0.8613
+[2024/02/18 20:35:13] Rank:None, Epoch[137/300], Step [66/66], lr:1.32e-03 pred_PSNR: 33.41 perplexity:114.85 lvq:1.79e-06 L2:6.65e-04 usage:0.2598 total usage:0.8984
+[2024/02/18 20:35:14] Rank:None, Epoch[138/300], Step [1/66], lr:1.32e-03 pred_PSNR: 31.47 perplexity:101.40 lvq:2.25e-04 L2:7.20e-04 usage:0.2363 total usage:0.2363
+[2024/02/18 20:35:19] Rank:None, Epoch[138/300], Step [51/66], lr:1.31e-03 pred_PSNR: 33.68 perplexity:111.36 lvq:3.05e-06 L2:4.59e-04 usage:0.2539 total usage:0.8906
+[2024/02/18 20:35:20] Rank:None, Epoch[138/300], Step [66/66], lr:1.31e-03 pred_PSNR: 33.6 perplexity:89.40 lvq:4.58e-05 L2:7.37e-04 usage:0.2051 total usage:0.9160
+[2024/02/18 20:35:21] Rank:None, Epoch[139/300], Step [1/66], lr:1.31e-03 pred_PSNR: 33.73 perplexity:90.09 lvq:3.29e-05 L2:4.65e-04 usage:0.2051 total usage:0.2051
+[2024/02/18 20:35:26] Rank:None, Epoch[139/300], Step [51/66], lr:1.30e-03 pred_PSNR: 33.16 perplexity:111.94 lvq:4.45e-06 L2:4.33e-04 usage:0.2598 total usage:0.8672
+[2024/02/18 20:35:27] Rank:None, Epoch[139/300], Step [66/66], lr:1.30e-03 pred_PSNR: 33.17 perplexity:95.02 lvq:1.97e-06 L2:3.15e-04 usage:0.2129 total usage:0.8906
+[2024/02/18 20:35:28] Rank:None, Epoch[140/300], Step [1/66], lr:1.30e-03 pred_PSNR: 31.79 perplexity:100.60 lvq:2.17e-06 L2:6.62e-04 usage:0.2305 total usage:0.2305
+[2024/02/18 20:35:33] Rank:None, Epoch[140/300], Step [51/66], lr:1.29e-03 pred_PSNR: 33.35 perplexity:78.74 lvq:4.69e-06 L2:3.40e-04 usage:0.1914 total usage:0.8828
+[2024/02/18 20:35:34] Rank:None, Epoch[140/300], Step [66/66], lr:1.29e-03 pred_PSNR: 33.52 perplexity:102.75 lvq:1.39e-06 L2:3.73e-04 usage:0.2363 total usage:0.9004
+[2024/02/18 20:35:35] Rank:None, Epoch[141/300], Step [1/66], lr:1.29e-03 pred_PSNR: 35.41 perplexity:104.34 lvq:1.24e-06 L2:2.89e-04 usage:0.2383 total usage:0.2383
+[2024/02/18 20:35:40] Rank:None, Epoch[141/300], Step [51/66], lr:1.28e-03 pred_PSNR: 33.62 perplexity:84.64 lvq:1.89e-05 L2:5.02e-04 usage:0.1992 total usage:0.8555
+[2024/02/18 20:35:41] Rank:None, Epoch[141/300], Step [66/66], lr:1.28e-03 pred_PSNR: 33.73 perplexity:82.01 lvq:2.17e-05 L2:2.99e-04 usage:0.1895 total usage:0.9004
+[2024/02/18 20:35:42] Rank:None, Epoch[142/300], Step [1/66], lr:1.28e-03 pred_PSNR: 32.92 perplexity:80.81 lvq:2.73e-05 L2:5.12e-04 usage:0.1914 total usage:0.1914
+[2024/02/18 20:35:47] Rank:None, Epoch[142/300], Step [51/66], lr:1.27e-03 pred_PSNR: 33.85 perplexity:99.63 lvq:1.72e-06 L2:2.48e-04 usage:0.2266 total usage:0.8809
+[2024/02/18 20:35:48] Rank:None, Epoch[142/300], Step [66/66], lr:1.26e-03 pred_PSNR: 33.77 perplexity:100.98 lvq:2.95e-06 L2:5.03e-04 usage:0.2363 total usage:0.9141
+[2024/02/18 20:35:49] Rank:None, Epoch[143/300], Step [1/66], lr:1.26e-03 pred_PSNR: 34.14 perplexity:96.26 lvq:2.81e-06 L2:4.24e-04 usage:0.2227 total usage:0.2227
+[2024/02/18 20:35:54] Rank:None, Epoch[143/300], Step [51/66], lr:1.26e-03 pred_PSNR: 33.6 perplexity:86.30 lvq:4.81e-06 L2:5.86e-04 usage:0.2090 total usage:0.8750
+[2024/02/18 20:35:55] Rank:None, Epoch[143/300], Step [66/66], lr:1.25e-03 pred_PSNR: 33.43 perplexity:85.46 lvq:2.52e-06 L2:5.57e-04 usage:0.2031 total usage:0.9023
+[2024/02/18 20:35:56] Rank:None, Epoch[144/300], Step [1/66], lr:1.25e-03 pred_PSNR: 32.92 perplexity:98.24 lvq:2.21e-06 L2:5.16e-04 usage:0.2324 total usage:0.2324
+[2024/02/18 20:36:01] Rank:None, Epoch[144/300], Step [51/66], lr:1.24e-03 pred_PSNR: 33.35 perplexity:96.47 lvq:1.31e-05 L2:5.26e-04 usage:0.2227 total usage:0.8711
+[2024/02/18 20:36:02] Rank:None, Epoch[144/300], Step [66/66], lr:1.24e-03 pred_PSNR: 33.26 perplexity:88.79 lvq:2.65e-04 L2:6.45e-04 usage:0.2129 total usage:0.9023
+[2024/02/18 20:36:03] Rank:None, Epoch[145/300], Step [1/66], lr:1.24e-03 pred_PSNR: 34.57 perplexity:80.55 lvq:1.91e-05 L2:3.52e-04 usage:0.1934 total usage:0.1934
+[2024/02/18 20:36:08] Rank:None, Epoch[145/300], Step [51/66], lr:1.23e-03 pred_PSNR: 33.34 perplexity:74.55 lvq:1.58e-05 L2:4.30e-04 usage:0.1777 total usage:0.8828
+[2024/02/18 20:36:09] Rank:None, Epoch[145/300], Step [66/66], lr:1.23e-03 pred_PSNR: 33.18 perplexity:93.18 lvq:2.07e-05 L2:4.80e-04 usage:0.2168 total usage:0.9082
+[2024/02/18 20:36:10] Rank:None, Epoch[146/300], Step [1/66], lr:1.23e-03 pred_PSNR: 32.92 perplexity:85.50 lvq:1.90e-05 L2:5.11e-04 usage:0.2031 total usage:0.2031
+[2024/02/18 20:36:14] Rank:None, Epoch[146/300], Step [51/66], lr:1.22e-03 pred_PSNR: 32.95 perplexity:84.30 lvq:7.30e-06 L2:4.29e-04 usage:0.1973 total usage:0.8516
+[2024/02/18 20:36:16] Rank:None, Epoch[146/300], Step [66/66], lr:1.22e-03 pred_PSNR: 32.76 perplexity:98.18 lvq:3.31e-06 L2:4.86e-04 usage:0.2207 total usage:0.8828
+[2024/02/18 20:36:16] Rank:None, Epoch[147/300], Step [1/66], lr:1.22e-03 pred_PSNR: 31.17 perplexity:100.21 lvq:2.01e-06 L2:7.74e-04 usage:0.2285 total usage:0.2285
+[2024/02/18 20:36:21] Rank:None, Epoch[147/300], Step [51/66], lr:1.21e-03 pred_PSNR: 32.49 perplexity:89.26 lvq:6.19e-06 L2:6.70e-04 usage:0.2031 total usage:0.8789
+[2024/02/18 20:36:23] Rank:None, Epoch[147/300], Step [66/66], lr:1.21e-03 pred_PSNR: 32.62 perplexity:111.27 lvq:5.86e-06 L2:7.06e-04 usage:0.2578 total usage:0.9062
+[2024/02/18 20:36:23] Rank:None, Epoch[148/300], Step [1/66], lr:1.21e-03 pred_PSNR: 34.92 perplexity:86.12 lvq:4.21e-06 L2:3.22e-04 usage:0.1992 total usage:0.1992
+[2024/02/18 20:36:28] Rank:None, Epoch[148/300], Step [51/66], lr:1.20e-03 pred_PSNR: 33.3 perplexity:103.31 lvq:2.28e-04 L2:6.96e-04 usage:0.2324 total usage:0.8750
+[2024/02/18 20:36:30] Rank:None, Epoch[148/300], Step [66/66], lr:1.20e-03 pred_PSNR: 33.26 perplexity:87.40 lvq:2.02e-05 L2:5.31e-04 usage:0.1953 total usage:0.9023
+[2024/02/18 20:36:30] Rank:None, Epoch[149/300], Step [1/66], lr:1.20e-03 pred_PSNR: 34.08 perplexity:90.67 lvq:1.12e-05 L2:3.95e-04 usage:0.2188 total usage:0.2188
+[2024/02/18 20:36:35] Rank:None, Epoch[149/300], Step [51/66], lr:1.19e-03 pred_PSNR: 33.38 perplexity:109.37 lvq:2.01e-06 L2:3.75e-04 usage:0.2480 total usage:0.8594
+[2024/02/18 20:36:37] Rank:None, Epoch[149/300], Step [66/66], lr:1.19e-03 pred_PSNR: 33.59 perplexity:93.72 lvq:5.71e-06 L2:4.28e-04 usage:0.2148 total usage:0.8926
+[2024/02/18 20:36:37] Rank:None, Epoch[150/300], Step [1/66], lr:1.19e-03 pred_PSNR: 32.7 perplexity:98.95 lvq:6.10e-06 L2:5.38e-04 usage:0.2266 total usage:0.2266
+[2024/02/18 20:36:42] Rank:None, Epoch[150/300], Step [51/66], lr:1.18e-03 pred_PSNR: 33.91 perplexity:88.94 lvq:1.29e-05 L2:2.43e-04 usage:0.2012 total usage:0.8613
+[2024/02/18 20:36:44] Rank:None, Epoch[150/300], Step [66/66], lr:1.17e-03 pred_PSNR: 34.03 perplexity:105.37 lvq:6.80e-06 L2:2.88e-04 usage:0.2441 total usage:0.9062
+[2024/02/18 20:36:44] Rank:None, Eval at Step [1/66] , FPS 151.8, pred_seen_psnr: 33.4 | 
+[2024/02/18 20:36:47] Rank:None, Eval at Step [51/66] , FPS 207.3, pred_seen_psnr: 33.83 | 
+[2024/02/18 20:36:48] Rank:None, Eval at Step [66/66] , FPS 201.7, pred_seen_psnr: 34.24 | 
+Eval at epoch 150 for (640, 1280): pred_seen_psnr: 34.24 | pred_unseen_psnr: 0.0 | quant_seen_psnr: 0.0 | quant_unseen_psnr: 0.0 | 
+[2024/02/18 20:36:49] Rank:None, Epoch[151/300], Step [1/66], lr:1.17e-03 pred_PSNR: 34.31 perplexity:92.77 lvq:4.86e-06 L2:3.91e-04 usage:0.2168 total usage:0.2168
+[2024/02/18 20:36:54] Rank:None, Epoch[151/300], Step [51/66], lr:1.16e-03 pred_PSNR: 34.06 perplexity:98.03 lvq:2.33e-05 L2:4.65e-04 usage:0.2246 total usage:0.8711
+[2024/02/18 20:36:55] Rank:None, Epoch[151/300], Step [66/66], lr:1.16e-03 pred_PSNR: 34.05 perplexity:100.77 lvq:2.22e-06 L2:5.81e-04 usage:0.2402 total usage:0.8926
+[2024/02/18 20:36:56] Rank:None, Epoch[152/300], Step [1/66], lr:1.16e-03 pred_PSNR: 34.41 perplexity:101.97 lvq:2.19e-06 L2:3.70e-04 usage:0.2344 total usage:0.2344
+[2024/02/18 20:37:01] Rank:None, Epoch[152/300], Step [51/66], lr:1.15e-03 pred_PSNR: 34.18 perplexity:87.91 lvq:2.91e-06 L2:2.82e-04 usage:0.1973 total usage:0.8672
+[2024/02/18 20:37:02] Rank:None, Epoch[152/300], Step [66/66], lr:1.15e-03 pred_PSNR: 34.18 perplexity:103.14 lvq:2.27e-06 L2:3.96e-04 usage:0.2363 total usage:0.8945
+[2024/02/18 20:37:03] Rank:None, Epoch[153/300], Step [1/66], lr:1.15e-03 pred_PSNR: 35.2 perplexity:105.34 lvq:2.04e-06 L2:3.09e-04 usage:0.2363 total usage:0.2363
+[2024/02/18 20:37:08] Rank:None, Epoch[153/300], Step [51/66], lr:1.14e-03 pred_PSNR: 34.13 perplexity:123.85 lvq:1.18e-06 L2:5.10e-04 usage:0.2715 total usage:0.8691
+[2024/02/18 20:37:09] Rank:None, Epoch[153/300], Step [66/66], lr:1.14e-03 pred_PSNR: 34.13 perplexity:93.90 lvq:6.99e-07 L2:3.24e-04 usage:0.2129 total usage:0.9023
+[2024/02/18 20:37:10] Rank:None, Epoch[154/300], Step [1/66], lr:1.14e-03 pred_PSNR: 34.68 perplexity:105.90 lvq:1.32e-06 L2:3.59e-04 usage:0.2363 total usage:0.2363
+[2024/02/18 20:37:15] Rank:None, Epoch[154/300], Step [51/66], lr:1.13e-03 pred_PSNR: 34.32 perplexity:94.45 lvq:3.97e-06 L2:2.72e-04 usage:0.2129 total usage:0.8574
+[2024/02/18 20:37:16] Rank:None, Epoch[154/300], Step [66/66], lr:1.13e-03 pred_PSNR: 34.18 perplexity:100.40 lvq:4.25e-06 L2:4.45e-04 usage:0.2324 total usage:0.9023
+[2024/02/18 20:37:17] Rank:None, Epoch[155/300], Step [1/66], lr:1.13e-03 pred_PSNR: 33.28 perplexity:98.73 lvq:1.36e-05 L2:4.70e-04 usage:0.2227 total usage:0.2227
+[2024/02/18 20:37:22] Rank:None, Epoch[155/300], Step [51/66], lr:1.12e-03 pred_PSNR: 34.2 perplexity:99.54 lvq:1.16e-06 L2:4.12e-04 usage:0.2363 total usage:0.8711
+[2024/02/18 20:37:23] Rank:None, Epoch[155/300], Step [66/66], lr:1.12e-03 pred_PSNR: 34.32 perplexity:115.82 lvq:1.74e-06 L2:3.48e-04 usage:0.2656 total usage:0.8867
+[2024/02/18 20:37:24] Rank:None, Epoch[156/300], Step [1/66], lr:1.12e-03 pred_PSNR: 33.51 perplexity:100.45 lvq:2.06e-06 L2:4.50e-04 usage:0.2285 total usage:0.2285
+[2024/02/18 20:37:29] Rank:None, Epoch[156/300], Step [51/66], lr:1.11e-03 pred_PSNR: 34.34 perplexity:104.15 lvq:4.33e-04 L2:3.65e-04 usage:0.2344 total usage:0.8848
+[2024/02/18 20:37:30] Rank:None, Epoch[156/300], Step [66/66], lr:1.10e-03 pred_PSNR: 34.4 perplexity:85.79 lvq:6.62e-06 L2:2.39e-04 usage:0.1992 total usage:0.9141
+[2024/02/18 20:37:31] Rank:None, Epoch[157/300], Step [1/66], lr:1.10e-03 pred_PSNR: 34.06 perplexity:91.50 lvq:4.77e-06 L2:3.94e-04 usage:0.2129 total usage:0.2129
+[2024/02/18 20:37:36] Rank:None, Epoch[157/300], Step [51/66], lr:1.10e-03 pred_PSNR: 34.74 perplexity:98.60 lvq:1.94e-06 L2:4.63e-04 usage:0.2285 total usage:0.8711
+[2024/02/18 20:37:37] Rank:None, Epoch[157/300], Step [66/66], lr:1.09e-03 pred_PSNR: 34.62 perplexity:108.74 lvq:3.58e-06 L2:3.02e-04 usage:0.2480 total usage:0.8926
+[2024/02/18 20:37:38] Rank:None, Epoch[158/300], Step [1/66], lr:1.09e-03 pred_PSNR: 33.83 perplexity:106.33 lvq:2.67e-06 L2:4.47e-04 usage:0.2402 total usage:0.2402
+[2024/02/18 20:37:43] Rank:None, Epoch[158/300], Step [51/66], lr:1.08e-03 pred_PSNR: 34.38 perplexity:101.11 lvq:2.69e-06 L2:3.09e-04 usage:0.2402 total usage:0.8516
+[2024/02/18 20:37:44] Rank:None, Epoch[158/300], Step [66/66], lr:1.08e-03 pred_PSNR: 34.33 perplexity:98.67 lvq:2.28e-05 L2:3.29e-04 usage:0.2246 total usage:0.8867
+[2024/02/18 20:37:45] Rank:None, Epoch[159/300], Step [1/66], lr:1.08e-03 pred_PSNR: 34.34 perplexity:102.35 lvq:2.60e-06 L2:3.89e-04 usage:0.2344 total usage:0.2344
+[2024/02/18 20:37:49] Rank:None, Epoch[159/300], Step [51/66], lr:1.07e-03 pred_PSNR: 34.29 perplexity:83.07 lvq:7.51e-06 L2:3.35e-04 usage:0.1973 total usage:0.8770
+[2024/02/18 20:37:51] Rank:None, Epoch[159/300], Step [66/66], lr:1.07e-03 pred_PSNR: 34.25 perplexity:96.94 lvq:4.04e-04 L2:3.71e-04 usage:0.2246 total usage:0.9062
+[2024/02/18 20:37:51] Rank:None, Epoch[160/300], Step [1/66], lr:1.07e-03 pred_PSNR: 32.42 perplexity:76.69 lvq:3.82e-05 L2:5.73e-04 usage:0.1777 total usage:0.1777
+[2024/02/18 20:37:56] Rank:None, Epoch[160/300], Step [51/66], lr:1.06e-03 pred_PSNR: 34.52 perplexity:79.58 lvq:1.51e-05 L2:3.53e-04 usage:0.1914 total usage:0.8574
+[2024/02/18 20:37:58] Rank:None, Epoch[160/300], Step [66/66], lr:1.06e-03 pred_PSNR: 34.56 perplexity:84.54 lvq:8.75e-06 L2:5.40e-04 usage:0.2031 total usage:0.9043
+[2024/02/18 20:37:58] Rank:None, Epoch[161/300], Step [1/66], lr:1.06e-03 pred_PSNR: 33.39 perplexity:88.06 lvq:3.49e-05 L2:4.59e-04 usage:0.2051 total usage:0.2051
+[2024/02/18 20:38:03] Rank:None, Epoch[161/300], Step [51/66], lr:1.05e-03 pred_PSNR: 34.32 perplexity:86.05 lvq:1.00e-05 L2:2.23e-04 usage:0.2012 total usage:0.8906
+[2024/02/18 20:38:05] Rank:None, Epoch[161/300], Step [66/66], lr:1.05e-03 pred_PSNR: 34.35 perplexity:87.24 lvq:2.65e-04 L2:3.76e-04 usage:0.2051 total usage:0.9121
+[2024/02/18 20:38:05] Rank:None, Epoch[162/300], Step [1/66], lr:1.05e-03 pred_PSNR: 33.92 perplexity:88.06 lvq:1.23e-05 L2:4.13e-04 usage:0.2070 total usage:0.2070
+[2024/02/18 20:38:10] Rank:None, Epoch[162/300], Step [51/66], lr:1.04e-03 pred_PSNR: 34.41 perplexity:83.95 lvq:1.21e-05 L2:2.36e-04 usage:0.1973 total usage:0.8789
+[2024/02/18 20:38:12] Rank:None, Epoch[162/300], Step [66/66], lr:1.04e-03 pred_PSNR: 34.64 perplexity:109.50 lvq:3.41e-06 L2:3.30e-04 usage:0.2500 total usage:0.8984
+[2024/02/18 20:38:12] Rank:None, Epoch[163/300], Step [1/66], lr:1.03e-03 pred_PSNR: 34.71 perplexity:99.69 lvq:1.93e-06 L2:3.38e-04 usage:0.2266 total usage:0.2266
+[2024/02/18 20:38:17] Rank:None, Epoch[163/300], Step [51/66], lr:1.03e-03 pred_PSNR: 34.7 perplexity:109.53 lvq:2.21e-06 L2:4.06e-04 usage:0.2422 total usage:0.8633
+[2024/02/18 20:38:18] Rank:None, Epoch[163/300], Step [66/66], lr:1.02e-03 pred_PSNR: 34.61 perplexity:109.09 lvq:1.11e-05 L2:4.15e-04 usage:0.2461 total usage:0.8926
+[2024/02/18 20:38:19] Rank:None, Epoch[164/300], Step [1/66], lr:1.02e-03 pred_PSNR: 37.26 perplexity:91.46 lvq:7.76e-07 L2:1.88e-04 usage:0.2148 total usage:0.2148
+[2024/02/18 20:38:24] Rank:None, Epoch[164/300], Step [51/66], lr:1.01e-03 pred_PSNR: 34.34 perplexity:88.77 lvq:2.49e-06 L2:2.75e-04 usage:0.2070 total usage:0.8633
+[2024/02/18 20:38:25] Rank:None, Epoch[164/300], Step [66/66], lr:1.01e-03 pred_PSNR: 34.22 perplexity:83.40 lvq:1.04e-05 L2:6.01e-04 usage:0.2031 total usage:0.9004
+[2024/02/18 20:38:26] Rank:None, Epoch[165/300], Step [1/66], lr:1.01e-03 pred_PSNR: 34.32 perplexity:86.76 lvq:1.06e-05 L2:4.06e-04 usage:0.2031 total usage:0.2031
+[2024/02/18 20:38:31] Rank:None, Epoch[165/300], Step [51/66], lr:1.00e-03 pred_PSNR: 34.49 perplexity:98.11 lvq:3.22e-06 L2:2.18e-04 usage:0.2207 total usage:0.8848
+[2024/02/18 20:38:32] Rank:None, Epoch[165/300], Step [66/66], lr:1.00e-03 pred_PSNR: 34.4 perplexity:109.35 lvq:2.36e-06 L2:5.61e-04 usage:0.2441 total usage:0.9102
+[2024/02/18 20:38:33] Rank:None, Epoch[166/300], Step [1/66], lr:1.00e-03 pred_PSNR: 35.14 perplexity:112.37 lvq:3.72e-06 L2:3.51e-04 usage:0.2559 total usage:0.2559
+[2024/02/18 20:38:38] Rank:None, Epoch[166/300], Step [51/66], lr:9.91e-04 pred_PSNR: 34.53 perplexity:104.13 lvq:1.65e-06 L2:4.91e-04 usage:0.2520 total usage:0.8828
+[2024/02/18 20:38:39] Rank:None, Epoch[166/300], Step [66/66], lr:9.89e-04 pred_PSNR: 34.52 perplexity:97.38 lvq:1.06e-06 L2:3.62e-04 usage:0.2227 total usage:0.9180
+[2024/02/18 20:38:40] Rank:None, Epoch[167/300], Step [1/66], lr:9.88e-04 pred_PSNR: 34.78 perplexity:104.07 lvq:1.14e-06 L2:3.59e-04 usage:0.2422 total usage:0.2422
+[2024/02/18 20:38:45] Rank:None, Epoch[167/300], Step [51/66], lr:9.80e-04 pred_PSNR: 34.09 perplexity:94.98 lvq:1.20e-05 L2:3.28e-04 usage:0.2246 total usage:0.8750
+[2024/02/18 20:38:46] Rank:None, Epoch[167/300], Step [66/66], lr:9.77e-04 pred_PSNR: 34.25 perplexity:104.93 lvq:3.96e-06 L2:3.59e-04 usage:0.2422 total usage:0.9023
+[2024/02/18 20:38:47] Rank:None, Epoch[168/300], Step [1/66], lr:9.77e-04 pred_PSNR: 34.71 perplexity:113.31 lvq:3.12e-06 L2:3.54e-04 usage:0.2520 total usage:0.2520
+[2024/02/18 20:38:52] Rank:None, Epoch[168/300], Step [51/66], lr:9.68e-04 pred_PSNR: 34.47 perplexity:94.58 lvq:1.29e-06 L2:2.01e-04 usage:0.2090 total usage:0.8672
+[2024/02/18 20:38:53] Rank:None, Epoch[168/300], Step [66/66], lr:9.65e-04 pred_PSNR: 34.32 perplexity:96.40 lvq:2.77e-06 L2:4.73e-04 usage:0.2246 total usage:0.9004
+[2024/02/18 20:38:54] Rank:None, Epoch[169/300], Step [1/66], lr:9.65e-04 pred_PSNR: 30.7 perplexity:103.56 lvq:3.55e-06 L2:9.20e-04 usage:0.2363 total usage:0.2363
+[2024/02/18 20:38:59] Rank:None, Epoch[169/300], Step [51/66], lr:9.56e-04 pred_PSNR: 34.05 perplexity:97.83 lvq:3.10e-06 L2:4.31e-04 usage:0.2344 total usage:0.8867
+[2024/02/18 20:39:00] Rank:None, Epoch[169/300], Step [66/66], lr:9.54e-04 pred_PSNR: 34.22 perplexity:86.28 lvq:9.23e-06 L2:2.54e-04 usage:0.1953 total usage:0.9121
+[2024/02/18 20:39:01] Rank:None, Epoch[170/300], Step [1/66], lr:9.53e-04 pred_PSNR: 33.03 perplexity:96.36 lvq:3.95e-06 L2:4.98e-04 usage:0.2246 total usage:0.2246
+[2024/02/18 20:39:06] Rank:None, Epoch[170/300], Step [51/66], lr:9.45e-04 pred_PSNR: 34.44 perplexity:94.07 lvq:1.48e-06 L2:2.60e-04 usage:0.2207 total usage:0.8613
+[2024/02/18 20:39:07] Rank:None, Epoch[170/300], Step [66/66], lr:9.42e-04 pred_PSNR: 34.34 perplexity:83.54 lvq:1.54e-05 L2:1.01e-03 usage:0.2012 total usage:0.8984
+[2024/02/18 20:39:08] Rank:None, Epoch[171/300], Step [1/66], lr:9.42e-04 pred_PSNR: 33.84 perplexity:92.88 lvq:1.65e-05 L2:4.15e-04 usage:0.2227 total usage:0.2227
+[2024/02/18 20:39:13] Rank:None, Epoch[171/300], Step [51/66], lr:9.33e-04 pred_PSNR: 34.28 perplexity:79.42 lvq:1.24e-05 L2:3.86e-04 usage:0.1914 total usage:0.8730
+[2024/02/18 20:39:14] Rank:None, Epoch[171/300], Step [66/66], lr:9.30e-04 pred_PSNR: 34.16 perplexity:95.39 lvq:1.68e-06 L2:2.70e-04 usage:0.2246 total usage:0.9062
+[2024/02/18 20:39:15] Rank:None, Epoch[172/300], Step [1/66], lr:9.30e-04 pred_PSNR: 32.42 perplexity:105.52 lvq:1.79e-06 L2:5.74e-04 usage:0.2422 total usage:0.2422
+[2024/02/18 20:39:20] Rank:None, Epoch[172/300], Step [51/66], lr:9.21e-04 pred_PSNR: 34.57 perplexity:99.97 lvq:7.93e-07 L2:2.16e-04 usage:0.2227 total usage:0.8691
+[2024/02/18 20:39:21] Rank:None, Epoch[172/300], Step [66/66], lr:9.19e-04 pred_PSNR: 34.47 perplexity:86.65 lvq:2.49e-05 L2:4.69e-04 usage:0.2109 total usage:0.9043
+[2024/02/18 20:39:22] Rank:None, Epoch[173/300], Step [1/66], lr:9.19e-04 pred_PSNR: 34.21 perplexity:78.74 lvq:2.58e-05 L2:3.84e-04 usage:0.1797 total usage:0.1797
+[2024/02/18 20:39:27] Rank:None, Epoch[173/300], Step [51/66], lr:9.10e-04 pred_PSNR: 34.54 perplexity:106.71 lvq:3.10e-06 L2:4.74e-04 usage:0.2402 total usage:0.8848
+[2024/02/18 20:39:28] Rank:None, Epoch[173/300], Step [66/66], lr:9.07e-04 pred_PSNR: 34.67 perplexity:109.25 lvq:1.38e-06 L2:3.26e-04 usage:0.2500 total usage:0.9141
+[2024/02/18 20:39:29] Rank:None, Epoch[174/300], Step [1/66], lr:9.07e-04 pred_PSNR: 36.08 perplexity:98.06 lvq:1.42e-06 L2:2.48e-04 usage:0.2168 total usage:0.2168
+[2024/02/18 20:39:34] Rank:None, Epoch[174/300], Step [51/66], lr:8.98e-04 pred_PSNR: 34.53 perplexity:110.79 lvq:2.63e-06 L2:3.20e-04 usage:0.2578 total usage:0.8594
+[2024/02/18 20:39:35] Rank:None, Epoch[174/300], Step [66/66], lr:8.96e-04 pred_PSNR: 34.63 perplexity:87.16 lvq:4.76e-06 L2:2.64e-04 usage:0.2031 total usage:0.8965
+[2024/02/18 20:39:36] Rank:None, Epoch[175/300], Step [1/66], lr:8.95e-04 pred_PSNR: 36.41 perplexity:100.47 lvq:3.76e-06 L2:2.28e-04 usage:0.2246 total usage:0.2246
+[2024/02/18 20:39:41] Rank:None, Epoch[175/300], Step [51/66], lr:8.87e-04 pred_PSNR: 34.77 perplexity:87.60 lvq:1.27e-05 L2:3.46e-04 usage:0.2070 total usage:0.8789
+[2024/02/18 20:39:42] Rank:None, Epoch[175/300], Step [66/66], lr:8.84e-04 pred_PSNR: 34.78 perplexity:95.40 lvq:2.32e-06 L2:2.93e-04 usage:0.2227 total usage:0.8965
+[2024/02/18 20:39:43] Rank:None, Epoch[176/300], Step [1/66], lr:8.84e-04 pred_PSNR: 33.21 perplexity:104.02 lvq:3.11e-06 L2:4.80e-04 usage:0.2422 total usage:0.2422
+[2024/02/18 20:39:48] Rank:None, Epoch[176/300], Step [51/66], lr:8.75e-04 pred_PSNR: 34.95 perplexity:96.46 lvq:1.71e-06 L2:3.71e-04 usage:0.2324 total usage:0.8613
+[2024/02/18 20:39:49] Rank:None, Epoch[176/300], Step [66/66], lr:8.73e-04 pred_PSNR: 34.95 perplexity:107.53 lvq:1.66e-06 L2:4.12e-04 usage:0.2461 total usage:0.8906
+[2024/02/18 20:39:50] Rank:None, Epoch[177/300], Step [1/66], lr:8.72e-04 pred_PSNR: 36.71 perplexity:91.55 lvq:1.36e-06 L2:2.16e-04 usage:0.2070 total usage:0.2070
+[2024/02/18 20:39:54] Rank:None, Epoch[177/300], Step [51/66], lr:8.64e-04 pred_PSNR: 35.0 perplexity:99.29 lvq:1.99e-06 L2:3.51e-04 usage:0.2246 total usage:0.8789
+[2024/02/18 20:39:56] Rank:None, Epoch[177/300], Step [66/66], lr:8.61e-04 pred_PSNR: 34.99 perplexity:82.70 lvq:5.28e-06 L2:2.67e-04 usage:0.1973 total usage:0.8965
+[2024/02/18 20:39:56] Rank:None, Epoch[178/300], Step [1/66], lr:8.61e-04 pred_PSNR: 34.97 perplexity:87.77 lvq:7.24e-06 L2:3.42e-04 usage:0.2129 total usage:0.2129
+[2024/02/18 20:40:01] Rank:None, Epoch[178/300], Step [51/66], lr:8.52e-04 pred_PSNR: 34.78 perplexity:105.16 lvq:9.15e-07 L2:3.78e-04 usage:0.2461 total usage:0.8594
+[2024/02/18 20:40:03] Rank:None, Epoch[178/300], Step [66/66], lr:8.49e-04 pred_PSNR: 34.87 perplexity:87.52 lvq:6.55e-06 L2:4.24e-04 usage:0.2109 total usage:0.8906
+[2024/02/18 20:40:03] Rank:None, Epoch[179/300], Step [1/66], lr:8.49e-04 pred_PSNR: 35.6 perplexity:85.09 lvq:5.68e-06 L2:2.94e-04 usage:0.1973 total usage:0.1973
+[2024/02/18 20:40:08] Rank:None, Epoch[179/300], Step [51/66], lr:8.41e-04 pred_PSNR: 35.29 perplexity:97.14 lvq:5.20e-06 L2:3.13e-04 usage:0.2285 total usage:0.8828
+[2024/02/18 20:40:10] Rank:None, Epoch[179/300], Step [66/66], lr:8.38e-04 pred_PSNR: 35.2 perplexity:91.84 lvq:9.86e-06 L2:4.13e-04 usage:0.2207 total usage:0.9082
+[2024/02/18 20:40:10] Rank:None, Epoch[180/300], Step [1/66], lr:8.38e-04 pred_PSNR: 35.71 perplexity:81.83 lvq:7.25e-06 L2:2.98e-04 usage:0.1992 total usage:0.1992
+[2024/02/18 20:40:15] Rank:None, Epoch[180/300], Step [51/66], lr:8.29e-04 pred_PSNR: 35.28 perplexity:88.38 lvq:1.97e-06 L2:2.31e-04 usage:0.2012 total usage:0.8555
+[2024/02/18 20:40:16] Rank:None, Epoch[180/300], Step [66/66], lr:8.27e-04 pred_PSNR: 35.19 perplexity:113.16 lvq:5.06e-06 L2:4.46e-04 usage:0.2500 total usage:0.8965
+[2024/02/18 20:40:17] Rank:None, Eval at Step [1/66] , FPS 219.1, pred_seen_psnr: 34.34 | 
+[2024/02/18 20:40:20] Rank:None, Eval at Step [51/66] , FPS 219.3, pred_seen_psnr: 35.04 | 
+[2024/02/18 20:40:20] Rank:None, Eval at Step [66/66] , FPS 211.7, pred_seen_psnr: 35.43 | 
+Eval at epoch 180 for (640, 1280): pred_seen_psnr: 35.43 | pred_unseen_psnr: 0.0 | quant_seen_psnr: 0.0 | quant_unseen_psnr: 0.0 | 
+[2024/02/18 20:40:21] Rank:None, Epoch[181/300], Step [1/66], lr:8.26e-04 pred_PSNR: 37.33 perplexity:104.23 lvq:7.75e-07 L2:1.86e-04 usage:0.2363 total usage:0.2363
+[2024/02/18 20:40:26] Rank:None, Epoch[181/300], Step [51/66], lr:8.18e-04 pred_PSNR: 35.19 perplexity:100.43 lvq:1.79e-06 L2:2.69e-04 usage:0.2266 total usage:0.8555
+[2024/02/18 20:40:28] Rank:None, Epoch[181/300], Step [66/66], lr:8.15e-04 pred_PSNR: 35.3 perplexity:103.61 lvq:7.88e-07 L2:3.01e-04 usage:0.2402 total usage:0.8867
+[2024/02/18 20:40:28] Rank:None, Epoch[182/300], Step [1/66], lr:8.15e-04 pred_PSNR: 35.75 perplexity:118.23 lvq:9.80e-07 L2:2.80e-04 usage:0.2695 total usage:0.2695
+[2024/02/18 20:40:33] Rank:None, Epoch[182/300], Step [51/66], lr:8.06e-04 pred_PSNR: 35.49 perplexity:81.07 lvq:1.33e-05 L2:3.05e-04 usage:0.1953 total usage:0.8691
+[2024/02/18 20:40:35] Rank:None, Epoch[182/300], Step [66/66], lr:8.04e-04 pred_PSNR: 35.46 perplexity:86.45 lvq:2.04e-05 L2:4.17e-04 usage:0.2051 total usage:0.9062
+[2024/02/18 20:40:35] Rank:None, Epoch[183/300], Step [1/66], lr:8.03e-04 pred_PSNR: 35.82 perplexity:87.49 lvq:1.30e-05 L2:3.02e-04 usage:0.2090 total usage:0.2090
+[2024/02/18 20:40:40] Rank:None, Epoch[183/300], Step [51/66], lr:7.95e-04 pred_PSNR: 35.48 perplexity:110.39 lvq:1.42e-06 L2:3.25e-04 usage:0.2500 total usage:0.8945
+[2024/02/18 20:40:42] Rank:None, Epoch[183/300], Step [66/66], lr:7.92e-04 pred_PSNR: 35.34 perplexity:82.66 lvq:2.00e-05 L2:3.54e-04 usage:0.2012 total usage:0.9258
+[2024/02/18 20:40:42] Rank:None, Epoch[184/300], Step [1/66], lr:7.92e-04 pred_PSNR: 35.05 perplexity:95.72 lvq:1.72e-05 L2:3.32e-04 usage:0.2246 total usage:0.2246
+[2024/02/18 20:40:47] Rank:None, Epoch[184/300], Step [51/66], lr:7.83e-04 pred_PSNR: 35.47 perplexity:92.43 lvq:2.43e-06 L2:3.69e-04 usage:0.2188 total usage:0.8945
+[2024/02/18 20:40:48] Rank:None, Epoch[184/300], Step [66/66], lr:7.81e-04 pred_PSNR: 35.37 perplexity:86.44 lvq:5.53e-06 L2:2.09e-04 usage:0.1953 total usage:0.9258
+[2024/02/18 20:40:49] Rank:None, Epoch[185/300], Step [1/66], lr:7.81e-04 pred_PSNR: 35.5 perplexity:92.32 lvq:3.49e-06 L2:3.14e-04 usage:0.2168 total usage:0.2168
+[2024/02/18 20:40:54] Rank:None, Epoch[185/300], Step [51/66], lr:7.72e-04 pred_PSNR: 35.28 perplexity:109.39 lvq:1.31e-06 L2:4.13e-04 usage:0.2500 total usage:0.8887
+[2024/02/18 20:40:55] Rank:None, Epoch[185/300], Step [66/66], lr:7.70e-04 pred_PSNR: 35.26 perplexity:83.13 lvq:1.25e-05 L2:3.55e-04 usage:0.2012 total usage:0.9023
+[2024/02/18 20:40:56] Rank:None, Epoch[186/300], Step [1/66], lr:7.69e-04 pred_PSNR: 37.24 perplexity:82.56 lvq:1.08e-05 L2:1.92e-04 usage:0.1895 total usage:0.1895
+[2024/02/18 20:41:01] Rank:None, Epoch[186/300], Step [51/66], lr:7.61e-04 pred_PSNR: 35.28 perplexity:92.18 lvq:7.07e-06 L2:2.72e-04 usage:0.2168 total usage:0.8848
+[2024/02/18 20:41:02] Rank:None, Epoch[186/300], Step [66/66], lr:7.58e-04 pred_PSNR: 35.28 perplexity:106.12 lvq:1.79e-06 L2:4.25e-04 usage:0.2461 total usage:0.9023
+[2024/02/18 20:41:03] Rank:None, Epoch[187/300], Step [1/66], lr:7.58e-04 pred_PSNR: 34.73 perplexity:103.42 lvq:1.41e-06 L2:3.47e-04 usage:0.2363 total usage:0.2363
+[2024/02/18 20:41:08] Rank:None, Epoch[187/300], Step [51/66], lr:7.50e-04 pred_PSNR: 35.43 perplexity:105.80 lvq:2.67e-06 L2:3.35e-04 usage:0.2441 total usage:0.8770
+[2024/02/18 20:41:09] Rank:None, Epoch[187/300], Step [66/66], lr:7.47e-04 pred_PSNR: 35.43 perplexity:96.08 lvq:3.75e-06 L2:3.49e-04 usage:0.2168 total usage:0.8965
+[2024/02/18 20:41:10] Rank:None, Epoch[188/300], Step [1/66], lr:7.47e-04 pred_PSNR: 35.56 perplexity:102.70 lvq:2.83e-06 L2:3.06e-04 usage:0.2363 total usage:0.2363
+[2024/02/18 20:41:15] Rank:None, Epoch[188/300], Step [51/66], lr:7.38e-04 pred_PSNR: 35.29 perplexity:105.69 lvq:2.88e-06 L2:3.51e-04 usage:0.2461 total usage:0.8750
+[2024/02/18 20:41:16] Rank:None, Epoch[188/300], Step [66/66], lr:7.36e-04 pred_PSNR: 35.36 perplexity:104.27 lvq:9.50e-07 L2:2.24e-04 usage:0.2461 total usage:0.9043
+[2024/02/18 20:41:17] Rank:None, Epoch[189/300], Step [1/66], lr:7.36e-04 pred_PSNR: 36.39 perplexity:94.99 lvq:7.57e-07 L2:2.42e-04 usage:0.2109 total usage:0.2109
+[2024/02/18 20:41:22] Rank:None, Epoch[189/300], Step [51/66], lr:7.27e-04 pred_PSNR: 35.34 perplexity:99.19 lvq:2.02e-06 L2:4.04e-04 usage:0.2305 total usage:0.8652
+[2024/02/18 20:41:23] Rank:None, Epoch[189/300], Step [66/66], lr:7.25e-04 pred_PSNR: 35.3 perplexity:86.54 lvq:5.77e-06 L2:2.68e-04 usage:0.2051 total usage:0.9062
+[2024/02/18 20:41:24] Rank:None, Epoch[190/300], Step [1/66], lr:7.24e-04 pred_PSNR: 37.11 perplexity:78.76 lvq:6.46e-06 L2:1.95e-04 usage:0.1855 total usage:0.1855
+[2024/02/18 20:41:29] Rank:None, Epoch[190/300], Step [51/66], lr:7.16e-04 pred_PSNR: 35.4 perplexity:91.74 lvq:1.88e-05 L2:3.26e-04 usage:0.2070 total usage:0.8809
+[2024/02/18 20:41:30] Rank:None, Epoch[190/300], Step [66/66], lr:7.13e-04 pred_PSNR: 35.29 perplexity:82.84 lvq:1.18e-05 L2:4.04e-04 usage:0.1934 total usage:0.9102
+[2024/02/18 20:41:31] Rank:None, Epoch[191/300], Step [1/66], lr:7.13e-04 pred_PSNR: 36.14 perplexity:88.65 lvq:1.10e-05 L2:2.54e-04 usage:0.2070 total usage:0.2070
+[2024/02/18 20:41:36] Rank:None, Epoch[191/300], Step [51/66], lr:7.05e-04 pred_PSNR: 35.49 perplexity:106.20 lvq:9.75e-07 L2:1.97e-04 usage:0.2480 total usage:0.8652
+[2024/02/18 20:41:37] Rank:None, Epoch[191/300], Step [66/66], lr:7.02e-04 pred_PSNR: 35.48 perplexity:96.52 lvq:1.25e-06 L2:2.86e-04 usage:0.2148 total usage:0.9004
+[2024/02/18 20:41:38] Rank:None, Epoch[192/300], Step [1/66], lr:7.02e-04 pred_PSNR: 34.47 perplexity:93.69 lvq:9.30e-07 L2:3.58e-04 usage:0.2129 total usage:0.2129
+[2024/02/18 20:41:43] Rank:None, Epoch[192/300], Step [51/66], lr:6.94e-04 pred_PSNR: 35.37 perplexity:82.22 lvq:9.99e-06 L2:2.98e-04 usage:0.1953 total usage:0.8535
+[2024/02/18 20:41:44] Rank:None, Epoch[192/300], Step [66/66], lr:6.91e-04 pred_PSNR: 35.34 perplexity:89.45 lvq:1.43e-05 L2:3.04e-04 usage:0.2188 total usage:0.8887
+[2024/02/18 20:41:45] Rank:None, Epoch[193/300], Step [1/66], lr:6.91e-04 pred_PSNR: 37.36 perplexity:80.93 lvq:1.21e-05 L2:1.84e-04 usage:0.1895 total usage:0.1895
+[2024/02/18 20:41:50] Rank:None, Epoch[193/300], Step [51/66], lr:6.83e-04 pred_PSNR: 35.55 perplexity:98.38 lvq:1.35e-06 L2:3.23e-04 usage:0.2246 total usage:0.8730
+[2024/02/18 20:41:51] Rank:None, Epoch[193/300], Step [66/66], lr:6.80e-04 pred_PSNR: 35.44 perplexity:88.22 lvq:5.38e-06 L2:3.12e-04 usage:0.2051 total usage:0.8926
+[2024/02/18 20:41:52] Rank:None, Epoch[194/300], Step [1/66], lr:6.80e-04 pred_PSNR: 35.18 perplexity:106.82 lvq:4.95e-06 L2:3.14e-04 usage:0.2441 total usage:0.2441
+[2024/02/18 20:41:57] Rank:None, Epoch[194/300], Step [51/66], lr:6.72e-04 pred_PSNR: 35.6 perplexity:88.27 lvq:3.81e-06 L2:1.74e-04 usage:0.2051 total usage:0.8613
+[2024/02/18 20:41:58] Rank:None, Epoch[194/300], Step [66/66], lr:6.69e-04 pred_PSNR: 35.5 perplexity:112.06 lvq:1.74e-06 L2:3.44e-04 usage:0.2520 total usage:0.8887
+[2024/02/18 20:41:59] Rank:None, Epoch[195/300], Step [1/66], lr:6.69e-04 pred_PSNR: 34.92 perplexity:97.21 lvq:1.78e-06 L2:3.29e-04 usage:0.2305 total usage:0.2305
+[2024/02/18 20:42:04] Rank:None, Epoch[195/300], Step [51/66], lr:6.61e-04 pred_PSNR: 35.34 perplexity:85.89 lvq:6.18e-06 L2:3.39e-04 usage:0.2109 total usage:0.8711
+[2024/02/18 20:42:05] Rank:None, Epoch[195/300], Step [66/66], lr:6.58e-04 pred_PSNR: 35.42 perplexity:86.12 lvq:1.37e-06 L2:2.22e-04 usage:0.2012 total usage:0.9102
+[2024/02/18 20:42:06] Rank:None, Epoch[196/300], Step [1/66], lr:6.58e-04 pred_PSNR: 34.93 perplexity:100.55 lvq:1.87e-06 L2:3.40e-04 usage:0.2422 total usage:0.2422
+[2024/02/18 20:42:11] Rank:None, Epoch[196/300], Step [51/66], lr:6.50e-04 pred_PSNR: 35.35 perplexity:106.40 lvq:4.04e-06 L2:2.74e-04 usage:0.2422 total usage:0.8711
+[2024/02/18 20:42:12] Rank:None, Epoch[196/300], Step [66/66], lr:6.47e-04 pred_PSNR: 35.33 perplexity:102.51 lvq:2.48e-06 L2:3.48e-04 usage:0.2422 total usage:0.8906
+[2024/02/18 20:42:13] Rank:None, Epoch[197/300], Step [1/66], lr:6.47e-04 pred_PSNR: 37.18 perplexity:98.44 lvq:9.12e-07 L2:1.92e-04 usage:0.2305 total usage:0.2305
+[2024/02/18 20:42:18] Rank:None, Epoch[197/300], Step [51/66], lr:6.39e-04 pred_PSNR: 35.59 perplexity:102.94 lvq:6.74e-07 L2:2.78e-04 usage:0.2422 total usage:0.8828
+[2024/02/18 20:42:19] Rank:None, Epoch[197/300], Step [66/66], lr:6.36e-04 pred_PSNR: 35.59 perplexity:91.39 lvq:7.65e-06 L2:3.36e-04 usage:0.2148 total usage:0.9043
+[2024/02/18 20:42:20] Rank:None, Epoch[198/300], Step [1/66], lr:6.36e-04 pred_PSNR: 35.96 perplexity:99.44 lvq:7.23e-06 L2:2.61e-04 usage:0.2305 total usage:0.2305
+[2024/02/18 20:42:25] Rank:None, Epoch[198/300], Step [51/66], lr:6.28e-04 pred_PSNR: 35.75 perplexity:79.90 lvq:8.19e-06 L2:1.80e-04 usage:0.1934 total usage:0.8750
+[2024/02/18 20:42:26] Rank:None, Epoch[198/300], Step [66/66], lr:6.26e-04 pred_PSNR: 35.69 perplexity:104.64 lvq:2.41e-06 L2:4.36e-04 usage:0.2344 total usage:0.9043
+[2024/02/18 20:42:27] Rank:None, Epoch[199/300], Step [1/66], lr:6.25e-04 pred_PSNR: 36.3 perplexity:104.93 lvq:3.14e-06 L2:2.38e-04 usage:0.2422 total usage:0.2422
+[2024/02/18 20:42:32] Rank:None, Epoch[199/300], Step [51/66], lr:6.17e-04 pred_PSNR: 35.57 perplexity:96.08 lvq:1.67e-06 L2:4.25e-04 usage:0.2207 total usage:0.8379
+[2024/02/18 20:42:33] Rank:None, Epoch[199/300], Step [66/66], lr:6.15e-04 pred_PSNR: 35.59 perplexity:96.27 lvq:5.96e-07 L2:3.12e-04 usage:0.2285 total usage:0.8789
+[2024/02/18 20:42:34] Rank:None, Epoch[200/300], Step [1/66], lr:6.15e-04 pred_PSNR: 33.67 perplexity:111.87 lvq:9.47e-07 L2:4.31e-04 usage:0.2520 total usage:0.2520
+[2024/02/18 20:42:39] Rank:None, Epoch[200/300], Step [51/66], lr:6.07e-04 pred_PSNR: 35.45 perplexity:116.76 lvq:1.14e-06 L2:4.06e-04 usage:0.2617 total usage:0.8555
+[2024/02/18 20:42:40] Rank:None, Epoch[200/300], Step [66/66], lr:6.04e-04 pred_PSNR: 35.45 perplexity:106.31 lvq:1.19e-06 L2:2.91e-04 usage:0.2363 total usage:0.8887
+[2024/02/18 20:42:41] Rank:None, Epoch[201/300], Step [1/66], lr:6.04e-04 pred_PSNR: 35.48 perplexity:108.57 lvq:1.22e-06 L2:3.06e-04 usage:0.2441 total usage:0.2441
+[2024/02/18 20:42:46] Rank:None, Epoch[201/300], Step [51/66], lr:5.96e-04 pred_PSNR: 35.31 perplexity:85.77 lvq:5.67e-06 L2:2.04e-04 usage:0.1992 total usage:0.8828
+[2024/02/18 20:42:47] Rank:None, Epoch[201/300], Step [66/66], lr:5.93e-04 pred_PSNR: 35.39 perplexity:97.48 lvq:5.96e-06 L2:1.95e-04 usage:0.2207 total usage:0.9043
+[2024/02/18 20:42:48] Rank:None, Epoch[202/300], Step [1/66], lr:5.93e-04 pred_PSNR: 35.62 perplexity:95.16 lvq:1.39e-04 L2:2.81e-04 usage:0.2227 total usage:0.2227
+[2024/02/18 20:42:53] Rank:None, Epoch[202/300], Step [51/66], lr:5.85e-04 pred_PSNR: 35.77 perplexity:120.43 lvq:9.14e-07 L2:2.48e-04 usage:0.2695 total usage:0.8633
+[2024/02/18 20:42:54] Rank:None, Epoch[202/300], Step [66/66], lr:5.83e-04 pred_PSNR: 35.64 perplexity:95.17 lvq:1.74e-06 L2:3.07e-04 usage:0.2207 total usage:0.9082
+[2024/02/18 20:42:55] Rank:None, Epoch[203/300], Step [1/66], lr:5.83e-04 pred_PSNR: 36.74 perplexity:99.92 lvq:1.43e-06 L2:2.23e-04 usage:0.2266 total usage:0.2266
+[2024/02/18 20:43:00] Rank:None, Epoch[203/300], Step [51/66], lr:5.75e-04 pred_PSNR: 35.76 perplexity:104.81 lvq:3.32e-06 L2:3.06e-04 usage:0.2402 total usage:0.8535
+[2024/02/18 20:43:01] Rank:None, Epoch[203/300], Step [66/66], lr:5.72e-04 pred_PSNR: 35.68 perplexity:100.06 lvq:3.55e-05 L2:4.34e-04 usage:0.2324 total usage:0.8711
+[2024/02/18 20:43:02] Rank:None, Epoch[204/300], Step [1/66], lr:5.72e-04 pred_PSNR: 34.3 perplexity:89.91 lvq:3.84e-06 L2:3.73e-04 usage:0.2148 total usage:0.2148
+[2024/02/18 20:43:07] Rank:None, Epoch[204/300], Step [51/66], lr:5.64e-04 pred_PSNR: 35.53 perplexity:125.02 lvq:6.93e-07 L2:3.30e-04 usage:0.2715 total usage:0.8379
+[2024/02/18 20:43:08] Rank:None, Epoch[204/300], Step [66/66], lr:5.62e-04 pred_PSNR: 35.37 perplexity:97.88 lvq:3.54e-06 L2:2.24e-04 usage:0.2324 total usage:0.8809
+[2024/02/18 20:43:09] Rank:None, Epoch[205/300], Step [1/66], lr:5.62e-04 pred_PSNR: 35.29 perplexity:88.76 lvq:3.45e-06 L2:3.28e-04 usage:0.2109 total usage:0.2109
+[2024/02/18 20:43:14] Rank:None, Epoch[205/300], Step [51/66], lr:5.54e-04 pred_PSNR: 35.42 perplexity:106.62 lvq:5.48e-07 L2:2.16e-04 usage:0.2461 total usage:0.8672
+[2024/02/18 20:43:15] Rank:None, Epoch[205/300], Step [66/66], lr:5.51e-04 pred_PSNR: 35.45 perplexity:89.54 lvq:1.17e-06 L2:1.66e-04 usage:0.2051 total usage:0.8828
+[2024/02/18 20:43:16] Rank:None, Epoch[206/300], Step [1/66], lr:5.51e-04 pred_PSNR: 34.86 perplexity:96.74 lvq:3.25e-04 L2:3.27e-04 usage:0.2305 total usage:0.2305
+[2024/02/18 20:43:21] Rank:None, Epoch[206/300], Step [51/66], lr:5.43e-04 pred_PSNR: 35.8 perplexity:93.60 lvq:1.43e-06 L2:2.12e-04 usage:0.2227 total usage:0.8672
+[2024/02/18 20:43:22] Rank:None, Epoch[206/300], Step [66/66], lr:5.41e-04 pred_PSNR: 35.83 perplexity:100.50 lvq:2.71e-05 L2:2.62e-04 usage:0.2266 total usage:0.8906
+[2024/02/18 20:43:23] Rank:None, Epoch[207/300], Step [1/66], lr:5.41e-04 pred_PSNR: 36.22 perplexity:104.03 lvq:1.01e-06 L2:2.64e-04 usage:0.2480 total usage:0.2480
+[2024/02/18 20:43:28] Rank:None, Epoch[207/300], Step [51/66], lr:5.33e-04 pred_PSNR: 35.95 perplexity:94.70 lvq:8.17e-07 L2:2.61e-04 usage:0.2266 total usage:0.8652
+[2024/02/18 20:43:29] Rank:None, Epoch[207/300], Step [66/66], lr:5.31e-04 pred_PSNR: 35.96 perplexity:93.25 lvq:2.33e-06 L2:2.90e-04 usage:0.2129 total usage:0.8906
+[2024/02/18 20:43:30] Rank:None, Epoch[208/300], Step [1/66], lr:5.31e-04 pred_PSNR: 36.54 perplexity:90.25 lvq:1.77e-06 L2:2.32e-04 usage:0.2109 total usage:0.2109
+[2024/02/18 20:43:35] Rank:None, Epoch[208/300], Step [51/66], lr:5.23e-04 pred_PSNR: 35.97 perplexity:96.54 lvq:2.69e-06 L2:3.14e-04 usage:0.2246 total usage:0.8672
+[2024/02/18 20:43:36] Rank:None, Epoch[208/300], Step [66/66], lr:5.20e-04 pred_PSNR: 35.93 perplexity:109.76 lvq:3.69e-04 L2:2.14e-04 usage:0.2480 total usage:0.8984
+[2024/02/18 20:43:37] Rank:None, Epoch[209/300], Step [1/66], lr:5.20e-04 pred_PSNR: 35.77 perplexity:93.23 lvq:1.27e-05 L2:2.89e-04 usage:0.2109 total usage:0.2109
+[2024/02/18 20:43:42] Rank:None, Epoch[209/300], Step [51/66], lr:5.13e-04 pred_PSNR: 36.0 perplexity:98.89 lvq:6.08e-07 L2:1.69e-04 usage:0.2285 total usage:0.8574
+[2024/02/18 20:43:43] Rank:None, Epoch[209/300], Step [66/66], lr:5.10e-04 pred_PSNR: 35.95 perplexity:84.25 lvq:5.24e-05 L2:2.73e-04 usage:0.2031 total usage:0.8906
+[2024/02/18 20:43:44] Rank:None, Epoch[210/300], Step [1/66], lr:5.10e-04 pred_PSNR: 37.38 perplexity:90.16 lvq:3.35e-06 L2:1.83e-04 usage:0.2148 total usage:0.2148
+[2024/02/18 20:43:49] Rank:None, Epoch[210/300], Step [51/66], lr:5.02e-04 pred_PSNR: 36.01 perplexity:94.62 lvq:2.20e-06 L2:1.76e-04 usage:0.2246 total usage:0.8438
+[2024/02/18 20:43:50] Rank:None, Epoch[210/300], Step [66/66], lr:5.00e-04 pred_PSNR: 35.98 perplexity:86.10 lvq:3.80e-06 L2:2.92e-04 usage:0.2070 total usage:0.8789
+[2024/02/18 20:43:51] Rank:None, Eval at Step [1/66] , FPS 146.0, pred_seen_psnr: 34.78 | 
+[2024/02/18 20:43:54] Rank:None, Eval at Step [51/66] , FPS 207.9, pred_seen_psnr: 35.6 | 
+[2024/02/18 20:43:55] Rank:None, Eval at Step [66/66] , FPS 200.5, pred_seen_psnr: 36.0 | 
+Eval at epoch 210 for (640, 1280): pred_seen_psnr: 36.0 | pred_unseen_psnr: 0.0 | quant_seen_psnr: 0.0 | quant_unseen_psnr: 0.0 | 
+[2024/02/18 20:43:55] Rank:None, Epoch[211/300], Step [1/66], lr:5.00e-04 pred_PSNR: 36.64 perplexity:82.08 lvq:3.74e-06 L2:2.42e-04 usage:0.1914 total usage:0.1914
+[2024/02/18 20:44:00] Rank:None, Epoch[211/300], Step [51/66], lr:4.92e-04 pred_PSNR: 36.02 perplexity:107.42 lvq:1.01e-05 L2:3.66e-04 usage:0.2441 total usage:0.8535
+[2024/02/18 20:44:02] Rank:None, Epoch[211/300], Step [66/66], lr:4.90e-04 pred_PSNR: 35.98 perplexity:115.00 lvq:2.46e-06 L2:2.28e-04 usage:0.2598 total usage:0.8848
+[2024/02/18 20:44:02] Rank:None, Epoch[212/300], Step [1/66], lr:4.90e-04 pred_PSNR: 35.35 perplexity:98.59 lvq:9.98e-07 L2:2.92e-04 usage:0.2266 total usage:0.2266
+[2024/02/18 20:44:07] Rank:None, Epoch[212/300], Step [51/66], lr:4.82e-04 pred_PSNR: 35.98 perplexity:99.28 lvq:1.92e-06 L2:2.87e-04 usage:0.2305 total usage:0.8711
+[2024/02/18 20:44:09] Rank:None, Epoch[212/300], Step [66/66], lr:4.80e-04 pred_PSNR: 36.06 perplexity:100.38 lvq:4.85e-07 L2:1.92e-04 usage:0.2324 total usage:0.8984
+[2024/02/18 20:44:10] Rank:None, Epoch[213/300], Step [1/66], lr:4.80e-04 pred_PSNR: 36.03 perplexity:111.06 lvq:6.01e-07 L2:2.60e-04 usage:0.2520 total usage:0.2520
+[2024/02/18 20:44:14] Rank:None, Epoch[213/300], Step [51/66], lr:4.72e-04 pred_PSNR: 36.03 perplexity:105.43 lvq:8.18e-07 L2:3.28e-04 usage:0.2461 total usage:0.8770
+[2024/02/18 20:44:16] Rank:None, Epoch[213/300], Step [66/66], lr:4.70e-04 pred_PSNR: 36.09 perplexity:111.79 lvq:2.06e-06 L2:2.36e-04 usage:0.2520 total usage:0.9023
+[2024/02/18 20:44:17] Rank:None, Epoch[214/300], Step [1/66], lr:4.70e-04 pred_PSNR: 36.71 perplexity:86.94 lvq:3.01e-06 L2:2.20e-04 usage:0.2070 total usage:0.2070
+[2024/02/18 20:44:21] Rank:None, Epoch[214/300], Step [51/66], lr:4.63e-04 pred_PSNR: 36.05 perplexity:98.49 lvq:1.78e-06 L2:2.57e-04 usage:0.2246 total usage:0.8652
+[2024/02/18 20:44:23] Rank:None, Epoch[214/300], Step [66/66], lr:4.60e-04 pred_PSNR: 36.2 perplexity:78.16 lvq:9.34e-06 L2:2.97e-04 usage:0.1855 total usage:0.8867
+[2024/02/18 20:44:23] Rank:None, Epoch[215/300], Step [1/66], lr:4.60e-04 pred_PSNR: 35.7 perplexity:78.87 lvq:1.04e-05 L2:2.69e-04 usage:0.1875 total usage:0.1875
+[2024/02/18 20:44:28] Rank:None, Epoch[215/300], Step [51/66], lr:4.53e-04 pred_PSNR: 36.2 perplexity:85.32 lvq:3.23e-06 L2:2.81e-04 usage:0.2031 total usage:0.8555
+[2024/02/18 20:44:30] Rank:None, Epoch[215/300], Step [66/66], lr:4.51e-04 pred_PSNR: 36.2 perplexity:103.56 lvq:1.34e-06 L2:2.14e-04 usage:0.2441 total usage:0.8848
+[2024/02/18 20:44:31] Rank:None, Epoch[216/300], Step [1/66], lr:4.50e-04 pred_PSNR: 35.06 perplexity:93.93 lvq:1.23e-06 L2:3.16e-04 usage:0.2168 total usage:0.2168
+[2024/02/18 20:44:35] Rank:None, Epoch[216/300], Step [51/66], lr:4.43e-04 pred_PSNR: 36.19 perplexity:103.96 lvq:5.03e-07 L2:2.42e-04 usage:0.2422 total usage:0.8672
+[2024/02/18 20:44:37] Rank:None, Epoch[216/300], Step [66/66], lr:4.41e-04 pred_PSNR: 36.19 perplexity:87.35 lvq:3.56e-06 L2:2.72e-04 usage:0.2109 total usage:0.9023
+[2024/02/18 20:44:38] Rank:None, Epoch[217/300], Step [1/66], lr:4.41e-04 pred_PSNR: 35.14 perplexity:88.35 lvq:3.19e-06 L2:3.07e-04 usage:0.2109 total usage:0.2109
+[2024/02/18 20:44:43] Rank:None, Epoch[217/300], Step [51/66], lr:4.34e-04 pred_PSNR: 36.08 perplexity:105.60 lvq:3.52e-07 L2:2.50e-04 usage:0.2402 total usage:0.8613
+[2024/02/18 20:44:44] Rank:None, Epoch[217/300], Step [66/66], lr:4.31e-04 pred_PSNR: 36.08 perplexity:120.73 lvq:1.20e-06 L2:3.49e-04 usage:0.2676 total usage:0.8828
+[2024/02/18 20:44:44] Rank:None, Epoch[218/300], Step [1/66], lr:4.31e-04 pred_PSNR: 35.23 perplexity:109.95 lvq:8.74e-07 L2:3.04e-04 usage:0.2520 total usage:0.2520
+[2024/02/18 20:44:49] Rank:None, Epoch[218/300], Step [51/66], lr:4.24e-04 pred_PSNR: 35.97 perplexity:114.85 lvq:5.70e-07 L2:2.69e-04 usage:0.2578 total usage:0.8418
+[2024/02/18 20:44:51] Rank:None, Epoch[218/300], Step [66/66], lr:4.22e-04 pred_PSNR: 36.1 perplexity:104.33 lvq:3.72e-07 L2:1.48e-04 usage:0.2402 total usage:0.8750
+[2024/02/18 20:44:51] Rank:None, Epoch[219/300], Step [1/66], lr:4.22e-04 pred_PSNR: 36.88 perplexity:109.32 lvq:4.27e-07 L2:2.07e-04 usage:0.2461 total usage:0.2461
+[2024/02/18 20:44:56] Rank:None, Epoch[219/300], Step [51/66], lr:4.14e-04 pred_PSNR: 36.21 perplexity:103.81 lvq:6.15e-07 L2:1.65e-04 usage:0.2422 total usage:0.8672
+[2024/02/18 20:44:58] Rank:None, Epoch[219/300], Step [66/66], lr:4.12e-04 pred_PSNR: 36.13 perplexity:90.27 lvq:1.19e-06 L2:1.90e-04 usage:0.2148 total usage:0.8965
+[2024/02/18 20:44:58] Rank:None, Epoch[220/300], Step [1/66], lr:4.12e-04 pred_PSNR: 38.24 perplexity:92.48 lvq:1.88e-06 L2:1.50e-04 usage:0.2168 total usage:0.2168
+[2024/02/18 20:45:03] Rank:None, Epoch[220/300], Step [51/66], lr:4.05e-04 pred_PSNR: 36.15 perplexity:92.87 lvq:3.25e-06 L2:3.45e-04 usage:0.2246 total usage:0.8594
+[2024/02/18 20:45:04] Rank:None, Epoch[220/300], Step [66/66], lr:4.03e-04 pred_PSNR: 36.15 perplexity:96.79 lvq:7.09e-07 L2:2.09e-04 usage:0.2207 total usage:0.8945
+[2024/02/18 20:45:05] Rank:None, Epoch[221/300], Step [1/66], lr:4.03e-04 pred_PSNR: 35.85 perplexity:114.36 lvq:1.04e-06 L2:2.87e-04 usage:0.2656 total usage:0.2656
+[2024/02/18 20:45:10] Rank:None, Epoch[221/300], Step [51/66], lr:3.96e-04 pred_PSNR: 36.23 perplexity:99.54 lvq:8.64e-07 L2:2.20e-04 usage:0.2227 total usage:0.8711
+[2024/02/18 20:45:11] Rank:None, Epoch[221/300], Step [66/66], lr:3.94e-04 pred_PSNR: 36.21 perplexity:96.96 lvq:3.95e-07 L2:1.39e-04 usage:0.2285 total usage:0.8984
+[2024/02/18 20:45:12] Rank:None, Epoch[222/300], Step [1/66], lr:3.94e-04 pred_PSNR: 37.94 perplexity:99.72 lvq:2.18e-07 L2:1.61e-04 usage:0.2363 total usage:0.2363
+[2024/02/18 20:45:17] Rank:None, Epoch[222/300], Step [51/66], lr:3.87e-04 pred_PSNR: 36.34 perplexity:96.23 lvq:4.44e-06 L2:3.91e-04 usage:0.2227 total usage:0.8613
+[2024/02/18 20:45:18] Rank:None, Epoch[222/300], Step [66/66], lr:3.84e-04 pred_PSNR: 36.26 perplexity:91.52 lvq:5.65e-06 L2:2.94e-04 usage:0.2129 total usage:0.9004
+[2024/02/18 20:45:19] Rank:None, Epoch[223/300], Step [1/66], lr:3.84e-04 pred_PSNR: 35.37 perplexity:93.16 lvq:5.57e-06 L2:2.90e-04 usage:0.2246 total usage:0.2246
+[2024/02/18 20:45:24] Rank:None, Epoch[223/300], Step [51/66], lr:3.77e-04 pred_PSNR: 36.4 perplexity:110.34 lvq:3.35e-07 L2:2.08e-04 usage:0.2480 total usage:0.8398
+[2024/02/18 20:45:25] Rank:None, Epoch[223/300], Step [66/66], lr:3.75e-04 pred_PSNR: 36.27 perplexity:114.24 lvq:4.15e-07 L2:2.28e-04 usage:0.2598 total usage:0.8730
+[2024/02/18 20:45:26] Rank:None, Epoch[224/300], Step [1/66], lr:3.75e-04 pred_PSNR: 36.8 perplexity:104.43 lvq:2.29e-07 L2:2.15e-04 usage:0.2500 total usage:0.2500
+[2024/02/18 20:45:31] Rank:None, Epoch[224/300], Step [51/66], lr:3.68e-04 pred_PSNR: 36.25 perplexity:95.42 lvq:4.20e-06 L2:2.12e-04 usage:0.2324 total usage:0.8691
+[2024/02/18 20:45:32] Rank:None, Epoch[224/300], Step [66/66], lr:3.66e-04 pred_PSNR: 36.21 perplexity:91.41 lvq:4.46e-06 L2:1.68e-04 usage:0.2148 total usage:0.9160
+[2024/02/18 20:45:33] Rank:None, Epoch[225/300], Step [1/66], lr:3.66e-04 pred_PSNR: 36.64 perplexity:88.90 lvq:9.22e-06 L2:2.31e-04 usage:0.2090 total usage:0.2090
+[2024/02/18 20:45:38] Rank:None, Epoch[225/300], Step [51/66], lr:3.59e-04 pred_PSNR: 36.32 perplexity:87.23 lvq:6.74e-06 L2:2.08e-04 usage:0.1992 total usage:0.8652
+[2024/02/18 20:45:39] Rank:None, Epoch[225/300], Step [66/66], lr:3.57e-04 pred_PSNR: 36.24 perplexity:100.26 lvq:6.20e-06 L2:2.96e-04 usage:0.2344 total usage:0.8984
+[2024/02/18 20:45:40] Rank:None, Epoch[226/300], Step [1/66], lr:3.57e-04 pred_PSNR: 35.34 perplexity:90.99 lvq:2.08e-06 L2:2.92e-04 usage:0.2148 total usage:0.2148
+[2024/02/18 20:45:45] Rank:None, Epoch[226/300], Step [51/66], lr:3.50e-04 pred_PSNR: 36.37 perplexity:95.13 lvq:2.61e-06 L2:1.96e-04 usage:0.2227 total usage:0.8711
+[2024/02/18 20:45:46] Rank:None, Epoch[226/300], Step [66/66], lr:3.48e-04 pred_PSNR: 36.28 perplexity:102.67 lvq:8.07e-07 L2:2.75e-04 usage:0.2383 total usage:0.8984
+[2024/02/18 20:45:47] Rank:None, Epoch[227/300], Step [1/66], lr:3.48e-04 pred_PSNR: 37.96 perplexity:98.00 lvq:4.70e-07 L2:1.60e-04 usage:0.2305 total usage:0.2305
+[2024/02/18 20:45:52] Rank:None, Epoch[227/300], Step [51/66], lr:3.42e-04 pred_PSNR: 36.37 perplexity:80.21 lvq:9.82e-06 L2:3.13e-04 usage:0.1934 total usage:0.8691
+[2024/02/18 20:45:53] Rank:None, Epoch[227/300], Step [66/66], lr:3.40e-04 pred_PSNR: 36.32 perplexity:100.03 lvq:2.25e-04 L2:2.54e-04 usage:0.2305 total usage:0.8887
+[2024/02/18 20:45:54] Rank:None, Epoch[228/300], Step [1/66], lr:3.40e-04 pred_PSNR: 36.76 perplexity:88.80 lvq:6.37e-06 L2:2.27e-04 usage:0.2070 total usage:0.2070
+[2024/02/18 20:45:59] Rank:None, Epoch[228/300], Step [51/66], lr:3.33e-04 pred_PSNR: 36.29 perplexity:110.16 lvq:6.73e-07 L2:2.35e-04 usage:0.2500 total usage:0.8633
+[2024/02/18 20:46:00] Rank:None, Epoch[228/300], Step [66/66], lr:3.31e-04 pred_PSNR: 36.34 perplexity:105.27 lvq:2.45e-07 L2:1.27e-04 usage:0.2422 total usage:0.8906
+[2024/02/18 20:46:01] Rank:None, Epoch[229/300], Step [1/66], lr:3.31e-04 pred_PSNR: 35.27 perplexity:113.14 lvq:5.13e-07 L2:3.02e-04 usage:0.2500 total usage:0.2500
+[2024/02/18 20:46:06] Rank:None, Epoch[229/300], Step [51/66], lr:3.24e-04 pred_PSNR: 36.41 perplexity:109.92 lvq:2.77e-07 L2:1.44e-04 usage:0.2559 total usage:0.8652
+[2024/02/18 20:46:07] Rank:None, Epoch[229/300], Step [66/66], lr:3.22e-04 pred_PSNR: 36.36 perplexity:100.12 lvq:1.49e-07 L2:1.31e-04 usage:0.2266 total usage:0.8926
+[2024/02/18 20:46:08] Rank:None, Epoch[230/300], Step [1/66], lr:3.22e-04 pred_PSNR: 36.86 perplexity:109.61 lvq:3.40e-07 L2:2.09e-04 usage:0.2461 total usage:0.2461
+[2024/02/18 20:46:13] Rank:None, Epoch[230/300], Step [51/66], lr:3.16e-04 pred_PSNR: 36.21 perplexity:110.20 lvq:6.01e-07 L2:2.36e-04 usage:0.2578 total usage:0.8633
+[2024/02/18 20:46:14] Rank:None, Epoch[230/300], Step [66/66], lr:3.14e-04 pred_PSNR: 36.39 perplexity:110.12 lvq:3.97e-07 L2:1.52e-04 usage:0.2539 total usage:0.8828
+[2024/02/18 20:46:15] Rank:None, Epoch[231/300], Step [1/66], lr:3.14e-04 pred_PSNR: 36.59 perplexity:111.99 lvq:4.45e-07 L2:2.20e-04 usage:0.2461 total usage:0.2461
+[2024/02/18 20:46:20] Rank:None, Epoch[231/300], Step [51/66], lr:3.07e-04 pred_PSNR: 36.51 perplexity:111.82 lvq:4.28e-07 L2:1.77e-04 usage:0.2500 total usage:0.8301
+[2024/02/18 20:46:21] Rank:None, Epoch[231/300], Step [66/66], lr:3.05e-04 pred_PSNR: 36.42 perplexity:105.37 lvq:3.72e-06 L2:3.11e-04 usage:0.2441 total usage:0.8652
+[2024/02/18 20:46:22] Rank:None, Epoch[232/300], Step [1/66], lr:3.05e-04 pred_PSNR: 35.35 perplexity:106.27 lvq:5.07e-07 L2:2.95e-04 usage:0.2441 total usage:0.2441
+[2024/02/18 20:46:27] Rank:None, Epoch[232/300], Step [51/66], lr:2.99e-04 pred_PSNR: 36.39 perplexity:108.25 lvq:2.23e-06 L2:2.36e-04 usage:0.2500 total usage:0.8672
+[2024/02/18 20:46:28] Rank:None, Epoch[232/300], Step [66/66], lr:2.97e-04 pred_PSNR: 36.4 perplexity:109.39 lvq:8.44e-07 L2:2.77e-04 usage:0.2598 total usage:0.8965
+[2024/02/18 20:46:29] Rank:None, Epoch[233/300], Step [1/66], lr:2.97e-04 pred_PSNR: 34.81 perplexity:100.14 lvq:6.40e-07 L2:3.32e-04 usage:0.2363 total usage:0.2363
+[2024/02/18 20:46:33] Rank:None, Epoch[233/300], Step [51/66], lr:2.91e-04 pred_PSNR: 36.42 perplexity:80.51 lvq:8.41e-06 L2:3.30e-04 usage:0.1895 total usage:0.8496
+[2024/02/18 20:46:35] Rank:None, Epoch[233/300], Step [66/66], lr:2.89e-04 pred_PSNR: 36.45 perplexity:109.68 lvq:1.32e-06 L2:2.46e-04 usage:0.2559 total usage:0.8828
+[2024/02/18 20:46:36] Rank:None, Epoch[234/300], Step [1/66], lr:2.89e-04 pred_PSNR: 36.47 perplexity:97.79 lvq:1.38e-06 L2:2.34e-04 usage:0.2188 total usage:0.2188
+[2024/02/18 20:46:40] Rank:None, Epoch[234/300], Step [51/66], lr:2.83e-04 pred_PSNR: 36.41 perplexity:109.15 lvq:1.55e-07 L2:1.71e-04 usage:0.2461 total usage:0.8320
+[2024/02/18 20:46:42] Rank:None, Epoch[234/300], Step [66/66], lr:2.81e-04 pred_PSNR: 36.47 perplexity:94.77 lvq:3.11e-06 L2:3.08e-04 usage:0.2266 total usage:0.8730
+[2024/02/18 20:46:42] Rank:None, Epoch[235/300], Step [1/66], lr:2.81e-04 pred_PSNR: 37.66 perplexity:87.57 lvq:2.24e-06 L2:1.72e-04 usage:0.2012 total usage:0.2012
+[2024/02/18 20:46:48] Rank:None, Epoch[235/300], Step [51/66], lr:2.75e-04 pred_PSNR: 36.49 perplexity:89.47 lvq:8.50e-06 L2:2.16e-04 usage:0.2070 total usage:0.8652
+[2024/02/18 20:46:49] Rank:None, Epoch[235/300], Step [66/66], lr:2.73e-04 pred_PSNR: 36.48 perplexity:96.36 lvq:3.01e-06 L2:3.12e-04 usage:0.2266 total usage:0.9102
+[2024/02/18 20:46:50] Rank:None, Epoch[236/300], Step [1/66], lr:2.73e-04 pred_PSNR: 37.1 perplexity:96.98 lvq:2.33e-06 L2:2.15e-04 usage:0.2285 total usage:0.2285
+[2024/02/18 20:46:54] Rank:None, Epoch[236/300], Step [51/66], lr:2.67e-04 pred_PSNR: 36.49 perplexity:104.29 lvq:1.09e-06 L2:2.35e-04 usage:0.2402 total usage:0.8730
+[2024/02/18 20:46:56] Rank:None, Epoch[236/300], Step [66/66], lr:2.65e-04 pred_PSNR: 36.48 perplexity:118.23 lvq:7.37e-07 L2:2.45e-04 usage:0.2637 total usage:0.9043
+[2024/02/18 20:46:57] Rank:None, Epoch[237/300], Step [1/66], lr:2.65e-04 pred_PSNR: 37.1 perplexity:98.08 lvq:6.28e-07 L2:2.14e-04 usage:0.2246 total usage:0.2246
+[2024/02/18 20:47:02] Rank:None, Epoch[237/300], Step [51/66], lr:2.59e-04 pred_PSNR: 36.52 perplexity:109.49 lvq:2.85e-07 L2:1.46e-04 usage:0.2520 total usage:0.8398
+[2024/02/18 20:47:03] Rank:None, Epoch[237/300], Step [66/66], lr:2.57e-04 pred_PSNR: 36.47 perplexity:88.94 lvq:3.87e-06 L2:2.55e-04 usage:0.2207 total usage:0.8730
+[2024/02/18 20:47:03] Rank:None, Epoch[238/300], Step [1/66], lr:2.57e-04 pred_PSNR: 35.53 perplexity:87.61 lvq:4.37e-06 L2:2.87e-04 usage:0.2148 total usage:0.2148
+[2024/02/18 20:47:08] Rank:None, Epoch[238/300], Step [51/66], lr:2.51e-04 pred_PSNR: 36.45 perplexity:94.25 lvq:2.78e-06 L2:2.85e-04 usage:0.2266 total usage:0.8574
+[2024/02/18 20:47:10] Rank:None, Epoch[238/300], Step [66/66], lr:2.49e-04 pred_PSNR: 36.47 perplexity:88.34 lvq:4.42e-06 L2:1.29e-04 usage:0.2051 total usage:0.8965
+[2024/02/18 20:47:10] Rank:None, Epoch[239/300], Step [1/66], lr:2.49e-04 pred_PSNR: 37.36 perplexity:94.32 lvq:3.29e-06 L2:1.92e-04 usage:0.2188 total usage:0.2188
+[2024/02/18 20:47:15] Rank:None, Epoch[239/300], Step [51/66], lr:2.43e-04 pred_PSNR: 36.49 perplexity:116.28 lvq:6.61e-06 L2:2.72e-04 usage:0.2637 total usage:0.8516
+[2024/02/18 20:47:17] Rank:None, Epoch[239/300], Step [66/66], lr:2.42e-04 pred_PSNR: 36.49 perplexity:103.62 lvq:3.21e-07 L2:2.96e-04 usage:0.2461 total usage:0.8848
+[2024/02/18 20:47:17] Rank:None, Epoch[240/300], Step [1/66], lr:2.41e-04 pred_PSNR: 38.19 perplexity:93.67 lvq:2.50e-07 L2:1.52e-04 usage:0.2148 total usage:0.2148
+[2024/02/18 20:47:22] Rank:None, Epoch[240/300], Step [51/66], lr:2.36e-04 pred_PSNR: 36.41 perplexity:95.28 lvq:1.59e-06 L2:1.77e-04 usage:0.2266 total usage:0.8594
+[2024/02/18 20:47:24] Rank:None, Epoch[240/300], Step [66/66], lr:2.34e-04 pred_PSNR: 36.51 perplexity:84.43 lvq:3.38e-06 L2:1.37e-04 usage:0.2090 total usage:0.8926
+[2024/02/18 20:47:24] Rank:None, Eval at Step [1/66] , FPS 224.7, pred_seen_psnr: 35.21 | 
+[2024/02/18 20:47:27] Rank:None, Eval at Step [51/66] , FPS 214.5, pred_seen_psnr: 36.21 | 
+[2024/02/18 20:47:28] Rank:None, Eval at Step [66/66] , FPS 208.7, pred_seen_psnr: 36.59 | 
+Eval at epoch 240 for (640, 1280): pred_seen_psnr: 36.59 | pred_unseen_psnr: 0.0 | quant_seen_psnr: 0.0 | quant_unseen_psnr: 0.0 | 
+[2024/02/18 20:47:28] Rank:None, Epoch[241/300], Step [1/66], lr:2.34e-04 pred_PSNR: 35.86 perplexity:95.31 lvq:2.53e-06 L2:2.60e-04 usage:0.2266 total usage:0.2266
+[2024/02/18 20:47:33] Rank:None, Epoch[241/300], Step [51/66], lr:2.28e-04 pred_PSNR: 36.52 perplexity:100.05 lvq:1.85e-06 L2:2.51e-04 usage:0.2324 total usage:0.8535
+[2024/02/18 20:47:35] Rank:None, Epoch[241/300], Step [66/66], lr:2.27e-04 pred_PSNR: 36.53 perplexity:104.72 lvq:5.17e-07 L2:2.46e-04 usage:0.2383 total usage:0.8906
+[2024/02/18 20:47:35] Rank:None, Epoch[242/300], Step [1/66], lr:2.27e-04 pred_PSNR: 34.81 perplexity:115.06 lvq:5.84e-07 L2:3.32e-04 usage:0.2676 total usage:0.2676
+[2024/02/18 20:47:40] Rank:None, Epoch[242/300], Step [51/66], lr:2.21e-04 pred_PSNR: 36.63 perplexity:106.13 lvq:2.54e-06 L2:2.40e-04 usage:0.2383 total usage:0.8477
+[2024/02/18 20:47:42] Rank:None, Epoch[242/300], Step [66/66], lr:2.19e-04 pred_PSNR: 36.55 perplexity:114.56 lvq:2.50e-06 L2:2.76e-04 usage:0.2578 total usage:0.8809
+[2024/02/18 20:47:42] Rank:None, Epoch[243/300], Step [1/66], lr:2.19e-04 pred_PSNR: 39.27 perplexity:88.30 lvq:1.96e-06 L2:1.18e-04 usage:0.2109 total usage:0.2109
+[2024/02/18 20:47:47] Rank:None, Epoch[243/300], Step [51/66], lr:2.14e-04 pred_PSNR: 36.48 perplexity:86.89 lvq:4.33e-06 L2:1.67e-04 usage:0.1953 total usage:0.8535
+[2024/02/18 20:47:49] Rank:None, Epoch[243/300], Step [66/66], lr:2.12e-04 pred_PSNR: 36.57 perplexity:97.50 lvq:4.61e-06 L2:1.79e-04 usage:0.2305 total usage:0.9004
+[2024/02/18 20:47:50] Rank:None, Epoch[244/300], Step [1/66], lr:2.12e-04 pred_PSNR: 36.44 perplexity:95.65 lvq:4.22e-06 L2:2.32e-04 usage:0.2227 total usage:0.2227
+[2024/02/18 20:47:54] Rank:None, Epoch[244/300], Step [51/66], lr:2.07e-04 pred_PSNR: 36.56 perplexity:100.23 lvq:2.28e-06 L2:2.64e-04 usage:0.2324 total usage:0.8477
+[2024/02/18 20:47:56] Rank:None, Epoch[244/300], Step [66/66], lr:2.05e-04 pred_PSNR: 36.55 perplexity:88.49 lvq:1.86e-06 L2:2.92e-04 usage:0.2168 total usage:0.8711
+[2024/02/18 20:47:57] Rank:None, Epoch[245/300], Step [1/66], lr:2.05e-04 pred_PSNR: 36.95 perplexity:85.33 lvq:1.70e-06 L2:2.11e-04 usage:0.2012 total usage:0.2012
+[2024/02/18 20:48:01] Rank:None, Epoch[245/300], Step [51/66], lr:2.00e-04 pred_PSNR: 36.59 perplexity:86.35 lvq:4.22e-06 L2:1.49e-04 usage:0.2051 total usage:0.8496
+[2024/02/18 20:48:03] Rank:None, Epoch[245/300], Step [66/66], lr:1.98e-04 pred_PSNR: 36.59 perplexity:104.82 lvq:6.48e-07 L2:1.98e-04 usage:0.2402 total usage:0.8809
+[2024/02/18 20:48:03] Rank:None, Epoch[246/300], Step [1/66], lr:1.98e-04 pred_PSNR: 36.3 perplexity:112.65 lvq:8.77e-07 L2:2.48e-04 usage:0.2539 total usage:0.2539
+[2024/02/18 20:48:09] Rank:None, Epoch[246/300], Step [51/66], lr:1.93e-04 pred_PSNR: 36.67 perplexity:90.31 lvq:1.65e-06 L2:1.37e-04 usage:0.2109 total usage:0.8594
+[2024/02/18 20:48:10] Rank:None, Epoch[246/300], Step [66/66], lr:1.91e-04 pred_PSNR: 36.6 perplexity:97.58 lvq:1.95e-06 L2:1.93e-04 usage:0.2246 total usage:0.8926
+[2024/02/18 20:48:11] Rank:None, Epoch[247/300], Step [1/66], lr:1.91e-04 pred_PSNR: 36.46 perplexity:104.69 lvq:6.12e-07 L2:2.44e-04 usage:0.2461 total usage:0.2461
+[2024/02/18 20:48:16] Rank:None, Epoch[247/300], Step [51/66], lr:1.86e-04 pred_PSNR: 36.53 perplexity:108.79 lvq:2.58e-07 L2:2.30e-04 usage:0.2520 total usage:0.8457
+[2024/02/18 20:48:17] Rank:None, Epoch[247/300], Step [66/66], lr:1.84e-04 pred_PSNR: 36.62 perplexity:114.34 lvq:2.68e-07 L2:2.21e-04 usage:0.2539 total usage:0.8672
+[2024/02/18 20:48:18] Rank:None, Epoch[248/300], Step [1/66], lr:1.84e-04 pred_PSNR: 35.26 perplexity:125.16 lvq:3.11e-07 L2:3.00e-04 usage:0.2773 total usage:0.2773
+[2024/02/18 20:48:23] Rank:None, Epoch[248/300], Step [51/66], lr:1.79e-04 pred_PSNR: 36.74 perplexity:105.80 lvq:9.61e-07 L2:2.47e-04 usage:0.2461 total usage:0.8613
+[2024/02/18 20:48:24] Rank:None, Epoch[248/300], Step [66/66], lr:1.78e-04 pred_PSNR: 36.63 perplexity:109.20 lvq:9.33e-07 L2:2.79e-04 usage:0.2539 total usage:0.8945
+[2024/02/18 20:48:25] Rank:None, Epoch[249/300], Step [1/66], lr:1.78e-04 pred_PSNR: 38.06 perplexity:92.05 lvq:9.76e-07 L2:1.60e-04 usage:0.2168 total usage:0.2168
+[2024/02/18 20:48:30] Rank:None, Epoch[249/300], Step [51/66], lr:1.73e-04 pred_PSNR: 36.6 perplexity:104.33 lvq:3.44e-07 L2:1.63e-04 usage:0.2383 total usage:0.8594
+[2024/02/18 20:48:31] Rank:None, Epoch[249/300], Step [66/66], lr:1.71e-04 pred_PSNR: 36.63 perplexity:93.84 lvq:1.30e-06 L2:2.30e-04 usage:0.2246 total usage:0.8867
+[2024/02/18 20:48:32] Rank:None, Epoch[250/300], Step [1/66], lr:1.71e-04 pred_PSNR: 39.21 perplexity:90.71 lvq:1.18e-06 L2:1.20e-04 usage:0.2148 total usage:0.2148
+[2024/02/18 20:48:37] Rank:None, Epoch[250/300], Step [51/66], lr:1.66e-04 pred_PSNR: 36.66 perplexity:111.60 lvq:7.36e-07 L2:2.70e-04 usage:0.2578 total usage:0.8418
+[2024/02/18 20:48:38] Rank:None, Epoch[250/300], Step [66/66], lr:1.65e-04 pred_PSNR: 36.64 perplexity:104.64 lvq:3.10e-07 L2:1.30e-04 usage:0.2402 total usage:0.8848
+[2024/02/18 20:48:39] Rank:None, Epoch[251/300], Step [1/66], lr:1.65e-04 pred_PSNR: 36.05 perplexity:115.51 lvq:6.86e-07 L2:2.67e-04 usage:0.2559 total usage:0.2559
+[2024/02/18 20:48:44] Rank:None, Epoch[251/300], Step [51/66], lr:1.60e-04 pred_PSNR: 36.66 perplexity:96.11 lvq:6.50e-07 L2:1.37e-04 usage:0.2227 total usage:0.8652
+[2024/02/18 20:48:45] Rank:None, Epoch[251/300], Step [66/66], lr:1.58e-04 pred_PSNR: 36.64 perplexity:104.62 lvq:3.51e-07 L2:2.35e-04 usage:0.2383 total usage:0.8984
+[2024/02/18 20:48:46] Rank:None, Epoch[252/300], Step [1/66], lr:1.58e-04 pred_PSNR: 37.35 perplexity:101.82 lvq:2.60e-07 L2:1.93e-04 usage:0.2324 total usage:0.2324
+[2024/02/18 20:48:51] Rank:None, Epoch[252/300], Step [51/66], lr:1.53e-04 pred_PSNR: 36.55 perplexity:110.82 lvq:7.71e-07 L2:2.70e-04 usage:0.2520 total usage:0.8574
+[2024/02/18 20:48:52] Rank:None, Epoch[252/300], Step [66/66], lr:1.52e-04 pred_PSNR: 36.66 perplexity:114.44 lvq:8.75e-07 L2:3.01e-04 usage:0.2637 total usage:0.8906
+[2024/02/18 20:48:53] Rank:None, Epoch[253/300], Step [1/66], lr:1.52e-04 pred_PSNR: 37.64 perplexity:106.70 lvq:6.60e-07 L2:1.77e-04 usage:0.2422 total usage:0.2422
+[2024/02/18 20:48:58] Rank:None, Epoch[253/300], Step [51/66], lr:1.47e-04 pred_PSNR: 36.65 perplexity:118.71 lvq:3.93e-07 L2:2.66e-04 usage:0.2676 total usage:0.8477
+[2024/02/18 20:48:59] Rank:None, Epoch[253/300], Step [66/66], lr:1.46e-04 pred_PSNR: 36.67 perplexity:101.25 lvq:9.98e-06 L2:1.96e-04 usage:0.2324 total usage:0.8730
+[2024/02/18 20:49:00] Rank:None, Epoch[254/300], Step [1/66], lr:1.46e-04 pred_PSNR: 35.18 perplexity:108.97 lvq:2.25e-06 L2:3.04e-04 usage:0.2539 total usage:0.2539
+[2024/02/18 20:49:05] Rank:None, Epoch[254/300], Step [51/66], lr:1.41e-04 pred_PSNR: 36.57 perplexity:100.94 lvq:1.63e-04 L2:1.43e-04 usage:0.2344 total usage:0.8535
+[2024/02/18 20:49:06] Rank:None, Epoch[254/300], Step [66/66], lr:1.40e-04 pred_PSNR: 36.67 perplexity:94.32 lvq:1.37e-06 L2:2.55e-04 usage:0.2227 total usage:0.8809
+[2024/02/18 20:49:07] Rank:None, Epoch[255/300], Step [1/66], lr:1.40e-04 pred_PSNR: 35.06 perplexity:98.61 lvq:1.70e-06 L2:3.12e-04 usage:0.2246 total usage:0.2246
+[2024/02/18 20:49:12] Rank:None, Epoch[255/300], Step [51/66], lr:1.35e-04 pred_PSNR: 36.65 perplexity:109.60 lvq:4.82e-07 L2:2.40e-04 usage:0.2480 total usage:0.8555
+[2024/02/18 20:49:13] Rank:None, Epoch[255/300], Step [66/66], lr:1.34e-04 pred_PSNR: 36.67 perplexity:102.88 lvq:3.33e-07 L2:1.86e-04 usage:0.2402 total usage:0.8867
+[2024/02/18 20:49:14] Rank:None, Epoch[256/300], Step [1/66], lr:1.34e-04 pred_PSNR: 36.83 perplexity:118.40 lvq:5.34e-07 L2:2.33e-04 usage:0.2715 total usage:0.2715
+[2024/02/18 20:49:19] Rank:None, Epoch[256/300], Step [51/66], lr:1.30e-04 pred_PSNR: 36.65 perplexity:101.59 lvq:8.38e-07 L2:1.70e-04 usage:0.2402 total usage:0.8613
+[2024/02/18 20:49:20] Rank:None, Epoch[256/300], Step [66/66], lr:1.28e-04 pred_PSNR: 36.69 perplexity:113.40 lvq:4.91e-07 L2:2.19e-04 usage:0.2617 total usage:0.8809
+[2024/02/18 20:49:21] Rank:None, Epoch[257/300], Step [1/66], lr:1.28e-04 pred_PSNR: 36.36 perplexity:103.85 lvq:4.05e-07 L2:2.42e-04 usage:0.2402 total usage:0.2402
+[2024/02/18 20:49:26] Rank:None, Epoch[257/300], Step [51/66], lr:1.24e-04 pred_PSNR: 36.55 perplexity:85.87 lvq:9.69e-06 L2:2.51e-04 usage:0.2051 total usage:0.8516
+[2024/02/18 20:49:27] Rank:None, Epoch[257/300], Step [66/66], lr:1.23e-04 pred_PSNR: 36.68 perplexity:93.22 lvq:1.79e-06 L2:2.12e-04 usage:0.2266 total usage:0.8789
+[2024/02/18 20:49:28] Rank:None, Epoch[258/300], Step [1/66], lr:1.23e-04 pred_PSNR: 36.1 perplexity:96.15 lvq:1.75e-06 L2:2.49e-04 usage:0.2324 total usage:0.2324
+[2024/02/18 20:49:33] Rank:None, Epoch[258/300], Step [51/66], lr:1.18e-04 pred_PSNR: 36.67 perplexity:103.61 lvq:2.70e-06 L2:2.21e-04 usage:0.2363 total usage:0.8457
+[2024/02/18 20:49:34] Rank:None, Epoch[258/300], Step [66/66], lr:1.17e-04 pred_PSNR: 36.7 perplexity:101.73 lvq:1.00e-06 L2:2.49e-04 usage:0.2344 total usage:0.8691
+[2024/02/18 20:49:35] Rank:None, Epoch[259/300], Step [1/66], lr:1.17e-04 pred_PSNR: 37.61 perplexity:85.95 lvq:8.25e-07 L2:1.88e-04 usage:0.2051 total usage:0.2051
+[2024/02/18 20:49:39] Rank:None, Epoch[259/300], Step [51/66], lr:1.13e-04 pred_PSNR: 36.6 perplexity:108.00 lvq:3.01e-07 L2:2.97e-04 usage:0.2422 total usage:0.8555
+[2024/02/18 20:49:41] Rank:None, Epoch[259/300], Step [66/66], lr:1.12e-04 pred_PSNR: 36.7 perplexity:111.74 lvq:3.52e-07 L2:1.81e-04 usage:0.2598 total usage:0.8867
+[2024/02/18 20:49:42] Rank:None, Epoch[260/300], Step [1/66], lr:1.12e-04 pred_PSNR: 37.09 perplexity:110.08 lvq:3.98e-07 L2:2.03e-04 usage:0.2539 total usage:0.2539
+[2024/02/18 20:49:47] Rank:None, Epoch[260/300], Step [51/66], lr:1.08e-04 pred_PSNR: 36.74 perplexity:107.40 lvq:6.09e-07 L2:2.72e-04 usage:0.2500 total usage:0.8574
+[2024/02/18 20:49:48] Rank:None, Epoch[260/300], Step [66/66], lr:1.06e-04 pred_PSNR: 36.71 perplexity:112.07 lvq:3.88e-07 L2:2.00e-04 usage:0.2559 total usage:0.8809
+[2024/02/18 20:49:49] Rank:None, Epoch[261/300], Step [1/66], lr:1.06e-04 pred_PSNR: 36.46 perplexity:108.13 lvq:2.93e-07 L2:2.28e-04 usage:0.2480 total usage:0.2480
+[2024/02/18 20:49:53] Rank:None, Epoch[261/300], Step [51/66], lr:1.02e-04 pred_PSNR: 36.72 perplexity:111.73 lvq:6.25e-07 L2:2.35e-04 usage:0.2578 total usage:0.8516
+[2024/02/18 20:49:55] Rank:None, Epoch[261/300], Step [66/66], lr:1.01e-04 pred_PSNR: 36.72 perplexity:112.77 lvq:2.10e-07 L2:1.96e-04 usage:0.2598 total usage:0.8887
+[2024/02/18 20:49:55] Rank:None, Epoch[262/300], Step [1/66], lr:1.01e-04 pred_PSNR: 35.44 perplexity:86.56 lvq:4.72e-07 L2:2.91e-04 usage:0.2051 total usage:0.2051
+[2024/02/18 20:50:00] Rank:None, Epoch[262/300], Step [51/66], lr:9.74e-05 pred_PSNR: 36.71 perplexity:113.60 lvq:6.95e-07 L2:1.93e-04 usage:0.2695 total usage:0.8477
+[2024/02/18 20:50:02] Rank:None, Epoch[262/300], Step [66/66], lr:9.62e-05 pred_PSNR: 36.72 perplexity:102.70 lvq:3.19e-07 L2:2.06e-04 usage:0.2305 total usage:0.8906
+[2024/02/18 20:50:03] Rank:None, Epoch[263/300], Step [1/66], lr:9.62e-05 pred_PSNR: 37.88 perplexity:106.41 lvq:2.90e-07 L2:1.63e-04 usage:0.2402 total usage:0.2402
+[2024/02/18 20:50:07] Rank:None, Epoch[263/300], Step [51/66], lr:9.24e-05 pred_PSNR: 36.7 perplexity:107.98 lvq:2.83e-07 L2:2.30e-04 usage:0.2422 total usage:0.8223
+[2024/02/18 20:50:09] Rank:None, Epoch[263/300], Step [66/66], lr:9.13e-05 pred_PSNR: 36.72 perplexity:124.60 lvq:2.63e-07 L2:2.61e-04 usage:0.2734 total usage:0.8691
+[2024/02/18 20:50:09] Rank:None, Epoch[264/300], Step [1/66], lr:9.12e-05 pred_PSNR: 36.67 perplexity:121.34 lvq:2.30e-07 L2:2.26e-04 usage:0.2656 total usage:0.2656
+[2024/02/18 20:50:14] Rank:None, Epoch[264/300], Step [51/66], lr:8.76e-05 pred_PSNR: 36.75 perplexity:116.88 lvq:8.45e-07 L2:2.69e-04 usage:0.2695 total usage:0.8594
+[2024/02/18 20:50:16] Rank:None, Epoch[264/300], Step [66/66], lr:8.65e-05 pred_PSNR: 36.73 perplexity:105.24 lvq:2.33e-07 L2:1.94e-04 usage:0.2402 total usage:0.8867
+[2024/02/18 20:50:16] Rank:None, Epoch[265/300], Step [1/66], lr:8.65e-05 pred_PSNR: 35.59 perplexity:100.39 lvq:3.91e-07 L2:2.81e-04 usage:0.2285 total usage:0.2285
+[2024/02/18 20:50:21] Rank:None, Epoch[265/300], Step [51/66], lr:8.29e-05 pred_PSNR: 36.75 perplexity:113.02 lvq:7.62e-07 L2:2.44e-04 usage:0.2559 total usage:0.8613
+[2024/02/18 20:50:23] Rank:None, Epoch[265/300], Step [66/66], lr:8.19e-05 pred_PSNR: 36.74 perplexity:99.19 lvq:7.51e-07 L2:2.26e-04 usage:0.2324 total usage:0.8789
+[2024/02/18 20:50:23] Rank:None, Epoch[266/300], Step [1/66], lr:8.18e-05 pred_PSNR: 38.49 perplexity:96.31 lvq:5.80e-07 L2:1.44e-04 usage:0.2207 total usage:0.2207
+[2024/02/18 20:50:28] Rank:None, Epoch[266/300], Step [51/66], lr:7.83e-05 pred_PSNR: 36.79 perplexity:99.40 lvq:4.62e-07 L2:1.18e-04 usage:0.2324 total usage:0.8770
+[2024/02/18 20:50:30] Rank:None, Epoch[266/300], Step [66/66], lr:7.73e-05 pred_PSNR: 36.74 perplexity:104.98 lvq:4.97e-07 L2:2.93e-04 usage:0.2461 total usage:0.8965
+[2024/02/18 20:50:30] Rank:None, Epoch[267/300], Step [1/66], lr:7.72e-05 pred_PSNR: 36.94 perplexity:117.64 lvq:1.98e-04 L2:2.14e-04 usage:0.2656 total usage:0.2656
+[2024/02/18 20:50:35] Rank:None, Epoch[267/300], Step [51/66], lr:7.39e-05 pred_PSNR: 36.69 perplexity:90.31 lvq:4.16e-06 L2:1.44e-04 usage:0.2090 total usage:0.8574
+[2024/02/18 20:50:37] Rank:None, Epoch[267/300], Step [66/66], lr:7.29e-05 pred_PSNR: 36.75 perplexity:96.66 lvq:5.23e-07 L2:2.00e-04 usage:0.2305 total usage:0.8848
+[2024/02/18 20:50:37] Rank:None, Epoch[268/300], Step [1/66], lr:7.28e-05 pred_PSNR: 36.91 perplexity:113.47 lvq:7.45e-07 L2:2.41e-04 usage:0.2559 total usage:0.2559
+[2024/02/18 20:50:42] Rank:None, Epoch[268/300], Step [51/66], lr:6.96e-05 pred_PSNR: 36.64 perplexity:104.05 lvq:2.95e-07 L2:2.59e-04 usage:0.2383 total usage:0.8477
+[2024/02/18 20:50:44] Rank:None, Epoch[268/300], Step [66/66], lr:6.86e-05 pred_PSNR: 36.75 perplexity:103.02 lvq:1.21e-07 L2:1.28e-04 usage:0.2461 total usage:0.8828
+[2024/02/18 20:50:44] Rank:None, Epoch[269/300], Step [1/66], lr:6.85e-05 pred_PSNR: 39.41 perplexity:111.17 lvq:2.00e-06 L2:1.15e-04 usage:0.2461 total usage:0.2461
+[2024/02/18 20:50:49] Rank:None, Epoch[269/300], Step [51/66], lr:6.53e-05 pred_PSNR: 36.9 perplexity:116.84 lvq:5.43e-07 L2:3.25e-04 usage:0.2617 total usage:0.8301
+[2024/02/18 20:50:51] Rank:None, Epoch[269/300], Step [66/66], lr:6.44e-05 pred_PSNR: 36.76 perplexity:105.78 lvq:1.22e-06 L2:3.37e-04 usage:0.2500 total usage:0.8750
+[2024/02/18 20:50:51] Rank:None, Epoch[270/300], Step [1/66], lr:6.44e-05 pred_PSNR: 36.52 perplexity:102.23 lvq:1.03e-06 L2:2.40e-04 usage:0.2344 total usage:0.2344
+[2024/02/18 20:50:56] Rank:None, Epoch[270/300], Step [51/66], lr:6.13e-05 pred_PSNR: 36.77 perplexity:115.98 lvq:2.47e-07 L2:1.84e-04 usage:0.2578 total usage:0.8438
+[2024/02/18 20:50:57] Rank:None, Epoch[270/300], Step [66/66], lr:6.04e-05 pred_PSNR: 36.76 perplexity:103.43 lvq:1.14e-06 L2:2.49e-04 usage:0.2383 total usage:0.8770
+[2024/02/18 20:50:58] Rank:None, Eval at Step [1/66] , FPS 224.7, pred_seen_psnr: 35.42 | 
+[2024/02/18 20:51:01] Rank:None, Eval at Step [51/66] , FPS 222.8, pred_seen_psnr: 36.41 | 
+[2024/02/18 20:51:01] Rank:None, Eval at Step [66/66] , FPS 215.0, pred_seen_psnr: 36.78 | 
+Eval at epoch 270 for (640, 1280): pred_seen_psnr: 36.78 | pred_unseen_psnr: 0.0 | quant_seen_psnr: 0.0 | quant_unseen_psnr: 0.0 | 
+[2024/02/18 20:51:02] Rank:None, Epoch[271/300], Step [1/66], lr:6.03e-05 pred_PSNR: 35.9 perplexity:108.87 lvq:1.04e-06 L2:2.58e-04 usage:0.2500 total usage:0.2500
+[2024/02/18 20:51:07] Rank:None, Epoch[271/300], Step [51/66], lr:5.73e-05 pred_PSNR: 36.78 perplexity:103.05 lvq:6.84e-06 L2:3.52e-04 usage:0.2344 total usage:0.8301
+[2024/02/18 20:51:09] Rank:None, Epoch[271/300], Step [66/66], lr:5.64e-05 pred_PSNR: 36.76 perplexity:89.73 lvq:4.86e-07 L2:2.43e-04 usage:0.2109 total usage:0.8750
+[2024/02/18 20:51:09] Rank:None, Epoch[272/300], Step [1/66], lr:5.64e-05 pred_PSNR: 34.67 perplexity:122.97 lvq:6.51e-07 L2:3.42e-04 usage:0.2715 total usage:0.2715
+[2024/02/18 20:51:14] Rank:None, Epoch[272/300], Step [51/66], lr:5.35e-05 pred_PSNR: 36.78 perplexity:112.78 lvq:4.69e-07 L2:2.75e-04 usage:0.2598 total usage:0.8555
+[2024/02/18 20:51:15] Rank:None, Epoch[272/300], Step [66/66], lr:5.27e-05 pred_PSNR: 36.77 perplexity:107.00 lvq:2.92e-07 L2:2.31e-04 usage:0.2461 total usage:0.8770
+[2024/02/18 20:51:16] Rank:None, Epoch[273/300], Step [1/66], lr:5.26e-05 pred_PSNR: 36.1 perplexity:119.37 lvq:3.76e-07 L2:2.65e-04 usage:0.2676 total usage:0.2676
+[2024/02/18 20:51:21] Rank:None, Epoch[273/300], Step [51/66], lr:4.98e-05 pred_PSNR: 36.78 perplexity:103.77 lvq:5.11e-07 L2:2.38e-04 usage:0.2422 total usage:0.8359
+[2024/02/18 20:51:22] Rank:None, Epoch[273/300], Step [66/66], lr:4.90e-05 pred_PSNR: 36.77 perplexity:110.49 lvq:1.14e-06 L2:2.83e-04 usage:0.2520 total usage:0.8789
+[2024/02/18 20:51:23] Rank:None, Epoch[274/300], Step [1/66], lr:4.89e-05 pred_PSNR: 37.47 perplexity:109.39 lvq:8.52e-07 L2:2.00e-04 usage:0.2480 total usage:0.2480
+[2024/02/18 20:51:28] Rank:None, Epoch[274/300], Step [51/66], lr:4.63e-05 pred_PSNR: 36.81 perplexity:115.51 lvq:2.74e-07 L2:2.14e-04 usage:0.2656 total usage:0.8398
+[2024/02/18 20:51:30] Rank:None, Epoch[274/300], Step [66/66], lr:4.55e-05 pred_PSNR: 36.77 perplexity:108.42 lvq:1.23e-07 L2:1.29e-04 usage:0.2480 total usage:0.8750
+[2024/02/18 20:51:30] Rank:None, Epoch[275/300], Step [1/66], lr:4.54e-05 pred_PSNR: 39.36 perplexity:106.66 lvq:1.07e-07 L2:1.16e-04 usage:0.2422 total usage:0.2422
+[2024/02/18 20:51:35] Rank:None, Epoch[275/300], Step [51/66], lr:4.28e-05 pred_PSNR: 36.72 perplexity:108.82 lvq:3.77e-07 L2:2.02e-04 usage:0.2520 total usage:0.8457
+[2024/02/18 20:51:37] Rank:None, Epoch[275/300], Step [66/66], lr:4.21e-05 pred_PSNR: 36.78 perplexity:114.65 lvq:1.44e-07 L2:2.11e-04 usage:0.2578 total usage:0.8828
+[2024/02/18 20:51:37] Rank:None, Epoch[276/300], Step [1/66], lr:4.20e-05 pred_PSNR: 37.22 perplexity:123.02 lvq:2.19e-07 L2:2.07e-04 usage:0.2734 total usage:0.2734
+[2024/02/18 20:51:42] Rank:None, Epoch[276/300], Step [51/66], lr:3.95e-05 pred_PSNR: 36.77 perplexity:110.49 lvq:4.07e-07 L2:2.27e-04 usage:0.2500 total usage:0.8242
+[2024/02/18 20:51:44] Rank:None, Epoch[276/300], Step [66/66], lr:3.88e-05 pred_PSNR: 36.78 perplexity:107.47 lvq:3.47e-07 L2:2.91e-04 usage:0.2500 total usage:0.8652
+[2024/02/18 20:51:44] Rank:None, Epoch[277/300], Step [1/66], lr:3.87e-05 pred_PSNR: 35.49 perplexity:113.64 lvq:3.25e-07 L2:2.83e-04 usage:0.2598 total usage:0.2598
+[2024/02/18 20:51:49] Rank:None, Epoch[277/300], Step [51/66], lr:3.63e-05 pred_PSNR: 36.91 perplexity:105.16 lvq:3.01e-07 L2:1.53e-04 usage:0.2480 total usage:0.8457
+[2024/02/18 20:51:51] Rank:None, Epoch[277/300], Step [66/66], lr:3.56e-05 pred_PSNR: 36.78 perplexity:113.10 lvq:4.72e-07 L2:3.47e-04 usage:0.2520 total usage:0.8770
+[2024/02/18 20:51:51] Rank:None, Epoch[278/300], Step [1/66], lr:3.56e-05 pred_PSNR: 37.64 perplexity:105.97 lvq:2.40e-07 L2:1.75e-04 usage:0.2402 total usage:0.2402
+[2024/02/18 20:51:56] Rank:None, Epoch[278/300], Step [51/66], lr:3.33e-05 pred_PSNR: 36.72 perplexity:112.80 lvq:5.44e-07 L2:3.27e-04 usage:0.2520 total usage:0.8145
+[2024/02/18 20:51:58] Rank:None, Epoch[278/300], Step [66/66], lr:3.26e-05 pred_PSNR: 36.79 perplexity:116.25 lvq:2.44e-07 L2:2.08e-04 usage:0.2637 total usage:0.8574
+[2024/02/18 20:51:58] Rank:None, Epoch[279/300], Step [1/66], lr:3.26e-05 pred_PSNR: 37.22 perplexity:115.98 lvq:2.22e-07 L2:2.00e-04 usage:0.2617 total usage:0.2617
+[2024/02/18 20:52:03] Rank:None, Epoch[279/300], Step [51/66], lr:3.04e-05 pred_PSNR: 36.92 perplexity:106.19 lvq:4.68e-07 L2:1.53e-04 usage:0.2441 total usage:0.8535
+[2024/02/18 20:52:04] Rank:None, Epoch[279/300], Step [66/66], lr:2.97e-05 pred_PSNR: 36.79 perplexity:106.76 lvq:3.47e-07 L2:2.23e-04 usage:0.2480 total usage:0.8789
+[2024/02/18 20:52:05] Rank:None, Epoch[280/300], Step [1/66], lr:2.97e-05 pred_PSNR: 37.23 perplexity:106.99 lvq:2.94e-07 L2:1.96e-04 usage:0.2383 total usage:0.2383
+[2024/02/18 20:52:10] Rank:None, Epoch[280/300], Step [51/66], lr:2.76e-05 pred_PSNR: 36.72 perplexity:108.83 lvq:3.58e-07 L2:1.58e-04 usage:0.2500 total usage:0.8203
+[2024/02/18 20:52:11] Rank:None, Epoch[280/300], Step [66/66], lr:2.70e-05 pred_PSNR: 36.79 perplexity:118.01 lvq:1.40e-07 L2:1.33e-04 usage:0.2637 total usage:0.8574
+[2024/02/18 20:52:12] Rank:None, Epoch[281/300], Step [1/66], lr:2.70e-05 pred_PSNR: 36.64 perplexity:122.72 lvq:3.07e-07 L2:2.42e-04 usage:0.2734 total usage:0.2734
+[2024/02/18 20:52:17] Rank:None, Epoch[281/300], Step [51/66], lr:2.50e-05 pred_PSNR: 36.86 perplexity:95.23 lvq:8.23e-07 L2:3.09e-04 usage:0.2188 total usage:0.8281
+[2024/02/18 20:52:18] Rank:None, Epoch[281/300], Step [66/66], lr:2.44e-05 pred_PSNR: 36.8 perplexity:101.16 lvq:6.59e-07 L2:2.51e-04 usage:0.2324 total usage:0.8555
+[2024/02/18 20:52:19] Rank:None, Epoch[282/300], Step [1/66], lr:2.43e-05 pred_PSNR: 37.19 perplexity:123.04 lvq:3.57e-07 L2:2.06e-04 usage:0.2793 total usage:0.2793
+[2024/02/18 20:52:24] Rank:None, Epoch[282/300], Step [51/66], lr:2.24e-05 pred_PSNR: 36.95 perplexity:113.26 lvq:3.28e-07 L2:2.33e-04 usage:0.2520 total usage:0.8438
+[2024/02/18 20:52:25] Rank:None, Epoch[282/300], Step [66/66], lr:2.19e-05 pred_PSNR: 36.8 perplexity:115.39 lvq:2.84e-07 L2:3.04e-04 usage:0.2598 total usage:0.8867
+[2024/02/18 20:52:26] Rank:None, Epoch[283/300], Step [1/66], lr:2.19e-05 pred_PSNR: 37.38 perplexity:108.89 lvq:1.76e-07 L2:1.84e-04 usage:0.2461 total usage:0.2461
+[2024/02/18 20:52:31] Rank:None, Epoch[283/300], Step [51/66], lr:2.01e-05 pred_PSNR: 36.85 perplexity:105.97 lvq:1.49e-06 L2:3.20e-04 usage:0.2402 total usage:0.8691
+[2024/02/18 20:52:32] Rank:None, Epoch[283/300], Step [66/66], lr:1.95e-05 pred_PSNR: 36.8 perplexity:126.27 lvq:2.47e-07 L2:2.01e-04 usage:0.2793 total usage:0.8867
+[2024/02/18 20:52:33] Rank:None, Epoch[284/300], Step [1/66], lr:1.95e-05 pred_PSNR: 36.72 perplexity:121.75 lvq:2.80e-07 L2:2.34e-04 usage:0.2676 total usage:0.2676
+[2024/02/18 20:52:38] Rank:None, Epoch[284/300], Step [51/66], lr:1.78e-05 pred_PSNR: 36.83 perplexity:114.38 lvq:4.29e-07 L2:3.33e-04 usage:0.2539 total usage:0.8496
+[2024/02/18 20:52:39] Rank:None, Epoch[284/300], Step [66/66], lr:1.73e-05 pred_PSNR: 36.8 perplexity:115.07 lvq:9.84e-08 L2:1.31e-04 usage:0.2559 total usage:0.8828
+[2024/02/18 20:52:40] Rank:None, Epoch[285/300], Step [1/66], lr:1.73e-05 pred_PSNR: 36.39 perplexity:124.39 lvq:7.36e-06 L2:2.42e-04 usage:0.2734 total usage:0.2734
+[2024/02/18 20:52:45] Rank:None, Epoch[285/300], Step [51/66], lr:1.57e-05 pred_PSNR: 36.72 perplexity:113.65 lvq:1.50e-07 L2:1.65e-04 usage:0.2520 total usage:0.8457
+[2024/02/18 20:52:46] Rank:None, Epoch[285/300], Step [66/66], lr:1.52e-05 pred_PSNR: 36.81 perplexity:111.85 lvq:1.44e-07 L2:1.38e-04 usage:0.2539 total usage:0.8848
+[2024/02/18 20:52:46] Rank:None, Epoch[286/300], Step [1/66], lr:1.52e-05 pred_PSNR: 35.17 perplexity:98.51 lvq:1.06e-04 L2:3.05e-04 usage:0.2246 total usage:0.2246
+[2024/02/18 20:52:51] Rank:None, Epoch[286/300], Step [51/66], lr:1.37e-05 pred_PSNR: 36.75 perplexity:117.74 lvq:1.26e-07 L2:1.84e-04 usage:0.2598 total usage:0.8281
+[2024/02/18 20:52:53] Rank:None, Epoch[286/300], Step [66/66], lr:1.33e-05 pred_PSNR: 36.81 perplexity:111.29 lvq:2.26e-07 L2:1.98e-04 usage:0.2520 total usage:0.8633
+[2024/02/18 20:52:53] Rank:None, Epoch[287/300], Step [1/66], lr:1.32e-05 pred_PSNR: 35.53 perplexity:99.58 lvq:3.06e-07 L2:2.82e-04 usage:0.2285 total usage:0.2285
+[2024/02/18 20:52:58] Rank:None, Epoch[287/300], Step [51/66], lr:1.18e-05 pred_PSNR: 36.83 perplexity:116.88 lvq:3.28e-07 L2:2.87e-04 usage:0.2656 total usage:0.8438
+[2024/02/18 20:53:00] Rank:None, Epoch[287/300], Step [66/66], lr:1.14e-05 pred_PSNR: 36.81 perplexity:110.87 lvq:4.85e-07 L2:3.10e-04 usage:0.2559 total usage:0.8750
+[2024/02/18 20:53:00] Rank:None, Epoch[288/300], Step [1/66], lr:1.14e-05 pred_PSNR: 38.08 perplexity:113.15 lvq:3.41e-07 L2:1.56e-04 usage:0.2578 total usage:0.2578
+[2024/02/18 20:53:05] Rank:None, Epoch[288/300], Step [51/66], lr:1.01e-05 pred_PSNR: 36.81 perplexity:107.85 lvq:1.73e-07 L2:2.01e-04 usage:0.2441 total usage:0.8535
+[2024/02/18 20:53:07] Rank:None, Epoch[288/300], Step [66/66], lr:9.76e-06 pred_PSNR: 36.81 perplexity:113.47 lvq:3.89e-07 L2:2.35e-04 usage:0.2598 total usage:0.8750
+[2024/02/18 20:53:07] Rank:None, Epoch[289/300], Step [1/66], lr:9.73e-06 pred_PSNR: 36.23 perplexity:118.64 lvq:3.99e-05 L2:2.55e-04 usage:0.2656 total usage:0.2656
+[2024/02/18 20:53:12] Rank:None, Epoch[289/300], Step [51/66], lr:8.54e-06 pred_PSNR: 36.73 perplexity:117.27 lvq:2.31e-07 L2:1.82e-04 usage:0.2617 total usage:0.8730
+[2024/02/18 20:53:14] Rank:None, Epoch[289/300], Step [66/66], lr:8.20e-06 pred_PSNR: 36.81 perplexity:115.39 lvq:3.26e-07 L2:3.23e-04 usage:0.2578 total usage:0.9062
+[2024/02/18 20:53:14] Rank:None, Epoch[290/300], Step [1/66], lr:8.18e-06 pred_PSNR: 35.16 perplexity:130.44 lvq:2.75e-07 L2:3.07e-04 usage:0.2871 total usage:0.2871
+[2024/02/18 20:53:19] Rank:None, Epoch[290/300], Step [51/66], lr:7.09e-06 pred_PSNR: 36.76 perplexity:126.71 lvq:6.28e-05 L2:3.24e-04 usage:0.2793 total usage:0.8535
+[2024/02/18 20:53:21] Rank:None, Epoch[290/300], Step [66/66], lr:6.78e-06 pred_PSNR: 36.81 perplexity:117.08 lvq:3.09e-07 L2:2.82e-04 usage:0.2695 total usage:0.8926
+[2024/02/18 20:53:22] Rank:None, Epoch[291/300], Step [1/66], lr:6.76e-06 pred_PSNR: 37.1 perplexity:103.67 lvq:2.30e-07 L2:1.95e-04 usage:0.2305 total usage:0.2305
+[2024/02/18 20:53:27] Rank:None, Epoch[291/300], Step [51/66], lr:5.78e-06 pred_PSNR: 36.9 perplexity:113.35 lvq:2.18e-07 L2:1.90e-04 usage:0.2539 total usage:0.8379
+[2024/02/18 20:53:28] Rank:None, Epoch[291/300], Step [66/66], lr:5.50e-06 pred_PSNR: 36.81 perplexity:121.02 lvq:2.89e-07 L2:2.65e-04 usage:0.2656 total usage:0.8633
+[2024/02/18 20:53:29] Rank:None, Epoch[292/300], Step [1/66], lr:5.48e-06 pred_PSNR: 37.01 perplexity:126.90 lvq:2.21e-07 L2:2.10e-04 usage:0.2812 total usage:0.2812
+[2024/02/18 20:53:34] Rank:None, Epoch[292/300], Step [51/66], lr:4.60e-06 pred_PSNR: 36.8 perplexity:122.32 lvq:1.81e-07 L2:1.60e-04 usage:0.2734 total usage:0.8398
+[2024/02/18 20:53:35] Rank:None, Epoch[292/300], Step [66/66], lr:4.35e-06 pred_PSNR: 36.82 perplexity:123.89 lvq:2.26e-07 L2:2.03e-04 usage:0.2793 total usage:0.8672
+[2024/02/18 20:53:36] Rank:None, Epoch[293/300], Step [1/66], lr:4.33e-06 pred_PSNR: 37.23 perplexity:112.57 lvq:1.34e-07 L2:2.00e-04 usage:0.2500 total usage:0.2500
+[2024/02/18 20:53:41] Rank:None, Epoch[293/300], Step [51/66], lr:3.55e-06 pred_PSNR: 36.91 perplexity:119.28 lvq:6.24e-07 L2:3.57e-04 usage:0.2734 total usage:0.8320
+[2024/02/18 20:53:42] Rank:None, Epoch[293/300], Step [66/66], lr:3.33e-06 pred_PSNR: 36.82 perplexity:94.47 lvq:1.38e-07 L2:1.90e-04 usage:0.2207 total usage:0.8652
+[2024/02/18 20:53:43] Rank:None, Epoch[294/300], Step [1/66], lr:3.32e-06 pred_PSNR: 36.22 perplexity:117.10 lvq:2.74e-07 L2:2.56e-04 usage:0.2617 total usage:0.2617
+[2024/02/18 20:53:48] Rank:None, Epoch[294/300], Step [51/66], lr:2.64e-06 pred_PSNR: 36.83 perplexity:116.37 lvq:1.83e-07 L2:2.04e-04 usage:0.2598 total usage:0.8301
+[2024/02/18 20:53:49] Rank:None, Epoch[294/300], Step [66/66], lr:2.45e-06 pred_PSNR: 36.82 perplexity:104.44 lvq:2.83e-07 L2:2.80e-04 usage:0.2402 total usage:0.8711
+[2024/02/18 20:53:50] Rank:None, Epoch[295/300], Step [1/66], lr:2.44e-06 pred_PSNR: 38.11 perplexity:112.83 lvq:1.82e-07 L2:1.55e-04 usage:0.2500 total usage:0.2500
+[2024/02/18 20:53:55] Rank:None, Epoch[295/300], Step [51/66], lr:1.86e-06 pred_PSNR: 36.86 perplexity:125.94 lvq:2.68e-07 L2:2.53e-04 usage:0.2773 total usage:0.8340
+[2024/02/18 20:53:56] Rank:None, Epoch[295/300], Step [66/66], lr:1.70e-06 pred_PSNR: 36.82 perplexity:117.00 lvq:1.63e-07 L2:2.17e-04 usage:0.2656 total usage:0.8711
+[2024/02/18 20:53:57] Rank:None, Epoch[296/300], Step [1/66], lr:1.69e-06 pred_PSNR: 35.61 perplexity:119.24 lvq:2.66e-07 L2:2.75e-04 usage:0.2617 total usage:0.2617
+[2024/02/18 20:54:02] Rank:None, Epoch[296/300], Step [51/66], lr:1.22e-06 pred_PSNR: 36.82 perplexity:120.25 lvq:4.69e-05 L2:2.73e-04 usage:0.2637 total usage:0.8496
+[2024/02/18 20:54:03] Rank:None, Epoch[296/300], Step [66/66], lr:1.09e-06 pred_PSNR: 36.82 perplexity:107.25 lvq:1.08e-07 L2:1.15e-04 usage:0.2461 total usage:0.8770
+[2024/02/18 20:54:04] Rank:None, Eval at Step [1/66] , FPS 179.9, pred_seen_psnr: 35.42 | 
+[2024/02/18 20:54:06] Rank:None, Eval at Step [51/66] , FPS 214.7, pred_seen_psnr: 36.44 | 
+[2024/02/18 20:54:07] Rank:None, Eval at Step [66/66] , FPS 207.6, pred_seen_psnr: 36.82 | 
+Eval at epoch 296 for (640, 1280): pred_seen_psnr: 36.82 | pred_unseen_psnr: 0.0 | quant_seen_psnr: 0.0 | quant_unseen_psnr: 0.0 | 
+[2024/02/18 20:54:08] Rank:None, Epoch[297/300], Step [1/66], lr:1.08e-06 pred_PSNR: 37.15 perplexity:119.98 lvq:2.44e-07 L2:2.08e-04 usage:0.2637 total usage:0.2637
+[2024/02/18 20:54:13] Rank:None, Epoch[297/300], Step [51/66], lr:7.12e-07 pred_PSNR: 36.82 perplexity:102.59 lvq:9.38e-08 L2:1.17e-04 usage:0.2305 total usage:0.8398
+[2024/02/18 20:54:15] Rank:None, Epoch[297/300], Step [66/66], lr:6.15e-07 pred_PSNR: 36.82 perplexity:121.84 lvq:6.59e-07 L2:3.62e-04 usage:0.2715 total usage:0.8711
+[2024/02/18 20:54:15] Rank:None, Epoch[298/300], Step [1/66], lr:6.09e-07 pred_PSNR: 35.22 perplexity:112.73 lvq:2.78e-07 L2:3.01e-04 usage:0.2500 total usage:0.2500
+[2024/02/18 20:54:20] Rank:None, Epoch[298/300], Step [51/66], lr:3.40e-07 pred_PSNR: 36.75 perplexity:123.89 lvq:2.67e-07 L2:2.49e-04 usage:0.2734 total usage:0.8457
+[2024/02/18 20:54:22] Rank:None, Epoch[298/300], Step [66/66], lr:2.75e-07 pred_PSNR: 36.82 perplexity:103.04 lvq:1.57e-07 L2:2.08e-04 usage:0.2285 total usage:0.8789
+[2024/02/18 20:54:22] Rank:None, Eval at Step [1/66] , FPS 223.5, pred_seen_psnr: 35.42 | 
+[2024/02/18 20:54:25] Rank:None, Eval at Step [51/66] , FPS 221.1, pred_seen_psnr: 36.44 | 
+[2024/02/18 20:54:26] Rank:None, Eval at Step [66/66] , FPS 214.9, pred_seen_psnr: 36.82 | 
+Eval at epoch 298 for (640, 1280): pred_seen_psnr: 36.82 | pred_unseen_psnr: 0.0 | quant_seen_psnr: 0.0 | quant_unseen_psnr: 0.0 | 
+[2024/02/18 20:54:26] Rank:None, Epoch[299/300], Step [1/66], lr:2.71e-07 pred_PSNR: 35.61 perplexity:117.87 lvq:3.25e-07 L2:2.86e-04 usage:0.2676 total usage:0.2676
+[2024/02/18 20:54:31] Rank:None, Epoch[299/300], Step [51/66], lr:1.04e-07 pred_PSNR: 36.73 perplexity:99.01 lvq:4.88e-07 L2:2.96e-04 usage:0.2344 total usage:0.8555
+[2024/02/18 20:54:33] Rank:None, Epoch[299/300], Step [66/66], lr:6.98e-08 pred_PSNR: 36.82 perplexity:119.25 lvq:1.61e-07 L2:1.33e-04 usage:0.2578 total usage:0.9043
+[2024/02/18 20:54:33] Rank:None, Epoch[300/300], Step [1/66], lr:6.77e-08 pred_PSNR: 36.74 perplexity:117.78 lvq:1.81e-07 L2:2.18e-04 usage:0.2637 total usage:0.2637
+[2024/02/18 20:54:38] Rank:None, Epoch[300/300], Step [51/66], lr:3.98e-09 pred_PSNR: 36.83 perplexity:110.87 lvq:1.67e-07 L2:2.54e-04 usage:0.2480 total usage:0.8340
+[2024/02/18 20:54:40] Rank:None, Epoch[300/300], Step [66/66], lr:1.55e-11 pred_PSNR: 36.82 perplexity:123.73 lvq:4.10e-07 L2:3.38e-04 usage:0.2773 total usage:0.8672
+[2024/02/18 20:54:40] Rank:None, Eval at Step [1/66] , FPS 226.2, pred_seen_psnr: 35.42 | 
+[2024/02/18 20:54:43] Rank:None, Eval at Step [51/66] , FPS 213.2, pred_seen_psnr: 36.44 | 
+[2024/02/18 20:54:44] Rank:None, Eval at Step [66/66] , FPS 208.3, pred_seen_psnr: 36.82 | 
+Eval at epoch 300 for (640, 1280): pred_seen_psnr: 36.82 | pred_unseen_psnr: 0.0 | quant_seen_psnr: 0.0 | quant_unseen_psnr: 0.0 | 
